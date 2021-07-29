@@ -1,4 +1,5 @@
-﻿@{
+
+@{
     ViewBag.title = "Search Cases";
 }
 <head>
@@ -188,3 +189,290 @@
 <body>
 
 </body>
+
+
+
+<body>
+    <div style="border-style:double;">
+
+        <table style="border:1px solid black;">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td colspan="1" align="center">
+                                <label for="filter_level" class="labelStyle">Search By: </label>
+                                <select name="filter_level" id="filter_level" style="width:150px; height:30px;">
+                                    <option value="" style="display:none; text-align:center;">--Select--</option>
+                                    <option value="Account Level">Account Level</option>
+                                    <option value="Adviser Level">Adviser Level</option>
+                                    <option value="Customer Level">Customer Level</option>
+                                </select>
+                            </td>
+                            <td colspan="1" align="left">
+                                <input id="Pid" type="text" size="10" placeholder="Enter ID" style="text-align:center;" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="dateRange" class="labelStyle">Date Range:</label>
+                                @*<input id="dateRange" type="date" name="date_element" style="outline:double" />*@
+
+                                <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly>
+
+                                <script>
+                                    $(".datepicker").datepicker({
+                                        dateFormat: 'dd/mm/yy'
+                                    });
+                                </script>
+                            <td />
+                            <td>
+                                <label for="toRange" class="labelStyle">to:</label>
+                                <input type="text" id="toRange" class="datepicker" title="To" style="outline:double" readonly>
+
+                                <script>
+                                    $(".datepicker").datepicker({
+                                        dateFormat: 'dd/mm/yy'
+                                    });
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+
+                                <input id="rdbCaseCreationDate" type="radio" name="date_case" value="Case Creation Date" checked="checked" />
+                                <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                <input id="rdbCaseClosedDate" type="radio" name="date_case" value="CaseClosed Date" />
+                                <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label><br>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr align="center">
+                <td colspan="2" vertical-align:top; border: 1px solid black;">
+                    <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+    <br />
+    <br />
+    <div>
+        <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
+    </div>
+
+    <div style="overflow:scroll" ng-controller="HomeController">
+        <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th>Status</th>
+                    <th>Case Type</th>
+                    <th>Created</th>
+                    <th>Completed</th>
+                    <th>Priority</th>
+                    <th>Adviser</th>
+                    <th>Flag</th>
+                    <th>CustomerId</th>
+                    <th>Requestor</th>
+                    <th>CaseId</th>
+                    <th>WorkpackId</th>
+                    <th>Team</th>
+                    <th>InPFC</th>
+                    <th>Employee</th>
+                </tr>
+            </thead>
+            <tbody id="caseTable" class="rowHighliter">
+                @*this way we will ferch the data from database in webgrid*@
+                @*<tr ng-repeat="e in regdata">
+                        <td>{{e.Account}}</td>
+                        <td>{{e.Status}}</td>
+                        <td>{{e.CaseType}}</td>
+                        <td>{{e.Created}}</td>
+                        <td>{{e.Completed}}</td>
+                        <td>{{e.Priority}}</td>
+                        <td>{{e.Adviser}}</td>
+                        <td>{{e.Flag}}</td>
+                        <td>{{e.CustomerId}}</td>
+                        <td>{{e.Requestor}}</td>
+                        <td>{{e.CaseId}}</td>
+                        <td>{{e.WorkpackId}}</td>
+                        <td>{{e.Team}}</td>
+                        <td>{{e.InPFC}}</td>
+                        <td>{{e.Employee}}</td>
+                    </tr>*@
+                <tr>
+
+                    <td>1234567</td>
+                    <td>Archived</td>
+                    <td>Premium alteration</td>
+                    <td>13 June 2021</td>
+                    <td>14 June 2021</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                </tr>
+                <tr>
+
+                    <td>1234567</td>
+                    <td>Archived</td>
+                    <td>Premium alteration</td>
+                    <td>13 June 2021</td>
+                    <td>14 June 2021</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                    <td>Normal</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @*<script src="~/Scripts/angular.min.js"></script>
+
+            <script src="~/Scripts/AngularController.js"></script>*@
+
+    </div>
+    <br />
+    <br />
+    <div>
+        <label for="documentText" style="text-align:left" class="labelStyle">Documents:</label>
+    </div>
+    <div style="overflow:scroll">
+        <table id="docTable" class="table table-condensed" style="border: 1px ridge lightgray">
+            <thead>
+                <tr>
+                    <th>Document Type</th>
+                    <th>Created</th>
+                    <th>Id</th>
+                    <th>Source</th>
+                    <th>Box/Batch</th>
+                    <th>Bundle Id</th>
+                    <th>Date/Time Received</th>
+                    <th>Id - Letter Description</th>
+                </tr>
+            </thead>
+            <tbody id="docContainer" class="rowHighliter">
+                <tr>
+                    <td>Letter to MLC</td>
+                    <td>24 Apr 2002 - 0:00</td>
+                    <td>239/4-4684536</td>
+                    <td>Scanned</td>
+                    <td>4702/8086</td>
+                    <td>3502617</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Letter from MLC</td>
+                    <td>27 Apr 2002 - 0:00</td>
+                    <td>239/4-4684536</td>
+                    <td>Checked</td>
+                    <td>4702/8086</td>
+                    <td>3502617</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="caseModal" class="modal" title="Case Activities">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div style="overflow:scroll">
+                <table id="actionTable" class="table table-condensed" style="border: 1px ridge lightgray">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Date and Time</th>
+                            <th>Employee</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="actionContainer" class="rowHighliter">
+                        <tr>
+                            <td>Case Created</td>
+                            <td>24 Apr 2002</td>
+                            <td>ABCD</td>
+                            <td>Case created by ABCD</td>
+                        </tr>
+                        <tr>
+                            <td>Case Message</td>
+                            <td>29 Apr 2002</td>
+                            <td>ABCD</td>
+                            <td>Product is ready for use</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <br />
+            <div>
+                <label for="fullTextMessage" class="labelStyle">Full Text of Message:</label><br />
+                <textarea id="fullTextMessage" rows="5" cols="150" readonly style="outline:double; max-width:100%; resize:none"></textarea>
+            </div>
+        </div>
+    </div>
+    <script>
+        var caseRow = document.getElementById("caseTable")
+        var modal = document.getElementById("caseModal")
+        var span = document.getElementsByClassName("close")[0];
+
+        document.oncontextmenu = function () { return false; };
+
+        $(caseRow).mousedown(function (e) {
+            if (e.button == 2) {
+                modal.style.display = "block";
+                return false;
+            }
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        $("#actionContainer tr").click(function () {
+            var $row = $(this).closest("tr"),
+                $tds = $row.find("td:nth-child(4)");
+            $("#fullTextMessage").text('').append($tds.text());
+        });
+    </script>
+
+
+</body>
+
+
