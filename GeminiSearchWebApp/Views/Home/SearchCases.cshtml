@@ -1,0 +1,190 @@
+﻿@{
+    ViewBag.title = "Search Cases";
+}
+<head>
+
+    <title>Gemini Case Search</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/basejquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.datatables.min.js" defer></script>
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.datatables.min.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            $("#myTabe").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+                "fnDrawCallback": function (oSettings) {
+                    if ($('#myTable tr').length < 11) {
+                         $('.dataTables_paginate').hide();
+                    }
+                }
+            });
+            $("#docTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+            });
+            $("#actionTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+            });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("btnSearch").click(function () {
+                var from = $("#dateRange").val();
+                var to = $("#toRange").val();
+                var d = new Date(from.split("/").reverse().join("-"));
+                var dd = d.getDate();
+                var mm = d.getMonth() + 1;
+                var yy = d.getFullYear();
+                var startDate = mm + "/" + dd + "/" + yy;
+                var d = new Date(to.split("/").reverse().join("-"));
+                var ddt = d.getDate();
+                var mmt = d.getMonth() + 1;
+                var yyt = d.getFullYear();
+                var endDate = mmt + "/" + ddt + "/" + yyt;
+                if (!$('#filter_level').val() && document.getElementById("Pid").nodeValue.length == 0 &&
+                    (($("#dateRange").val()) === "" || ($("#toRange").val()) === "")) {
+                    alert('@ViewBag.emptySearch');
+                }
+                else if (!$('#filter_level').val()) {
+                    alert('viewBag.emptySearchLevel');
+                }
+                else if (document.getElementById("Pid").nodeValue.length == 0) {
+                    alert('viewBag.emptySearchPid');
+                }
+                else if (($("#dateRange").val()) === "" || ($("#toRange").val()) === "") {
+                    alert('viewBag.emptySearchDateRange');
+                }
+                else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
+                    alert('viewBag.fromDateGreaterThanToDate');
+                }
+                else if ($('input[name="Date_case"]:checked').length == 0) {
+                    alert('viewBag.emptyCaseTypeDate');
+                }
+                else {
+                    alert("Filter Level:" + $("#filter_level option:selected").val() + "\r\nID:" + $("Pid").val() + "\r\nFrom Date:" + $("input[id='dateRange']").val()
+                        + "\r\nTo Date:" + $("input[id='toRange']".val() + "\r\nCase Date:" + $('input[id="date_case"]:checked').val()));
+                }
+            });
+
+            $("docContainer").hide();
+
+            $("#caseTable tr").click(function (event) {
+                event.preventDefault();
+                sessionStorage.account = $(this).html();
+                sessionStorage.status = $(this).find("td:first").html();
+                currentRow = this;
+                $("#docContainer").show();
+            });
+        })
+    </script>
+
+    <style>
+        table {
+            width: 568px;
+            background-color: aliceblue;
+        }
+
+        .table {
+            width: 500px;
+            background-color: aliceblue;
+            font-size: 17px;
+            font-family: 'Times New Roman';
+            font-style: normal;
+            text-align: center;
+        }
+
+        .th {
+            font-weight: bold;
+            font-family: 'Times New Roman';
+            font-style: normal;
+            text-align: center;
+        }
+
+        .td {
+            font-weight: bold;
+            font-family: 'Times New Roman';
+            font-style: normal;
+            text-align: center;
+        }
+
+        .rowHighlighter tr:hover td {
+            background-color: lightblue;
+        }
+
+        #btnSearch {
+            padding: 0px 25px 0px 25px;
+            font-size: 16px;
+            margin: 20px 20px 20px 20px;
+        }
+
+        .datepicker {
+            width: 130px;
+            margin: 20px 0px 10px 0px
+        }
+
+        .textBoxInput {
+            width: 100px;
+            outline: double;
+        }
+
+        .lableStyle {
+            padding-left: 5px;
+            font-size: medium;
+            text-align: left;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            width: auto;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        #myTable thread .sorting_asc {
+            background-image: url("");
+        }
+
+        #myTable thread .sorting_desc {
+            background-image: url("");
+        }
+    </style>
+</head>
+<body>
+
+</body>
