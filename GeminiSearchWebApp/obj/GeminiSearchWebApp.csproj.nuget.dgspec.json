@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {}
+    "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {}
   },
   "projects": {
-    "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {
+    "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "projectUniqueName": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
         "projectName": "GeminiSearchWebApp",
-        "projectPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "projectPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
         "packagesPath": "C:\\Users\\x033027d\\.nuget\\packages\\",
-        "outputPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\obj\\",
+        "outputPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

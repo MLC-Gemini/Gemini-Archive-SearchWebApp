@@ -9,9 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CSS\" />
     <Folder Include="DAL\" />
     <Folder Include="Images\" />
-    <Folder Include="CSS\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
 

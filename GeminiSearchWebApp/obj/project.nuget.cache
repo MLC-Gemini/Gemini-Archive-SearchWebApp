@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "P7gOWvy3KTcaP8MH4+Fymftw4JSVRHZLFAAdyYqk3A+h+/T559npPPDtwnQl90T9XkpeiWM75Z1yuSQuudbCuQ==",
+  "dgSpecHash": "8tY4pAv8G0K5Yr2LifTuG18obBvV55McZ4L3+Kc8y28xpuqbSu4DOts7QigAR1/bLD1QOBPbFVHIuTz4bh1lzw==",
   "success": true,
-  "projectFilePath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+  "projectFilePath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\5.0.8\\microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512",
     "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\5.0.8\\microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512",
