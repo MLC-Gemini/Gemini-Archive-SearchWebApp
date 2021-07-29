@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "8tY4pAv8G0K5Yr2LifTuG18obBvV55McZ4L3+Kc8y28xpuqbSu4DOts7QigAR1/bLD1QOBPbFVHIuTz4bh1lzw==",
+  "dgSpecHash": "KFIblqJ9totaNRy8c/RxcJFRKVPEVGox5e/EVe0BPG4KI4/7sYe/3HNNso2VGQbpNOU8WQW+8s+bEkvfPoMDHg==",
   "success": true,
-  "projectFilePath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+  "projectFilePath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\5.0.8\\microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\5.0.8\\microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.8\\microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\system.directoryservices.protocols\\5.0.0\\system.directoryservices.protocols.5.0.0.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512"
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\5.0.8\\microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\5.0.8\\microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.8\\microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\system.directoryservices.protocols\\5.0.0\\system.directoryservices.protocols.5.0.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }
