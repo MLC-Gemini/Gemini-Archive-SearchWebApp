@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "P7gOWvy3KTcaP8MH4+Fymftw4JSVRHZLFAAdyYqk3A+h+/T559npPPDtwnQl90T9XkpeiWM75Z1yuSQuudbCuQ==",
+  "success": true,
+  "projectFilePath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.authentication.negotiate\\5.0.8\\microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\5.0.8\\microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.8\\microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\system.directoryservices.protocols\\5.0.0\\system.directoryservices.protocols.5.0.0.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
