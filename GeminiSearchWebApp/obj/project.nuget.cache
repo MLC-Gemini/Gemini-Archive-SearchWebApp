@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KFIblqJ9totaNRy8c/RxcJFRKVPEVGox5e/EVe0BPG4KI4/7sYe/3HNNso2VGQbpNOU8WQW+8s+bEkvfPoMDHg==",
+  "dgSpecHash": "3pqhgXOE7T8ZJsNVUV6KfE7jyAi4OYj4Ur2+RrIRzxVTAsSHXqOO7BmRXknLGmF9qPQfiFvSMlX0aV6PJMPVMA==",
   "success": true,
   "projectFilePath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
   "expectedPackageFiles": [
@@ -9,8 +9,15 @@
     "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.8\\microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512",
     "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
     "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\system.data.sqlclient\\4.8.2\\system.data.sqlclient.4.8.2.nupkg.sha512",
     "C:\\Users\\X033022d\\.nuget\\packages\\system.directoryservices.protocols\\5.0.0\\system.directoryservices.protocols.5.0.0.nupkg.sha512",
     "C:\\Users\\X033022d\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
+    "C:\\Users\\X033022d\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\X033022d\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512"
   ],
   "logs": []
