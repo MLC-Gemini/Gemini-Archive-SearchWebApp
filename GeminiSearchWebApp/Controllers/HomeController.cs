@@ -15,11 +15,16 @@ namespace GeminiSearchWebApp.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IConfiguration configuration;
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
+        public HomeController(IConfiguration _configuration)
         {
-            _logger = logger;
+            configuration = _configuration;
         }
 
         public IActionResult Index()
@@ -29,6 +34,19 @@ namespace GeminiSearchWebApp.Controllers
             //{
             //    Content("i belongs to admin");
             //}
+            return View();
+        }
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
+
             return View();
         }
 
@@ -51,6 +69,9 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.emptySearch = configuration["Appsettings:emptySearch"];
             ViewBag.emptySearchLevel = configuration["Appsettings:emptySearchLevel"];
             ViewBag.emptySearchPid = configuration["Appsettings:emptySearchPid"];
+            ViewBag.emptyAccountID = configuration["Appsettings:emptyAccountId"];
+            ViewBag.emptyAdviserID = configuration["Appsettings:emptyAdviserId"];
+            ViewBag.emptyCustomerId = configuration["Appsettings:emptyCustomerId"];
             ViewBag.emptyDateRange = configuration["Appsettings:emptyDateRange"];
             ViewBag.fromDateGreaterThanToDate = configuration["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = configuration["Appsettings:emptyCaseTypeDate"];
