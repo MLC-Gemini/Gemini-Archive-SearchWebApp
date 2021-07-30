@@ -48,13 +48,13 @@ namespace GeminiSearchWebApp.Controllers
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var configuration = builder.Build();
 
-            viewBag.emptySearch = configuration["Appsettings:emptySearch"];
-            viewBag.emptySearchLevel = configuration["Appsettings:emptySearchLevel"];
-            viewBag.emptySearchPid = configuration["Appsettings:emptySearchPid"];
-            viewBag.emptyDateRange = configuration["Appsettings:emptyDateRange"];
-            viewBag.fromDateGreaterThanToDate = configuration["Appsettings:fromDateGreaterThanToDate"];
-            viewBag.emptyCaseTypeDate = configuration["Appsettings:emptyCaseTypeDate"];
-            viewBag.rightClick = configuration["Appsettings:rightClick"];
+            ViewBag.emptySearch = configuration["Appsettings:emptySearch"];
+            ViewBag.emptySearchLevel = configuration["Appsettings:emptySearchLevel"];
+            ViewBag.emptySearchPid = configuration["Appsettings:emptySearchPid"];
+            ViewBag.emptyDateRange = configuration["Appsettings:emptyDateRange"];
+            ViewBag.fromDateGreaterThanToDate = configuration["Appsettings:fromDateGreaterThanToDate"];
+            ViewBag.emptyCaseTypeDate = configuration["Appsettings:emptyCaseTypeDate"];
+            ViewBag.rightClick = configuration["Appsettings:rightClick"];
 
             return View();
         }
