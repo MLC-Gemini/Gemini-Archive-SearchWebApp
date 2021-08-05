@@ -9,15 +9,50 @@
 <head>
     <title>Gemini Case Search</title>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js" type="text/javascript"></script>
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>*@
-    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" rel="stylesheet" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js" type="text/javascript"></script>*@
+    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>*@
+    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    @*<script src="Web.config.js" type="text/javascript"></script>*@
+
+  
 
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
-    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+    <script>
+        /*$.noConflict();*/
+        $(document).ready(function () {
+            $("#myTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+                "fnDrawCallback": function (oSettings) {
+                    if ($('#myTable tr').length < 11) {
+                        $('.dataTables_paginate').hide();
+                    }
+                }
+            });
+            $("#docTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
+            $("#actionTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
+        });
+    </script>
+
+    <script>
 
     <script type="text/javascript">
+
         $(document).ready(function () {
 
             $("#btnSearch").click(function () {
@@ -34,17 +69,14 @@
                 var mmt = d.getMonth() + 1;
                 var yyt = d.getFullYear();
                 var endDate = mmt + "/" + ddt + "/" + yyt;
-                if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0
-                    //&& (($("#dateRange").val()) === "" || ($("#toRange").val()) === "")
-                ) {
+
+                if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0) {
+
                     alert('@ViewBag.emptySearch');
                 }
                 else if (!$('#filter_level').val()) {
                     alert('@ViewBag.emptySearchLevel');
                 }
-                @*else if (document.getElementById("Pid").value.length == 0) {
-                    alert('@ViewBag.emptySearchPid');
-                }*@
                 else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyAccountID')
                 }
@@ -55,9 +87,14 @@
                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyCustomerID')
                 }
+
+                else if (document.getElementById("Pid").value.length == 0) {
+                    alert('@ViewBag.emptySearchPid');
+
+                }
                 @*else if (($("#dateRange").val()) === "" || ($("#toRange").val()) === "") {
                     alert('@ViewBag.emptyDateRange');
-                }
+                }*@
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
                 }*@
@@ -66,8 +103,10 @@
                 }
                 else {
                     alert("Filter Level:" + $("#filter_level option:selected").val() + "\r\nID:" + $("#Pid").val() + "\r\nFrom Date:" + $("input[id='dateRange']").val() + "\r\nTo Date:" + $("input[id='toRange']").val() + "\r\nCase Date:" + $('input[name="date_case"]:checked').val());
-                    $("#myTable").show();
-                    $("#docTable").show();
+                    //$("#myTable").show();
+                    //$("#docTable").show();
+                    $("#output1").show();
+                    $("#output2").show();
                 }
 
                 debugger;
@@ -122,6 +161,10 @@
             });
 
 
+            //$("#myTable").hide();
+            //$("#docTable").hide();
+
+
 
             //$("#myTable").dataTable({
             //    pageLength: 10,
@@ -148,12 +191,13 @@
             //$("#docTable").hide();
 
 
+
         });
     </script>
 
     <style>
         table {
-            width: 568px;
+            width: 549px;
             background-color: aliceblue;
         }
 
@@ -241,14 +285,15 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+       
 
-        #myTable thread .sorting_asc {
+        /*#myTable thread .sorting_asc {
             background-image: url("");
         }
 
         #myTable thread .sorting_desc {
             background-image: url("");
-        }
+        }*/
     </style>
 </head>
 
@@ -287,7 +332,10 @@
 
                                 <script>
                                     $(".datepicker").datepicker({
-                                        dateFormat: 'dd/mm/yy'
+                                        dateFormat: 'dd/mm/yy',
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1980:+nn"
                                     });
                                 </script>
                             <td />
@@ -297,7 +345,10 @@
 
                                 <script>
                                     $(".datepicker").datepicker({
-                                        dateFormat: 'dd/mm/yy'
+                                        dateFormat: 'dd/mm/yy',
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1980:+nn"
                                     });
                                 </script>
                             </td>
@@ -330,9 +381,253 @@
     </div>
     <br />
     <br />
-    <div>
+    <div id="output1" style="display:none">
         <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
-    </div>
+
+
+
+        <div style="overflow:scroll" ng-controller="HomeController">
+            <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Status</th>
+                        <th>Case Type</th>
+                        <th>Created</th>
+                        <th>Completed</th>
+                        <th>Priority</th>
+                        <th>Adviser</th>
+                        <th>Flag</th>
+                        <th>CustomerId</th>
+                        <th>Requestor</th>
+                        <th>CaseId</th>
+                        <th>WorkpackId</th>
+                        <th>Team</th>
+                        <th>InPFC</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody id="caseTable" class="rowHighliter">
+                    @*this way we will ferch the data from database in webgrid*@
+                    @*<tr ng-repeat="e in regdata">
+                        <td>{{e.Account}}</td>
+                        <td>{{e.Status}}</td>
+                        <td>{{e.CaseType}}</td>
+                        <td>{{e.Created}}</td>
+                        <td>{{e.Completed}}</td>
+                        <td>{{e.Priority}}</td>
+                        <td>{{e.Adviser}}</td>
+                        <td>{{e.Flag}}</td>
+                        <td>{{e.CustomerId}}</td>
+                        <td>{{e.Requestor}}</td>
+                        <td>{{e.CaseId}}</td>
+                        <td>{{e.WorkpackId}}</td>
+                        <td>{{e.Team}}</td>
+                        <td>{{e.InPFC}}</td>
+                        <td>{{e.Employee}}</td>
+                    </tr>*@
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                    <tr>
+
+                        <td>1234567</td>
+                        <td>Archived</td>
+                        <td>Premium alteration</td>
+                        <td>13 June 2021</td>
+                        <td>14 June 2021</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                        <td>Normal</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            @*<script src="~/Scripts/angular.min.js"></script>
 
     
     <div style="overflow:scroll"
@@ -416,52 +711,55 @@
     </table>
     @*<script src="~/Scripts/angular.min.js"></script>
 
+
         <script src="~/Scripts/AngularController.js"></script>*@
 
+        </div>
     </div>
 
     <br />
     <br />
-    <div>
+    <div id="output2" style=" display:none">
         <label for="documentText" style="text-align:left" class="labelStyle">Documents:</label>
-    </div>
-    <div style="overflow:scroll">
-        <table id="docTable" class="table table-condensed" style="border: 1px ridge lightgray">
-            <thead>
-                <tr>
-                    <th>Document Type</th>
-                    <th>Created</th>
-                    <th>Id</th>
-                    <th>Source</th>
-                    <th>Box/Batch</th>
-                    <th>Bundle Id</th>
-                    <th>Date/Time Received</th>
-                    <th>Id - Letter Description</th>
-                </tr>
-            </thead>
-            <tbody id="docContainer" class="rowHighliter">
-                <tr>
-                    <td>Letter to MLC</td>
-                    <td>24 Apr 2002 - 0:00</td>
-                    <td>239/4-4684536</td>
-                    <td>Scanned</td>
-                    <td>4702/8086</td>
-                    <td>3502617</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Letter from MLC</td>
-                    <td>27 Apr 2002 - 0:00</td>
-                    <td>239/4-4684536</td>
-                    <td>Checked</td>
-                    <td>4702/8086</td>
-                    <td>3502617</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+
+        <div style="overflow:scroll">
+            <table id="docTable" class="table table-condensed" style="border: 1px ridge lightgray">
+                <thead>
+                    <tr>
+                        <th>Document Type</th>
+                        <th>Created</th>
+                        <th>Id</th>
+                        <th>Source</th>
+                        <th>Box/Batch</th>
+                        <th>Bundle Id</th>
+                        <th>Date/Time Received</th>
+                        <th>Id - Letter Description</th>
+                    </tr>
+                </thead>
+                <tbody id="docContainer" class="rowHighliter">
+                    <tr>
+                        <td>Letter to MLC</td>
+                        <td>24 Apr 2002 - 0:00</td>
+                        <td>239/4-4684536</td>
+                        <td>Scanned</td>
+                        <td>4702/8086</td>
+                        <td>3502617</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Letter from MLC</td>
+                        <td>27 Apr 2002 - 0:00</td>
+                        <td>239/4-4684536</td>
+                        <td>Checked</td>
+                        <td>4702/8086</td>
+                        <td>3502617</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="caseModal" class="modal" title="Case Activities">
