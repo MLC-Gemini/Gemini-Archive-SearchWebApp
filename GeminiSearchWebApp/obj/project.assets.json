@@ -84,6 +84,15 @@
           }
         }
       },
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -360,6 +369,33 @@
         "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.xml",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
@@ -671,6 +707,7 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "Microsoft.AspNetCore.Authentication.Negotiate >= 5.0.8",
+      "Newtonsoft.Json >= 13.0.1",
       "System.Data.SqlClient >= 4.8.2"
     ]
   },
@@ -682,11 +719,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "projectUniqueName": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
       "projectName": "GeminiSearchWebApp",
-      "projectPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "projectPath": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
       "packagesPath": "C:\\Users\\x033027d\\.nuget\\packages\\",
-      "outputPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\obj\\",
+      "outputPath": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -724,6 +761,10 @@
           "Microsoft.AspNetCore.Authentication.Negotiate": {
             "target": "Package",
             "version": "[5.0.8, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.1, )"
           },
           "System.Data.SqlClient": {
             "target": "Package",

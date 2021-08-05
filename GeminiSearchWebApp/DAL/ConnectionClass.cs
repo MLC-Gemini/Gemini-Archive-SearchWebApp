@@ -30,7 +30,7 @@ namespace GeminiSearchWebApp.DAL
         // SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["rdsConn"].ConnectionString);
 
 
-        public List<Case> Getrecord(UserInput userInput)
+        public DataSet Getrecord(UserInput userInput)
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
            
@@ -40,7 +40,7 @@ namespace GeminiSearchWebApp.DAL
                 SqlCommand dbCommand = new SqlCommand();
                 dbCommand.Connection = conn;
                 dbCommand.CommandType = CommandType.StoredProcedure;
-                dbCommand.CommandText = "[dbo].[usp_TestCase]";
+                dbCommand.CommandText = "[dbo].[usp_CaseGrid]";
                 //dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 1;
                 //dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = "17241705";
                 //dbCommand.Parameters.Add("@FromDate", SqlDbType.DateTime).Value = DBNull.Value;
@@ -98,35 +98,35 @@ namespace GeminiSearchWebApp.DAL
 
 
 
-                    //SqlDataAdapter da = new SqlDataAdapter(dbCommand);
-                    //da.Fill(dsResult);
+                    SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                    da.Fill(dsResult);
 
-                    SqlDataReader dr = dbCommand.ExecuteReader();
-                    if (dr.HasRows)
-                    {
+                    //SqlDataReader dr = dbCommand.ExecuteReader();
+                    //if (dr.HasRows)
+                    //{
 
-                        while (dr.Read())
-                        {
-                            cases.Add(new Case()
-                            {
-                                Account = dr["Account"].ToString(),
-                                Status = Convert.ToInt32(dr["Status"].ToString()),
-                                CaseType = dr["Case Type"].ToString(),
-                                Created = dr["Created"].ToString(),
-                                Completed = dr["Completed"].ToString(),
-                                Priority = Convert.ToInt32(dr["Priority"].ToString()),
-                                Adviser = dr["Adviser"].ToString(),
-                                Flag = dr["Flag"].ToString(),
-                                CustomerId = dr["Customer Id"].ToString(),
-                                Requestor = Convert.ToInt32(dr["Requestor"].ToString()),
-                                CaseID = dr["Case ID"].ToString(),
-                                WorkpackID = Convert.ToInt32(dr["Workpack ID"].ToString()),
-                                Team = dr["Team"].ToString(),
-                                InPFC = Convert.ToInt32(dr["InPFC"].ToString()),
-                                Employees = Convert.ToInt32(dr["Employee"].ToString())
-                            });
-                        }
-                    }
+                    //    while (dr.Read())
+                    //    {
+                    //        cases.Add(new Case()
+                    //        {
+                    //            Account = dr["Account"].ToString(),
+                    //            Status = Convert.ToInt32(dr["Status"].ToString()),
+                    //            CaseType = dr["Case Type"].ToString(),
+                    //            Created = dr["Created"].ToString(),
+                    //            Completed = dr["Completed"].ToString(),
+                    //            Priority = Convert.ToInt32(dr["Priority"].ToString()),
+                    //            Adviser = dr["Adviser"].ToString(),
+                    //            Flag = dr["Flag"].ToString(),
+                    //            CustomerId = dr["Customer Id"].ToString(),
+                    //            Requestor = Convert.ToInt32(dr["Requestor"].ToString()),
+                    //            CaseID = dr["Case ID"].ToString(),
+                    //            WorkpackID = Convert.ToInt32(dr["Workpack ID"].ToString()),
+                    //            Team = dr["Team"].ToString(),
+                    //            InPFC = Convert.ToInt32(dr["InPFC"].ToString()),
+                    //            Employees = Convert.ToInt32(dr["Employee"].ToString())
+                    //        });
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -140,7 +140,7 @@ namespace GeminiSearchWebApp.DAL
             }
             
 
-            return cases;
+            return dsResult;
         }
     }
 }

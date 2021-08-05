@@ -12,7 +12,7 @@ using Gemini.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using RestSharp;
+
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -87,7 +87,7 @@ namespace GeminiSearchWebApp.Controllers
         }
 
        // [HttpPost]
-        public JsonResult GetSearchCases(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        public string GetSearchCases(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
         {
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
@@ -100,15 +100,8 @@ namespace GeminiSearchWebApp.Controllers
                 userInput.FromDate = fromDate;
                 userInput.ToDate = toDate;
                 userInput.CaseTypeDate = caseDateType;
-
-                //userInput.FilterLevel = "Account Level";
-                //userInput.UserId = "17241705";
-                //userInput.FromDate = DateTime.MinValue;
-                //userInput.ToDate = DateTime.MinValue;
-                //userInput.CaseTypeDate = "Case Creation Date";
-
                 ConnectionClass connectionClass = new ConnectionClass(configuration);
-                cases = connectionClass.Getrecord(userInput);
+                ds = connectionClass.Getrecord(userInput);
             }
             catch (Exception)
             {
@@ -118,9 +111,17 @@ namespace GeminiSearchWebApp.Controllers
 
             //ViewBag.Data = ds;
 
-         //   Json(JsonConvert.SerializeObject(cases), JsonRequestBehaviour.AllowGet);
+            //   Json(JsonConvert.SerializeObject(cases), JsonRequestBehaviour.AllowGet);
+           return DataTableToJSONWithJSONNet(ds.Tables[0]);
 
-            return Json(cases);
+            //return Json(ds);
+        }
+
+        public string DataTableToJSONWithJSONNet(DataTable table)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(table);
+            return JSONString;
         }
 
         //[HttpGet]
@@ -152,6 +153,6 @@ namespace GeminiSearchWebApp.Controllers
         //    return PartialView("CaseGrid",cases);
         //}
 
-        
+
     }
 }

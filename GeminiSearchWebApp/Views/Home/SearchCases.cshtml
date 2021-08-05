@@ -26,37 +26,10 @@
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
 
 
-    <script>
-        /*$.noConflict();*/
-        $(document).ready(function () {
-            $("#myTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
-                "fnDrawCallback": function (oSettings) {
-                    if ($('#myTable tr').length < 11) {
-                        $('.dataTables_paginate').hide();
-                    }
-                }
-            });
-            $("#docTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
-            });
-            $("#actionTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
-            });
-        });
-    </script>
-
-    <script>
-
     <script type="text/javascript">
 
         $(document).ready(function () {
-
             $("#btnSearch").click(function () {
-
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
                 var d = new Date(from.split("/").reverse().join("-"));
@@ -92,12 +65,10 @@
                     alert('@ViewBag.emptySearchPid');
 
                 }
-                @*else if (($("#dateRange").val()) === "" || ($("#toRange").val()) === "") {
-                    alert('@ViewBag.emptyDateRange');
-                }*@
+               
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
-                }*@
+                }
                 else if ($('input[name="date_case"]:checked').lengtViewBag == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
                 }
@@ -109,7 +80,7 @@
                     $("#output2").show();
                 }
 
-                debugger;
+                
                 var aFilterValue = $("#filter_level option:selected").val();
                 var aIdValue = $("#Pid").val();
                 var aFromDate = $("#dateRange").val();
@@ -125,26 +96,43 @@
                         success: function (result) {
                             console.log("success");
                             console.log(result);
-                            var row = "";
+                            var rows = "";
+                            var rowsDoc = "";
                             $.each(result, function (i, item) {
-                                var rows = "<tr>"
-                                    + "<td >" + item.account + "</td>"
-                                    + "<td >" + item.status + "</td>"
-                                    + "<td >" + item.caseType + "</td>"
-                                    + "<td >" + item.created + "</td>"
-                                    + "<td >" + item.completed + "</td>"
-                                    + "<td >" + item.priority + "</td>"
-                                    + "<td >" + item.adviser + "</td>"
-                                    + "<td >" + item.flag + "</td>"
-                                    + "<td >" + item.customerId + "</td>"
-                                    + "<td >" + item.requestor + "</td>"
-                                    + "<td >" + item.caseID + "</td>"
-                                    + "<td >" + item.workpackID + "</td>"
-                                    + "<td >" + item.team + "</td>"
-                                    + "<td >" + item.inPFC + "</td>"
-                                    + "<td >" + item.employees + "</td>"
+                                    rows = "<tr>"
+                                    + "<td >" + item.Account + "</td>"
+                                    + "<td >" + item.Status + "</td>"
+                                    + "<td >" + item.CaseType + "</td>"
+                                    + "<td >" + item.Created + "</td>"
+                                    + "<td >" + item.Completed + "</td>"
+                                    + "<td >" + item.Priority + "</td>"
+                                    + "<td >" + item.Adviser + "</td>"
+                                    + "<td >" + item.Flag + "</td>"
+                                    + "<td >" + item.CustomerId + "</td>"
+                                    + "<td >" + item.Requestor + "</td>"
+                                    + "<td >" + item.CaseID + "</td>"
+                                    + "<td >" + item.WorkpackID + "</td>"
+                                    + "<td >" + item.Team + "</td>"
+                                    + "<td >" + item.InPFC + "</td>"
+                                    + "<td >" + item.Employee + "</td>"
                                     + "</tr>";
                                 $('#caseContainer').append(rows);
+
+                            });
+
+
+                            $.each(result, function (i, item) {
+                                rowsDoc = "<tr>"
+                                    + "<td >" + item.DocumentType + "</td>"
+                                    + "<td >" + item.Created + "</td>"
+                                    + "<td >" + item.Id + "</td>"
+                                    + "<td >" + item.Source + "</td>"
+                                    + "<td >" + item.BoxID + "</td>"
+                                    + "<td >" + item.BundleID + "</td>"
+                                    + "<td >" + item.DateTimeReceived + "</td>"
+                                    + "<td >" + item.LetterDescription + "</td>"                                    
+                                    + "</tr>";
+                                $('#docContainer').append(rowsDoc);
 
                             });
 
@@ -160,37 +148,23 @@
 
             });
 
-
-            //$("#myTable").hide();
-            //$("#docTable").hide();
-
-
-
-            //$("#myTable").dataTable({
-            //    pageLength: 10,
-            //    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
-            //    "fnDrawCallback": function (data) {
-            //        if ($('#myTable tr').length < 11) {
-            //            $('.dataTables_paginate').hide();
-            //        }
-            //    }
-            //});
+            $("#myTable").dataTable({
+            pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+                "fnDrawCallback": function (oSettings) {
+                    if ($('#myTable tr').length < 11) {
+                         $('.dataTables_paginate').hide();
+                    }
+                }
+            });
             $("#docTable").dataTable({
-                pageLength: 10,
+            pageLength: 10,
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
             $("#actionTable").dataTable({
-                pageLength: 10,
+            pageLength: 10,
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
-
-
-
-            //$("docContainer").hide();
-            //$("#myTable").hide();
-            //$("#docTable").hide();
-
-
 
         });
     </script>
@@ -385,250 +359,6 @@
         <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
 
 
-
-        <div style="overflow:scroll" ng-controller="HomeController">
-            <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
-                <thead>
-                    <tr>
-                        <th>Account</th>
-                        <th>Status</th>
-                        <th>Case Type</th>
-                        <th>Created</th>
-                        <th>Completed</th>
-                        <th>Priority</th>
-                        <th>Adviser</th>
-                        <th>Flag</th>
-                        <th>CustomerId</th>
-                        <th>Requestor</th>
-                        <th>CaseId</th>
-                        <th>WorkpackId</th>
-                        <th>Team</th>
-                        <th>InPFC</th>
-                        <th>Employee</th>
-                    </tr>
-                </thead>
-                <tbody id="caseTable" class="rowHighliter">
-                    @*this way we will ferch the data from database in webgrid*@
-                    @*<tr ng-repeat="e in regdata">
-                        <td>{{e.Account}}</td>
-                        <td>{{e.Status}}</td>
-                        <td>{{e.CaseType}}</td>
-                        <td>{{e.Created}}</td>
-                        <td>{{e.Completed}}</td>
-                        <td>{{e.Priority}}</td>
-                        <td>{{e.Adviser}}</td>
-                        <td>{{e.Flag}}</td>
-                        <td>{{e.CustomerId}}</td>
-                        <td>{{e.Requestor}}</td>
-                        <td>{{e.CaseId}}</td>
-                        <td>{{e.WorkpackId}}</td>
-                        <td>{{e.Team}}</td>
-                        <td>{{e.InPFC}}</td>
-                        <td>{{e.Employee}}</td>
-                    </tr>*@
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                    <tr>
-
-                        <td>1234567</td>
-                        <td>Archived</td>
-                        <td>Premium alteration</td>
-                        <td>13 June 2021</td>
-                        <td>14 June 2021</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                        <td>Normal</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            @*<script src="~/Scripts/angular.min.js"></script>
-
     
     <div style="overflow:scroll"
     ng-controller="HomeController"
@@ -653,67 +383,10 @@
                 <th>Employee</th>
             </tr>
         </thead>
-        <tbody id="caseContainer">
-    @*@{
-            DataSet data = ViewBag.Data;
-
-            if (data != null)
-            {
-                foreach (DataRow row in data.Tables[0].Rows)
-                {
-                    <tr>
-                        <td>@row["Account"]</td>
-                        <td>@row["Status"]</td>
-                        <td>@row["Case Type"]</td>
-                        <td>@row["Created"]</td>
-                        <td>@row["Completed"]</td>
-                        <td>@row["Priority"]</td>
-                        <td>@row["Adviser"]</td>
-                        <td>@row["Flag"]</td>
-                        <td>@row["Customer Id"]</td>
-                        <td>@row["Requestor"]</td>
-                        <td>@row["Case ID"]</td>
-                        <td>@row["Workpack ID"]</td>
-                        <td>@row["Team"]</td>
-                        <td>@row["InPFC"]</td>
-                        <td>@row["Employee"]</td>
-                    </tr>
-                }
-            }
-        }*@
-
-    @*@{
-                if (Model != null)
-                {
-                    foreach (var data in Model)
-                    {
-                        <tr>
-                            <td>@data.Account</td>
-                            <td>@data.Status</td>
-                            <td>@data.CaseType</td>
-                            <td>@data.Created</td>
-                            <td>@data.Completed</td>
-                            <td>@data.Priority</td>
-                            <td>@data.Adviser</td>
-                            <td>@data.Flag</td>
-                            <td>@data.CustomerId</td>
-                            <td>@data.Requestor</td>
-                            <td>@data.CaseID</td>
-                            <td>@data.WorkpackID</td>
-                            <td>@data.Team</td>
-                            <td>@data.InPFC</td>
-                            <td>@data.Employees</td>
-                        </tr>
-                    }
-                }
-            }*@
+        <tbody id="caseContainer">     
         </tbody>
     </table>
-    @*<script src="~/Scripts/angular.min.js"></script>
-
-
-        <script src="~/Scripts/AngularController.js"></script>*@
-
+   
         </div>
     </div>
 
@@ -737,26 +410,7 @@
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighliter">
-                    <tr>
-                        <td>Letter to MLC</td>
-                        <td>24 Apr 2002 - 0:00</td>
-                        <td>239/4-4684536</td>
-                        <td>Scanned</td>
-                        <td>4702/8086</td>
-                        <td>3502617</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Letter from MLC</td>
-                        <td>27 Apr 2002 - 0:00</td>
-                        <td>239/4-4684536</td>
-                        <td>Checked</td>
-                        <td>4702/8086</td>
-                        <td>3502617</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                   
                 </tbody>
             </table>
         </div>
