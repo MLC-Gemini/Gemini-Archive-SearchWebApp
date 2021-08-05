@@ -13,7 +13,5 @@
     <Folder Include="CSS\" />
     <Folder Include="DAL\" />
     <Folder Include="Images\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
-
 </Project>

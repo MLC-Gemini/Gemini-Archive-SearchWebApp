@@ -675,25 +675,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\X033022d\\.nuget\\packages\\": {},
+    "C:\\Users\\x033027d\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "projectUniqueName": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
       "projectName": "GeminiSearchWebApp",
-      "projectPath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
-      "packagesPath": "C:\\Users\\X033022d\\.nuget\\packages\\",
-      "outputPath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\obj\\",
+      "projectPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "packagesPath": "C:\\Users\\x033027d\\.nuget\\packages\\",
+      "outputPath": "C:\\Temp\\VSCode\\GeminiSearchWebApp\\GemArchSearchWebApp\\GeminiSearchWebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\X033022d\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\x033027d\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
