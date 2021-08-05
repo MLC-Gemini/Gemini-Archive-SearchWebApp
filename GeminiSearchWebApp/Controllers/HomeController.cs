@@ -1,21 +1,27 @@
-﻿using GeminiSearchWebApp.Models;
+﻿using GeminiSearchWebApp.DAL;
+using GeminiSearchWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using Gemini.Models;
+using System.Data.SqlClient;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using RestSharp;
 
 namespace GeminiSearchWebApp.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
+        List<Case> cases = new List<Case>();
         private IConfiguration configuration;
+        
         //private readonly ILogger<HomeController> _logger;
 
         //public HomeController(ILogger<HomeController> logger)
@@ -60,24 +66,92 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult searchCases()
+
+        public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var configuration = builder.Build();
+            var config = builder.Build();
 
-            ViewBag.emptySearch = configuration["Appsettings:emptySearch"];
-            ViewBag.emptySearchLevel = configuration["Appsettings:emptySearchLevel"];
-            ViewBag.emptySearchPid = configuration["Appsettings:emptySearchPid"];
-            ViewBag.emptyAccountID = configuration["Appsettings:emptyAccountId"];
-            ViewBag.emptyAdviserID = configuration["Appsettings:emptyAdviserId"];
-            ViewBag.emptyCustomerId = configuration["Appsettings:emptyCustomerId"];
-            ViewBag.emptyDateRange = configuration["Appsettings:emptyDateRange"];
-            ViewBag.fromDateGreaterThanToDate = configuration["Appsettings:fromDateGreaterThanToDate"];
-            ViewBag.emptyCaseTypeDate = configuration["Appsettings:emptyCaseTypeDate"];
-            ViewBag.rightClick = configuration["Appsettings:rightClick"];
-
+            ViewBag.emptySearch = config["Appsettings:emptySearch"];
+            ViewBag.emptySearchLevel = config["Appsettings:emptySearchLevel"];
+            ViewBag.emptySearchPid = config["Appsettings:emptySearchPid"];
+            ViewBag.emptyAccountID = config["Appsettings:emptyAccountId"];
+            ViewBag.emptyAdviserID = config["Appsettings:emptyAdviserId"];
+            ViewBag.emptyCustomerId = config["Appsettings:emptyCustomerId"];
+            ViewBag.emptyDateRange = config["Appsettings:emptyDateRange"];
+            ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
+            ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
+            ViewBag.rightClick = config["Appsettings:rightClick"];
             return View();
         }
+
+       // [HttpPost]
+        public JsonResult GetSearchCases(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+          
+            try
+            {
+                UserInput userInput = new UserInput();
+                userInput.FilterLevel = filterLevel;
+                userInput.UserId = userId;
+                userInput.FromDate = fromDate;
+                userInput.ToDate = toDate;
+                userInput.CaseTypeDate = caseDateType;
+
+                //userInput.FilterLevel = "Account Level";
+                //userInput.UserId = "17241705";
+                //userInput.FromDate = DateTime.MinValue;
+                //userInput.ToDate = DateTime.MinValue;
+                //userInput.CaseTypeDate = "Case Creation Date";
+
+                ConnectionClass connectionClass = new ConnectionClass(configuration);
+                cases = connectionClass.Getrecord(userInput);
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("error");
+            }
+
+            //ViewBag.Data = ds;
+
+         //   Json(JsonConvert.SerializeObject(cases), JsonRequestBehaviour.AllowGet);
+
+            return Json(cases);
+        }
+
+        //[HttpGet]
+        //public IActionResult CaseGrid(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        //{
+        //    try
+        //    {
+        //        UserInput userInput = new UserInput();
+        //        userInput.FilterLevel = filterLevel;
+        //        userInput.UserId = userId;
+        //        userInput.FromDate = fromDate;
+        //        userInput.ToDate = toDate;
+        //        userInput.CaseTypeDate = caseDateType;
+
+        //        //userInput.FilterLevel = "Account Level";
+        //        //userInput.UserId = "17241705";
+        //        //userInput.FromDate = DateTime.MinValue;
+        //        //userInput.ToDate = DateTime.MinValue;
+        //        //userInput.CaseTypeDate = "Case Creation Date";
+
+        //        ConnectionClass connectionClass = new ConnectionClass(configuration);
+        //        cases = connectionClass.Getrecord(userInput);
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        Console.WriteLine("error");
+        //    }
+        //    return PartialView("CaseGrid",cases);
+        //}
+
+        
     }
 }
