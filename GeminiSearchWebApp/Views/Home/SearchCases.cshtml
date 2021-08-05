@@ -1,3 +1,6 @@
+@using System.Data
+@*@model IEnumerable<Gemini.Models.Case>*@
+ 
 @{
 
     ViewBag.title = "Search Cases";
@@ -6,7 +9,7 @@
 <head>
     <title>Gemini Case Search</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>*@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
@@ -14,32 +17,11 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
     <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-    <script>
-        $(document).ready(function () {
-            $("#myTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
-                "fnDrawCallback": function (oSettings) {
-                    if ($('#myTable tr').length < 11) {
-                        $('.dataTables_paginate').hide();
-                    }
-                }
-            });
-            $("#docTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
-            });
-            $("#actionTable").dataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
-            });
-        });
-    </script>
-
-    <script>
+    <script type="text/javascript">
         $(document).ready(function () {
 
             $("#btnSearch").click(function () {
+
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
                 var d = new Date(from.split("/").reverse().join("-"));
@@ -52,8 +34,9 @@
                 var mmt = d.getMonth() + 1;
                 var yyt = d.getFullYear();
                 var endDate = mmt + "/" + ddt + "/" + yyt;
-                if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0 &&
-                    (($("#dateRange").val()) === "" || ($("#toRange").val()) === "")) {
+                if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0
+                    //&& (($("#dateRange").val()) === "" || ($("#toRange").val()) === "")
+                ) {
                     alert('@ViewBag.emptySearch');
                 }
                 else if (!$('#filter_level').val()) {
@@ -72,12 +55,12 @@
                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyCustomerID')
                 }
-                else if (($("#dateRange").val()) === "" || ($("#toRange").val()) === "") {
+                @*else if (($("#dateRange").val()) === "" || ($("#toRange").val()) === "") {
                     alert('@ViewBag.emptyDateRange');
                 }
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
-                }
+                }*@
                 else if ($('input[name="date_case"]:checked').lengtViewBag == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
                 }
@@ -86,19 +69,85 @@
                     $("#myTable").show();
                     $("#docTable").show();
                 }
+
+                debugger;
+                var aFilterValue = $("#filter_level option:selected").val();
+                var aIdValue = $("#Pid").val();
+                var aFromDate = $("#dateRange").val();
+                var aToDate = $("#toRange").val();
+                var aCaseType = $('input[name="date_case"]:checked').val();
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Home/GetSearchCases",
+                        dataType: "JSON",
+                        data: {filterLevel: aFilterValue,userId: aIdValue,fromDate: aFromDate,toDate: aToDate,caseDateType: aCaseType},                     
+
+                        success: function (result) {
+                            console.log("success");
+                            console.log(result);
+                            var row = "";
+                            $.each(result, function (i, item) {
+                                var rows = "<tr>"
+                                    + "<td >" + item.account + "</td>"
+                                    + "<td >" + item.status + "</td>"
+                                    + "<td >" + item.caseType + "</td>"
+                                    + "<td >" + item.created + "</td>"
+                                    + "<td >" + item.completed + "</td>"
+                                    + "<td >" + item.priority + "</td>"
+                                    + "<td >" + item.adviser + "</td>"
+                                    + "<td >" + item.flag + "</td>"
+                                    + "<td >" + item.customerId + "</td>"
+                                    + "<td >" + item.requestor + "</td>"
+                                    + "<td >" + item.caseID + "</td>"
+                                    + "<td >" + item.workpackID + "</td>"
+                                    + "<td >" + item.team + "</td>"
+                                    + "<td >" + item.inPFC + "</td>"
+                                    + "<td >" + item.employees + "</td>"
+                                    + "</tr>";
+                                $('#caseContainer').append(rows);
+
+                            });
+
+
+                        },
+                        error: function () {
+                            console.log("Error");
+                        }
+
+                    });
+
+
+
             });
 
-            $("docContainer").hide();
-            $("#myTable").hide();
-            $("#docTable").hide();
 
-            $("#caseTable tr").click(function (event) {
-                event.preventDefault();
-                sessionStorage.account = $(this).html();
-                sessionStorage.status = $(this).find("td:first").html();
-                currentRow = this;
-                $("#docContainer").show();
+
+            //$("#myTable").dataTable({
+            //    pageLength: 10,
+            //    lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+            //    "fnDrawCallback": function (data) {
+            //        if ($('#myTable tr').length < 11) {
+            //            $('.dataTables_paginate').hide();
+            //        }
+            //    }
+            //});
+            $("#docTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
+            $("#actionTable").dataTable({
+                pageLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
+
+
+
+            //$("docContainer").hide();
+            //$("#myTable").hide();
+            //$("#docTable").hide();
+
+
         });
     </script>
 
@@ -160,7 +209,7 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1; 
+            z-index: 1;
             padding-top: 100px;
             left: 0;
             top: 0;
@@ -217,7 +266,7 @@
                                     <option value="" style="display:none; text-align:center;">--Select--</option>
                                     <option value="Account Level">Account Level</option>
                                     <option value="Adviser Level">Adviser Level</option>
-                                    <option value="Customer Level">Customer Level</option>  
+                                    <option value="Customer Level">Customer Level</option>
                                 </select>
                             </td>
                             <td colspan="1" align="left">
@@ -285,252 +334,92 @@
         <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
     </div>
 
-    <div style="overflow:scroll" ng-controller="HomeController">
-        <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
-            <thead>
-                <tr>
-                    <th>Account</th>
-                    <th>Status</th>
-                    <th>Case Type</th>
-                    <th>Created</th>
-                    <th>Completed</th>
-                    <th>Priority</th>
-                    <th>Adviser</th>
-                    <th>Flag</th>
-                    <th>CustomerId</th>
-                    <th>Requestor</th>
-                    <th>CaseId</th>
-                    <th>WorkpackId</th>
-                    <th>Team</th>
-                    <th>InPFC</th>
-                    <th>Employee</th>
-                </tr>
-            </thead>
-            <tbody id="caseTable" class="rowHighliter">
-                @*this way we will ferch the data from database in webgrid*@
-                @*<tr ng-repeat="e in regdata">
-            <td>{{e.Account}}</td>
-            <td>{{e.Status}}</td>
-            <td>{{e.CaseType}}</td>
-            <td>{{e.Created}}</td>
-            <td>{{e.Completed}}</td>
-            <td>{{e.Priority}}</td>
-            <td>{{e.Adviser}}</td>
-            <td>{{e.Flag}}</td>
-            <td>{{e.CustomerId}}</td>
-            <td>{{e.Requestor}}</td>
-            <td>{{e.CaseId}}</td>
-            <td>{{e.WorkpackId}}</td>
-            <td>{{e.Team}}</td>
-            <td>{{e.InPFC}}</td>
-            <td>{{e.Employee}}</td>
-        </tr>*@
-                <tr>
+    
+    <div style="overflow:scroll"
+    ng-controller="HomeController"
+    >
+    <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Status</th>
+                <th>Case Type</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Priority</th>
+                <th>Adviser</th>
+                <th>Flag</th>
+                <th>Customer Id</th>
+                <th>Requestor</th>
+                <th>Case ID</th>
+                <th>Workpack ID</th>
+                <th>Team</th>
+                <th>InPFC</th>
+                <th>Employee</th>
+            </tr>
+        </thead>
+        <tbody id="caseContainer">
+    @*@{
+            DataSet data = ViewBag.Data;
 
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
+            if (data != null)
+            {
+                foreach (DataRow row in data.Tables[0].Rows)
+                {
+                    <tr>
+                        <td>@row["Account"]</td>
+                        <td>@row["Status"]</td>
+                        <td>@row["Case Type"]</td>
+                        <td>@row["Created"]</td>
+                        <td>@row["Completed"]</td>
+                        <td>@row["Priority"]</td>
+                        <td>@row["Adviser"]</td>
+                        <td>@row["Flag"]</td>
+                        <td>@row["Customer Id"]</td>
+                        <td>@row["Requestor"]</td>
+                        <td>@row["Case ID"]</td>
+                        <td>@row["Workpack ID"]</td>
+                        <td>@row["Team"]</td>
+                        <td>@row["InPFC"]</td>
+                        <td>@row["Employee"]</td>
+                    </tr>
+                }
+            }
+        }*@
 
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
+    @*@{
+                if (Model != null)
+                {
+                    foreach (var data in Model)
+                    {
+                        <tr>
+                            <td>@data.Account</td>
+                            <td>@data.Status</td>
+                            <td>@data.CaseType</td>
+                            <td>@data.Created</td>
+                            <td>@data.Completed</td>
+                            <td>@data.Priority</td>
+                            <td>@data.Adviser</td>
+                            <td>@data.Flag</td>
+                            <td>@data.CustomerId</td>
+                            <td>@data.Requestor</td>
+                            <td>@data.CaseID</td>
+                            <td>@data.WorkpackID</td>
+                            <td>@data.Team</td>
+                            <td>@data.InPFC</td>
+                            <td>@data.Employees</td>
+                        </tr>
+                    }
+                }
+            }*@
+        </tbody>
+    </table>
+    @*<script src="~/Scripts/angular.min.js"></script>
 
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-                <tr>
-
-                    <td>1234567</td>
-                    <td>Archived</td>
-                    <td>Premium alteration</td>
-                    <td>13 June 2021</td>
-                    <td>14 June 2021</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                    <td>Normal</td>
-                </tr>
-            </tbody>
-        </table>
-
-        @*<script src="~/Scripts/angular.min.js"></script>
-
-            <script src="~/Scripts/AngularController.js"></script>*@
+        <script src="~/Scripts/AngularController.js"></script>*@
 
     </div>
+
     <br />
     <br />
     <div>
