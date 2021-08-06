@@ -164,3 +164,4 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Newtonsoft.Json.dll
