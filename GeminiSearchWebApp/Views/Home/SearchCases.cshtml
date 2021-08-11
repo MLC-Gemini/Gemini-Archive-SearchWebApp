@@ -11,17 +11,8 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js" type="text/javascript"></script>
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>*@
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js" type="text/javascript"></script>*@
-    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>*@
-    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-    @*<script src="Web.config.js" type="text/javascript"></script>*@
-
-  
-
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
 
@@ -29,6 +20,7 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
             //$("#myForm").on("change", "#eventType", function (event) {
             //    event.delegateTarget.reset();
             //});
@@ -75,6 +67,7 @@
             };
             
             console.log($.fn.ifEmpty());
+
             $("#btnSearch").click(function () {
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
@@ -115,9 +108,6 @@
                     alert('@ViewBag.emptyCaseTypeDate');
                 }
                 else {
-                    alert("Filter Level:" + $("#filter_level option:selected").val() + "\r\nID:" + $("#Pid").val() + "\r\nFrom Date:" + $("input[id='dateRange']").val() + "\r\nTo Date:" + $("input[id='toRange']").val() + "\r\nCase Date:" + $('input[name="date_case"]:checked').val());
-                    //$("#myTable").show();
-                    //$("#docTable").show();
                     $("#output1").show();
                     $("#output2").show();
                 }
@@ -125,16 +115,43 @@
                 
                 var aFilterValue = $("#filter_level option:selected").val();
                 var aIdValue = $("#Pid").val();
-                var aFromDate = $("#dateRange").val();
-                var aToDate = $("#toRange").val();
+                var aFromDate = $("input[id='dateRange']").val();
+                var aToDate = $("input[id='toRange']").val();
                 var aCaseType = $('input[name="date_case"]:checked').val();
+
+                
                 $.ajax(
                     {
                         type: "POST",
-                        url: "/Home/GetSearchCases",
+                        url: "/Home/GetCasesRecord",
                         dataType: "JSON",
                         data: { filterLevel: aFilterValue, userId: aIdValue, fromDate: aFromDate, toDate: aToDate, caseDateType: aCaseType },
                         success: function (result) {
+
+                            
+                            $("#myTable").DataTable({
+                                pageLength: 10,
+                                searching: false,
+                                select:true,
+                                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+                                data: result,
+                                columns: [
+                                    { 'data': 'Account' },
+                                    { 'data': 'Status' },
+                                    { 'data': 'CaseType' },
+                                    { 'data': 'Created' },
+                                    { 'data': 'Completed' },
+                                    { 'data': 'Priority' },
+                                    { 'data': 'Adviser' },
+                                    { 'data': 'Flag' },
+                                    { 'data': 'CustomerId' },
+                                    { 'data': 'Requestor' },
+                                    { 'data': 'CaseID' },
+                                    { 'data': 'WorkpackID' },
+                                    { 'data': 'InPFC' },
+                                    { 'data': 'Employee' }
+                                ]
+
                             console.log("success");
                             console.log(result);
                             console.log($.fn.ifEmpty());
@@ -178,15 +195,132 @@
                                     + "</tr>";
                                 $('#docContainer').append(rowsDoc);
 
+
                             });
 
 
+                            var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
+                            var caseIdText = caseTable.text();
+                            
+                            var aFValue = $("#filter_level option:selected").val();
+                            var aId = $("#Pid").val();
+                            var aFDate = $("input[id='dateRange']").val();
+                            var aTDate = $("input[id='toRange']").val();
+                            var aCase = $('input[name="date_case"]:checked').val();
+
+                            $.ajax(
+                                {
+                                   
+                                    type: "POST",
+                                    url: "/Home/GetSearchDoc",
+                                    dataType: "JSON",
+                                    data: { fLevel: aFValue, uId: aId, fDate: aFDate, tDate: aTDate, caseType: aCase },
+                                    success: function (response) {
+                                        debugger;
+                                        var tableDoc = $('#docTable').DataTable();
+
+                                        tableDoc.clear();
+                                        $.each(response, function (i, index) {
+                                            if (caseIdText == index.CaseID) {
+                                                tableDoc.row.add([
+                                                    index.DocumentType,
+                                                    index.DocCreated,
+                                                    index.Id,
+                                                    index.Source,
+                                                    index.BoxID,
+                                                    index.BundleID,
+                                                    index.DateTimeReceived,
+                                                    index.LetterDescription
+                                                ]);
+                                                tableDoc.draw();
+                                            }
+                                        });
+
+
+                                        $('#myTable').on('click', 'tr', function (e) {
+                                            var $row = $(this).closest("tr");
+                                            var $tds = $row.find("td:nth-child(11)");
+                                            tableDoc.clear();
+                                            $.each(response, function (i, index) {
+                                                if ($tds.text() == index.CaseID) {
+                                                    tableDoc.row.add([
+                                                        index.DocumentType,
+                                                        index.DocCreated,
+                                                        index.Id,
+                                                        index.Source,
+                                                        index.BoxID,
+                                                        index.BundleID,
+                                                        index.DateTimeReceived,
+                                                        index.LetterDescription
+                                                    ]);
+                                                    tableDoc.draw();
+                                                }
+                                            });
+                                        });
+
+                                        var tableAction = $('#actionTable').DataTable();
+                                        var msg = "";
+                                        var extraMsgTxt = "";
+                                        var finalMsg = "";
+                                        $('#myTable').on('dblclick', 'tr', function (e) {
+                                            var rowId = this.rowIndex;
+                                            var selectedCaseId = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
+                                            var caseText = selectedCaseId.text();
+                                            tableAction.clear();
+                                            $.each(response, function (i, index) {
+                                                if (index.Text.length > 200 && caseText == index.CaseID) {
+                                                    msg = index.Text.substring(0, 200);
+                                                    extraMsgTxt = index.Text.substring(200)
+                                                    var dots = "...........";
+                                                    finalMsg = msg.concat(dots);
+                                                    tableAction.row.add([
+                                                        index.ActionText,
+                                                        index.DateandTime,
+                                                        index.FirstName,
+                                                        finalMsg
+                                                    ]);
+                                                    tableAction.draw();
+                                                }
+                                                else if (caseText == index.CaseID) {
+                                                    tableAction.row.add([
+                                                        index.ActionText,
+                                                        index.DateandTime,
+                                                        index.FirstName,
+                                                        index.Text
+                                                    ]);
+                                                    tableAction.draw();
+                                                }
+                                            });
+                                            modal.style.display = "block";
+                                        });
+                                        $('#actionTable').on('click', 'tr', function (e) {
+                                            var $row = $(this).closest("tr");
+                                            var $tds = "";
+                                            $tds = $row.find("td:nth-child(4)");
+                                            if ($tds.text().includes("...........")) {
+                                                $("#fullTextMessage").text('').append(msg + extraMsgTxt);
+                                            }
+                                            else {
+                                                $("#fullTextMessage").text('').append($tds.text());
+                                            }
+                                            
+                                        });
+                                    },
+                                    error: function () {                                       
+                                        console.log("Error");
+                                    }
+                                });
                         },
                         error: function () {
                             console.log("Error");
                         }
 
                     });
+
+            });
+            
+
+
 
                 $.fn.resetForm();
 
@@ -218,6 +352,7 @@
                 searching: false,
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
+
         });
     </script>
 
@@ -306,9 +441,12 @@
     </style>
 </head>
 
-<body>
-    <div>
-        <table style="border: 1px solid black; border-style: double; border-color:black; border-width:thick">
+
+<body id="htmlBody">
+    <div style="border-style:double;">
+
+        <table style="border:1px solid black;">
+
             <tr>
                 <td>
                     <table>
@@ -332,10 +470,11 @@
                     <table>
                         <tr>
                             <td>
-                                <label for="dateRange" class="labelStyle">From Date:</label>
-                                @*<input id="dateRange" type="date" name="date_element" style="outline:double" />*@
 
-                                <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly />
+                                <label for="dateRange" class="labelStyle">Date Range:</label>
+                                <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly>
+
+
 
                                 <script>
                                     $(".datepicker").datepicker({
@@ -390,32 +529,39 @@
             </tr>
         </table>
     </div>
-    <div id="output1" style="display: none;">
-        <label for="caseText" class="labelStyle">Cases:</label>
-        <div style=" border: 3px ridge black; " ng-controller="HomeController">
-            <table id="myTable" class="table table-condensed rowHighlighter" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
-                <thead>
-                    <tr style="vertical-align:top">
-                        <th>Account</th>
-                        <th>Status</th>
-                        <th>Case Type</th>
-                        <th>Created</th>
-                        <th>Completed</th>
-                        <th>Priority</th>
-                        <th>Adviser</th>
-                        <th>Flag</th>
-                        <th>Customer Id</th>
-                        <th>Requestor</th>
-                        <th>Case ID</th>
-                        <th>Workpack ID</th>
-                        <th>Team</th>
-                        <th>InPFC</th>
-                        <th>Employee</th>
-                    </tr>
-                </thead>
-                <tbody id="caseContainer">
-                </tbody>
-            </table>
+
+    <br />
+    <br />
+    <div id="output1" style="display:none">
+        <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
+
+
+    
+    <div style="overflow:scroll">
+    <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
+        <thead>
+            <tr>
+                <th>Account</th>
+                <th>Status</th>
+                <th>Case Type</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Priority</th>
+                <th>Adviser</th>
+                <th>Flag</th>
+                <th>Customer Id</th>
+                <th>Requestor</th>
+                <th>Case ID</th>
+                <th>Workpack ID</th>
+                <th>Team</th>
+                <th>InPFC</th>
+                <th>Employee</th>
+            </tr>
+        </thead>
+        <tbody id="caseContainer" class="rowHighlighter">     
+        </tbody>
+    </table>  
+   
         </div>
     </div>
     <div id="output2" style=" display:none">
@@ -436,6 +582,7 @@
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighlighter">
+
                 </tbody>
             </table>
         </div>
@@ -454,19 +601,8 @@
                             <th>Message</th>
                         </tr>
                     </thead>
-                    <tbody id="actionContainer" class="rowHighliter">
-                        <tr>
-                            <td>Case Created</td>
-                            <td>24 Apr 2002</td>
-                            <td>ABCD</td>
-                            <td>Case created by ABCD</td>
-                        </tr>
-                        <tr>
-                            <td>Case Message</td>
-                            <td>29 Apr 2002</td>
-                            <td>ABCD</td>
-                            <td>Product is ready for use</td>
-                        </tr>
+                    <tbody id="actionContainer" class="rowHighlighter">
+                        
                     </tbody>
                 </table>
             </div>
@@ -479,36 +615,25 @@
         </div>
     </div>
     <script>
-        var caseRow = document.getElementById("myTable")
+
+        
+
+
         var modal = document.getElementById("caseModal")
         var span = document.getElementsByClassName("close")[0];
-
-        document.oncontextmenu = function () { return false; };
-
-        $(caseRow).mousedown(function (e) {
-            if (e.button == 2) {
-                modal.style.display = "block";
-                return false;
-            }
-        });
-
-        // When the user clicks on <span> (x), close the modal
+        
+        //document.oncontextmenu = function () { return false; };
+    
         span.onclick = function () {
             modal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
 
-        $("#actionContainer tr").click(function () {
-            var $row = $(this).closest("tr"),
-                $tds = $row.find("td:nth-child(4)");
-            $("#fullTextMessage").text('').append($tds.text());
-        });
     </script>
 
 

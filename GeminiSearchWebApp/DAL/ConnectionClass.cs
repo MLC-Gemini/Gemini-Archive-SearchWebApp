@@ -26,36 +26,24 @@ namespace GeminiSearchWebApp.DAL
             Configuration = _configuration;
             userInput = new UserInput();
         }
-        //string connString = Configuration.GetConnectionString("MyConn");
-        // SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["rdsConn"].ConnectionString);
 
-
-        public DataSet Getrecord(UserInput userInput)
+        public DataTable GetCasesRecord(UserInput userInput)
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
-           
-            DataSet dsResult = new DataSet();
+            DataTable dtCases = new DataTable();
             using (SqlConnection conn = new SqlConnection(connString))
             {
                 SqlCommand dbCommand = new SqlCommand();
                 dbCommand.Connection = conn;
                 dbCommand.CommandType = CommandType.StoredProcedure;
-                dbCommand.CommandText = "[dbo].[usp_CaseGrid]";
-                //dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 1;
-                //dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = "17241705";
-                //dbCommand.Parameters.Add("@FromDate", SqlDbType.DateTime).Value = DBNull.Value;
-                //dbCommand.Parameters.Add("@ToDate", SqlDbType.DateTime).Value = DBNull.Value;
-                //dbCommand.Parameters.Add("@CaseDate", SqlDbType.Int, 20).Value = 1;
+                dbCommand.CommandText = "[dbo].[usp_GetCases]";
                 conn.Open();
-
-
-
                 try
                 {
                     if (userInput.FilterLevel == "Account Level")
                     {
                         dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 1;
-                        dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = userInput.UserId; //@UserInputtedID
+                        dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = userInput.UserId;
 
                     }
                     else if (userInput.FilterLevel == "Adviser Level")
@@ -71,20 +59,20 @@ namespace GeminiSearchWebApp.DAL
 
                     if (userInput.FromDate == DateTime.MinValue)
                     {
-                        dbCommand.Parameters.Add("@FromDate", SqlDbType.DateTime).Value = DBNull.Value;
+                        dbCommand.Parameters.Add("@FromDate", SqlDbType.Date).Value = DBNull.Value;
                     }
                     else
                     {
-                        dbCommand.Parameters.Add("@FromDate", SqlDbType.DateTime).Value = userInput.FromDate;
+                        dbCommand.Parameters.Add("@FromDate", SqlDbType.Date).Value = userInput.FromDate;
                     }
 
                     if (userInput.ToDate == DateTime.MinValue)
                     {
-                        dbCommand.Parameters.Add("@ToDate", SqlDbType.DateTime).Value = DBNull.Value;
+                        dbCommand.Parameters.Add("@ToDate", SqlDbType.Date).Value = DBNull.Value;
                     }
                     else
                     {
-                        dbCommand.Parameters.Add("@ToDate", SqlDbType.DateTime).Value = userInput.ToDate;
+                        dbCommand.Parameters.Add("@ToDate", SqlDbType.Date).Value = userInput.ToDate;
                     }
 
                     if (userInput.CaseTypeDate == "Case Creation Date")
@@ -97,36 +85,9 @@ namespace GeminiSearchWebApp.DAL
                     }
 
 
-
                     SqlDataAdapter da = new SqlDataAdapter(dbCommand);
-                    da.Fill(dsResult);
+                    da.Fill(dtCases);
 
-                    //SqlDataReader dr = dbCommand.ExecuteReader();
-                    //if (dr.HasRows)
-                    //{
-
-                    //    while (dr.Read())
-                    //    {
-                    //        cases.Add(new Case()
-                    //        {
-                    //            Account = dr["Account"].ToString(),
-                    //            Status = Convert.ToInt32(dr["Status"].ToString()),
-                    //            CaseType = dr["Case Type"].ToString(),
-                    //            Created = dr["Created"].ToString(),
-                    //            Completed = dr["Completed"].ToString(),
-                    //            Priority = Convert.ToInt32(dr["Priority"].ToString()),
-                    //            Adviser = dr["Adviser"].ToString(),
-                    //            Flag = dr["Flag"].ToString(),
-                    //            CustomerId = dr["Customer Id"].ToString(),
-                    //            Requestor = Convert.ToInt32(dr["Requestor"].ToString()),
-                    //            CaseID = dr["Case ID"].ToString(),
-                    //            WorkpackID = Convert.ToInt32(dr["Workpack ID"].ToString()),
-                    //            Team = dr["Team"].ToString(),
-                    //            InPFC = Convert.ToInt32(dr["InPFC"].ToString()),
-                    //            Employees = Convert.ToInt32(dr["Employee"].ToString())
-                    //        });
-                    //    }
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -138,9 +99,88 @@ namespace GeminiSearchWebApp.DAL
                     conn.Close();
                 }
             }
-            
+            return dtCases;
+        }
 
-            return dsResult;
+
+
+
+        public DataTable Getrecord(UserInput userInput)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+           
+            DataSet dsResult = new DataSet();
+            DataTable dtResult = new DataTable();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand dbCommand = new SqlCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandType = CommandType.StoredProcedure;
+                dbCommand.CommandText = "[dbo].[usp_GeminiArcSp]";
+                conn.Open();
+                try
+                {
+                    if (userInput.FilterLevel == "Account Level")
+                    {
+                        dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 1;
+                        dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = userInput.UserId; 
+
+                    }
+                    else if (userInput.FilterLevel == "Adviser Level")
+                    {
+                        dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 2;
+                        dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = userInput.UserId;
+                    }
+                    else
+                    {
+                        dbCommand.Parameters.Add("@FilterLevel", SqlDbType.Int, 20).Value = 3;
+                        dbCommand.Parameters.Add("@UserInputtedID", SqlDbType.Char, 20).Value = userInput.UserId;
+                    }
+
+                    if (userInput.FromDate == DateTime.MinValue)
+                    {
+                        dbCommand.Parameters.Add("@FromDate", SqlDbType.Date).Value = DBNull.Value;
+                    }
+                    else
+                    {
+                        dbCommand.Parameters.Add("@FromDate", SqlDbType.Date).Value = userInput.FromDate;
+                    }
+
+                    if (userInput.ToDate == DateTime.MinValue)
+                    {
+                        dbCommand.Parameters.Add("@ToDate", SqlDbType.Date).Value = DBNull.Value;
+                    }
+                    else
+                    {
+                        dbCommand.Parameters.Add("@ToDate", SqlDbType.Date).Value = userInput.ToDate;
+                    }
+
+                    if (userInput.CaseTypeDate == "Case Creation Date")
+                    {
+                        dbCommand.Parameters.Add("@CaseDate", SqlDbType.Int, 20).Value = 1;
+                    }
+                    else
+                    {
+                        dbCommand.Parameters.Add("@CaseDate", SqlDbType.Int, 20).Value = 2;
+                    }
+
+
+                    SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                    da.Fill(dtResult);
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+           
+            return dtResult;
         }
     }
 }
