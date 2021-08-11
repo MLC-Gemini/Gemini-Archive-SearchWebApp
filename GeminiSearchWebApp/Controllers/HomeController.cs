@@ -86,8 +86,8 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-       // [HttpPost]
-        public string GetSearchCases(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+       
+        public string GetSearchDoc(string fLevel, string uId, DateTime fDate, DateTime tDate, string caseType)
         {
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
@@ -95,13 +95,14 @@ namespace GeminiSearchWebApp.Controllers
             try
             {
                 UserInput userInput = new UserInput();
-                userInput.FilterLevel = filterLevel;
-                userInput.UserId = userId;
-                userInput.FromDate = fromDate;
-                userInput.ToDate = toDate;
-                userInput.CaseTypeDate = caseDateType;
+                userInput.FilterLevel = fLevel;
+                userInput.UserId = uId;
+                userInput.FromDate = fDate;
+                userInput.ToDate = tDate;
+                userInput.CaseTypeDate = caseType;
                 ConnectionClass connectionClass = new ConnectionClass(configuration);
-                ds = connectionClass.Getrecord(userInput);
+                dt = connectionClass.Getrecord(userInput);
+               
             }
             catch (Exception)
             {
@@ -109,12 +110,8 @@ namespace GeminiSearchWebApp.Controllers
                 Console.WriteLine("error");
             }
 
-            //ViewBag.Data = ds;
+           return DataTableToJSONWithJSONNet(dt);
 
-            //   Json(JsonConvert.SerializeObject(cases), JsonRequestBehaviour.AllowGet);
-           return DataTableToJSONWithJSONNet(ds.Tables[0]);
-
-            //return Json(ds);
         }
 
         public string DataTableToJSONWithJSONNet(DataTable table)
@@ -124,34 +121,41 @@ namespace GeminiSearchWebApp.Controllers
             return JSONString;
         }
 
-        //[HttpGet]
-        //public IActionResult CaseGrid(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
-        //{
-        //    try
-        //    {
-        //        UserInput userInput = new UserInput();
-        //        userInput.FilterLevel = filterLevel;
-        //        userInput.UserId = userId;
-        //        userInput.FromDate = fromDate;
-        //        userInput.ToDate = toDate;
-        //        userInput.CaseTypeDate = caseDateType;
 
-        //        //userInput.FilterLevel = "Account Level";
-        //        //userInput.UserId = "17241705";
-        //        //userInput.FromDate = DateTime.MinValue;
-        //        //userInput.ToDate = DateTime.MinValue;
-        //        //userInput.CaseTypeDate = "Case Creation Date";
 
-        //        ConnectionClass connectionClass = new ConnectionClass(configuration);
-        //        cases = connectionClass.Getrecord(userInput);
-        //    }
-        //    catch (Exception)
-        //    {
+        public string GetCasesRecord(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
 
-        //        Console.WriteLine("error");
-        //    }
-        //    return PartialView("CaseGrid",cases);
-        //}
+            try
+            {
+                UserInput userInput = new UserInput();
+                userInput.FilterLevel = filterLevel;
+                userInput.UserId = userId;
+                userInput.FromDate = fromDate;
+                userInput.ToDate = toDate;
+                userInput.CaseTypeDate = caseDateType;
+                ConnectionClass connectionClass = new ConnectionClass(configuration);
+                dt = connectionClass.GetCasesRecord(userInput);
+
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("error");
+            }
+
+            return CasesToJson(dt);
+
+        }
+
+        public string CasesToJson(DataTable table)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(table);
+            return JSONString;
+        }
 
 
     }
