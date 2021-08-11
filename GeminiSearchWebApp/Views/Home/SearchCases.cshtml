@@ -21,6 +21,53 @@
 
         $(document).ready(function () {
 
+            //$("#myForm").on("change", "#eventType", function (event) {
+            //    event.delegateTarget.reset();
+            //});
+            //$.fn.resetForm = function () {
+            //    if ($("#filter_level").change() || $("#Pid").change() || $("#dateRange").change() || $("#toRange").change() || $("#rdbCaseCreationDate").change()) {
+            //        if (!$("caseContainer").empty()) {
+            //            $("#myForm").reset();
+            //        }
+            //    }
+
+            //};
+            $.fn.resetForm = function () {
+                $("input").change(function () {
+                    if ($.fn.ifEmpty() == false) {
+                        location.reload();
+                    }
+                })
+                $("#filter_level").change(function () {
+                    if ($.fn.ifEmpty() == false) {
+                        location.reload();
+                    }
+                })
+                //$("#dateRange").change(function () {
+                //    if ($.fn.ifEmpty() == false) {
+                //        location.reload();
+                //    }
+                //})
+                //$("#toRange").change(function () {
+                //    if ($.fn.ifEmpty() == false) {
+                //        location.reload();
+                //    }
+                //})
+            };
+            var empty = false;
+            $.fn.ifEmpty = function () {
+                $('input[type="text"]').each(function () {
+                    console.log($(this).val());
+                    if ($(this).val() == "") {
+                        empty = true;
+                        return true;
+                    }
+                })
+                return false;
+            };
+            
+            console.log($.fn.ifEmpty());
+
             $("#btnSearch").click(function () {
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
@@ -48,20 +95,16 @@
                 else if ($('#filter_level').val() == "Adviser Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyAdviserID')
                 }
-
                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyCustomerID')
                 }
-
                 else if (document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptySearchPid');
-
                 }
-
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
                 }
-                else if ($('input[name="date_case"]:checked').lengtViewBag == 0) {
+                else if ($('input[name="date_case"]:checked').length == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
                 }
                 else {
@@ -84,6 +127,7 @@
                         dataType: "JSON",
                         data: { filterLevel: aFilterValue, userId: aIdValue, fromDate: aFromDate, toDate: aToDate, caseDateType: aCaseType },
                         success: function (result) {
+
                             
                             $("#myTable").DataTable({
                                 pageLength: 10,
@@ -107,6 +151,51 @@
                                     { 'data': 'InPFC' },
                                     { 'data': 'Employee' }
                                 ]
+
+                            console.log("success");
+                            console.log(result);
+                            console.log($.fn.ifEmpty());
+                            console.log(aFilterValue + aIdValue + aCaseType + aFromDate + aToDate);
+                            var rows = "";
+                            var rowsDoc = "";
+                            $.each(result, function (i, item) {
+                                    rows = "<tr>"
+                                    + "<td >" + item.Account + "</td>"
+                                    + "<td >" + item.Status + "</td>"
+                                    + "<td >" + item.CaseType + "</td>"
+                                    + "<td >" + item.Created + "</td>"
+                                    + "<td >" + item.Completed + "</td>"
+                                    + "<td >" + item.Priority + "</td>"
+                                    + "<td >" + item.Adviser + "</td>"
+                                    + "<td >" + item.Flag + "</td>"
+                                    + "<td >" + item.CustomerId + "</td>"
+                                    + "<td >" + item.Requestor + "</td>"
+                                    + "<td >" + item.CaseID + "</td>"
+                                    + "<td >" + item.WorkpackID + "</td>"
+                                    + "<td >" + item.Team + "</td>"
+                                    + "<td >" + item.InPFC + "</td>"
+                                    + "<td >" + item.Employee + "</td>"
+                                    + "</tr>";
+                                $('#caseContainer').append(rows);
+                                $('.odd').hide();
+
+                            });
+
+
+                            $.each(result, function (i, item) {
+                                rowsDoc = "<tr>"
+                                    + "<td >" + item.DocumentType + "</td>"
+                                    + "<td >" + item.Created + "</td>"
+                                    + "<td >" + item.Id + "</td>"
+                                    + "<td >" + item.Source + "</td>"
+                                    + "<td >" + item.BoxID + "</td>"
+                                    + "<td >" + item.BundleID + "</td>"
+                                    + "<td >" + item.DateTimeReceived + "</td>"
+                                    + "<td >" + item.LetterDescription + "</td>"                                    
+                                    + "</tr>";
+                                $('#docContainer').append(rowsDoc);
+
+
                             });
 
 
@@ -227,51 +316,76 @@
                         }
 
                     });
+
             });
             
+
+
+
+                $.fn.resetForm();
+
+            });
+
+            $("#myTable").dataTable({
+                pageLength: 10,
+                searching: false,
+                scrollX:true,
+                scrollY: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    heightMatch: 'none',
+                },
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
+            $("#docTable").dataTable({
+                pageLength: 10,
+                searching: false,
+                scrollX: true,
+                scrollY: true,
+                fixedColumns: {
+                    heightMatch: 'none',
+                },
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
+            $("#actionTable").dataTable({
+                pageLength: 10,
+                searching: false,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+            });
 
         });
     </script>
 
     <style>
         table {
-            width: 549px;
-            background-color: aliceblue;
-        }
-
-        .table {
-            width: 500px;
+            white-space: nowrap;
+            width: 550px;
             background-color: aliceblue;
             font-size: 17px;
             font-family: 'Times New Roman';
             font-style: normal;
             text-align: center;
+            max-height: 10px;
         }
-
-        .th {
-            font-weight: bold;
-            font-family: 'Times New Roman';
-            font-style: normal;
-            text-align: center;
-        }
-
-        .td {
-            font-weight: bold;
-            font-family: 'Times New Roman';
-            font-style: normal;
-            text-align: center;
-        }
-
         .rowHighlighter tr:hover td {
             background-color: lightblue;
         }
-
-        #btnSearch {
-            padding: 0px 25px 0px 25px;
-            font-size: 16px;
-            margin: 20px 20px 20px 20px;
+        th,td{
+            white-space:nowrap;
         }
-
+        div.dataTables_wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+        #btnSearch {
+            padding: 0px 20px 0px 20px;
+            font-size: 16px;
+            font-weight:bold;
+            margin: 10px 10px 10px 10px;
+        }
+            #btnSearch:hover{
+                background-color:lightskyblue;
+            }
         .datepicker {
             width: 130px;
             margin: 20px 0px 10px 0px
@@ -282,9 +396,10 @@
             outline: double;
         }
 
-        .lableStyle {
-            padding-left: 5px;
-            font-size: medium;
+        .labelStyle {
+            padding-left: 10px;
+            font-weight: bold;
+            font-style: normal;
             text-align: left;
         }
 
@@ -326,10 +441,12 @@
     </style>
 </head>
 
+
 <body id="htmlBody">
     <div style="border-style:double;">
 
         <table style="border:1px solid black;">
+
             <tr>
                 <td>
                     <table>
@@ -344,30 +461,36 @@
                                 </select>
                             </td>
                             <td colspan="1" align="left">
-                                <input id="Pid" type="text" size="10" placeholder="Enter ID" style="text-align:center;" />
+                                <input id="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
                             </td>
                         </tr>
                     </table>
                 </td>
                 <td>
-
                     <table>
                         <tr>
                             <td>
+
                                 <label for="dateRange" class="labelStyle">Date Range:</label>
                                 <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly>
+
+
 
                                 <script>
                                     $(".datepicker").datepicker({
                                         dateFormat: 'dd/mm/yy',
                                         changeMonth: true,
                                         changeYear: true,
-                                        yearRange: "1980:+nn"
+                                        yearRange: "1980:+nn",
+                                        onSelect: function (dateText) {
+                                            console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                            $(this).change();
+                                        }
                                     });
                                 </script>
                             <td />
                             <td>
-                                <label for="toRange" class="labelStyle">to:</label>
+                                <label for="toRange" class="labelStyle">To Date:</label>
                                 <input type="text" id="toRange" class="datepicker" title="To" style="outline:double" readonly>
 
                                 <script>
@@ -375,37 +498,38 @@
                                         dateFormat: 'dd/mm/yy',
                                         changeMonth: true,
                                         changeYear: true,
-                                        yearRange: "1980:+nn"
+                                        yearRange: "1980:+nn",
+                                        onSelect: function (dateText) {
+                                            console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                            $(this).change();
+                                        }
                                     });
                                 </script>
                             </td>
                         </tr>
                         <tr>
                             <td align="left">
-
                                 <input id="rdbCaseCreationDate" type="radio" name="date_case" value="Case Creation Date" checked="checked" />
-                                <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label><br>
+                                <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label>
                             </td>
                         </tr>
                         <tr>
                             <td align="left">
                                 <input id="rdbCaseClosedDate" type="radio" name="date_case" value="CaseClosed Date" />
-                                <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label><br>
-
+                                <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr align="center">
-                <td colspan="2" vertical-align:top; border: 1px solid black;">
-                    <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
+                <td colspan="2" style="vertical-align:top;">
+                    <button id="btnSearch" type="button" name="btn_search" value="search" >Search</button>
                 </td>
             </tr>
         </table>
-
-
     </div>
+
     <br />
     <br />
     <div id="output1" style="display:none">
@@ -436,20 +560,16 @@
         </thead>
         <tbody id="caseContainer" class="rowHighlighter">     
         </tbody>
-    </table>
+    </table>  
    
         </div>
     </div>
-
-    <br />
-    <br />
     <div id="output2" style=" display:none">
-        <label for="documentText" style="text-align:left" class="labelStyle">Documents:</label>
-
-        <div style="overflow:scroll">
-            <table id="docTable" class="table table-condensed" style="border: 1px ridge lightgray">
+        <label for="documentText" class="labelStyle">Documents:</label>
+        <div style="border: 3px ridge black; ">
+            <table id="docTable" class="table table-condensed" style="width: contain; border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color: lightskyblue; ">
                 <thead>
-                    <tr>
+                    <tr style="vertical-align:top">
                         <th>Document Type</th>
                         <th>Created</th>
                         <th>Id</th>
@@ -458,10 +578,11 @@
                         <th>Bundle Id</th>
                         <th>Date/Time Received</th>
                         <th>Id - Letter Description</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighlighter">
-                   
+
                 </tbody>
             </table>
         </div>
@@ -494,7 +615,9 @@
         </div>
     </div>
     <script>
+
         
+
 
         var modal = document.getElementById("caseModal")
         var span = document.getElementsByClassName("close")[0];
