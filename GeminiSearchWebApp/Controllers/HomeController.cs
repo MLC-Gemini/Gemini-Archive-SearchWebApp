@@ -12,11 +12,14 @@ using Gemini.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace GeminiSearchWebApp.Controllers
 {
-    [Authorize]
+   
     public class HomeController : Controller
     {
         List<Case> cases = new List<Case>();
@@ -66,7 +69,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        [Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
@@ -152,6 +155,34 @@ namespace GeminiSearchWebApp.Controllers
         //    }
         //    return PartialView("CaseGrid",cases);
         //}
+
+        // code for PI tower service call
+
+        [HttpPost]
+        public async Task<IActionResult> GetDoc(int id)
+        {
+            Documents documents = new Documents();
+
+            using (var httpClient = new HttpClient())
+            {
+                // httpClient.DefaultRequestHeaders.Add("Key", "Secret@123");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "username:password");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(documents), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.GetAsync("" + id))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        documents = JsonConvert.DeserializeObject<Documents>(apiResponse);
+                    }
+                    else
+                        ViewBag.StatusCode = response.StatusCode;
+                }
+            }
+            return View(documents);
+        }
+
+
 
 
     }
