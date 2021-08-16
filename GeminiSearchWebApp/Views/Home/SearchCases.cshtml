@@ -195,28 +195,22 @@
             $("#myTable").dataTable({
                 pageLength: 10,
                 searching: false,
-                scrollX:true,
-                scrollY: true,
-                scrollCollapse: true,
                 fixedColumns: {
                     heightMatch: 'none',
                 },
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
             $("#docTable").dataTable({
-                pageLength: 10,
                 searching: false,
-                scrollX: true,
-                scrollY: true,
                 fixedColumns: {
                     heightMatch: 'none',
                 },
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+                lengthChange:false
             });
             $("#actionTable").dataTable({
-                pageLength: 10,
+                paginate: false,
                 searching: false,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+                bInfo: false
             });
         });
     </script>
@@ -224,12 +218,14 @@
     <style>
         table {
             white-space: nowrap;
-            width: 550px;
+            width: auto;
+            align-content:center;
             background-color: aliceblue;
-            font-size: 17px;
+            font-size: 15px;
             font-family: 'Times New Roman';
             font-style: normal;
             text-align: center;
+            vertical-align:top;
             max-height: 10px;
         }
         .rowHighlighter tr:hover td {
@@ -241,23 +237,37 @@
         div.dataTables_wrapper {
             width: 100%;
             margin: 0 auto;
+            font-size:small;
+            padding:0px 0px 0px 0px;
+        }
+        .size{
+            font-size:small;
+        }
+        #myTable.dataTable tbody th, #docTable.dataTable tbody th, #actionTable.dataTable tbody th,
+        #myTable.dataTable tbody td, #docTable.dataTable tbody td, #actionTable.dataTable tbody td {
+            padding: 0px 18px;
+            text-align: left;
+        }
+        #myTable.dataTable thead th, #docTable.dataTable thead th, #actionTable.dataTable thead th,
+        #myTable.dataTable thead td, #docTable.dataTable thead td, #actionTable.dataTable thead td {
+            padding: 0px 18px;
+            text-align: left;
         }
         #btnSearch {
             padding: 0px 20px 0px 20px;
             font-size: 16px;
-            font-weight:bold;
+            font-weight: bold;
             margin: 10px 10px 10px 10px;
         }
             #btnSearch:hover{
                 background-color:lightskyblue;
             }
         .datepicker {
-            width: 130px;
-            margin: 20px 0px 10px 0px
+            width: 140px;
         }
 
         .textBoxInput {
-            width: 100px;
+            width: 150px;
             outline: double;
         }
 
@@ -266,6 +276,7 @@
             font-weight: bold;
             font-style: normal;
             text-align: left;
+            font-size:15px;
         }
 
         .modal {
@@ -303,17 +314,18 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+
     </style>
 </head>
 
 <body>
-    <div>
-        <table style="border: 1px solid black; border-style: double; border-color:black; border-width:thick">
+    <div style="position:center;">
+        <table style="align-content:center; border: 1px solid black; border-style: double; border-color:black; border-width:thick">
             <tr>
                 <td>
                     <table>
                         <tr>
-                            <td colspan="1" align="center">
+                            <td style="padding-right:60px; padding-left:50px; padding-top:10px;">
                                 <label for="filter_level" class="labelStyle">Search By: </label>
                                 <select name="filter_level" id="filter_level" style="width:150px; height:30px;">
                                     <option value="" style="display:none; text-align:center;">--Select--</option>
@@ -322,21 +334,13 @@
                                     <option value="Customer Level">Customer Level</option>
                                 </select>
                             </td>
-                            <td colspan="1" align="left">
+                            <td style="padding-right: 50px; padding-top: 10px;">
                                 <input id="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
                             </td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
+                            <td style="padding-right: 50px; padding-top: 10px;">
                                 <label for="dateRange" class="labelStyle">From Date:</label>
                                 @*<input id="dateRange" type="date" name="date_element" style="outline:double" />*@
-
                                 <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly />
-
                                 <script>
                                     $(".datepicker").datepicker({
                                         dateFormat: 'dd/mm/yy',
@@ -349,11 +353,10 @@
                                         }
                                     });
                                 </script>
-                            <td />
-                            <td>
+                            </td>
+                            <td style="padding-right: 60px; padding-top:10px;">
                                 <label for="toRange" class="labelStyle">To Date:</label>
                                 <input type="text" id="toRange" class="datepicker" title="To" style="outline:double" readonly>
-
                                 <script>
                                     $(".datepicker").datepicker({
                                         dateFormat: 'dd/mm/yy',
@@ -369,13 +372,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td colspan="2" style="padding-left:60px; padding-bottom: 0px;">
+                                <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
+                            </td>
+                            <td align="left" style="padding-right: 50px; padding-left: 60px; padding-bottom: 0px;">
                                 <input id="rdbCaseCreationDate" type="radio" name="date_case" value="Case Creation Date" checked="checked" />
                                 <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label>
                             </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
+                            <td align="left" style="padding-right: 50px; padding-bottom: 0px;">
                                 <input id="rdbCaseClosedDate" type="radio" name="date_case" value="CaseClosed Date" />
                                 <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label>
                             </td>
@@ -383,19 +387,14 @@
                     </table>
                 </td>
             </tr>
-            <tr align="center">
-                <td colspan="2" style="vertical-align:top;">
-                    <button id="btnSearch" type="button" name="btn_search" value="search" >Search</button>
-                </td>
-            </tr>
         </table>
     </div>
     <div id="output1" style="display: none;">
-        <label for="caseText" class="labelStyle">Cases:</label>
-        <div style=" border: 3px ridge black; " ng-controller="HomeController">
-            <table id="myTable" class="table table-condensed rowHighlighter" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
+        <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
+        <div style=" border: 3px ridge black; overflow:auto;">
+            <table id="myTable" class="table table-condensed rowHighlighter size compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
                 <thead>
-                    <tr style="vertical-align:top">
+                    <tr style="vertical-align:top;font-size:small;">
                         <th>Account</th>
                         <th>Status</th>
                         <th>Case Type</th>
@@ -419,11 +418,11 @@
         </div>
     </div>
     <div id="output2" style=" display:none">
-        <label for="documentText" class="labelStyle">Documents:</label>
-        <div style="border: 3px ridge black; ">
-            <table id="docTable" class="table table-condensed" style="width: contain; border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color: lightskyblue; ">
+        <label for="documentText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Documents:</label>
+        <div style="border: 3px ridge black; overflow:auto;">
+            <table id="docTable" class="table table-condensed size compact nowrap" style="width: contain; border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color: lightskyblue; ">
                 <thead>
-                    <tr style="vertical-align:top">
+                    <tr style="vertical-align: top; font-size:small;">
                         <th>Document Type</th>
                         <th>Created</th>
                         <th>Id</th>
@@ -432,7 +431,6 @@
                         <th>Bundle Id</th>
                         <th>Date/Time Received</th>
                         <th>Id - Letter Description</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighlighter">
@@ -444,8 +442,8 @@
     <div id="caseModal" class="modal" title="Case Activities">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div style="overflow:scroll">
-                <table id="actionTable" class="table table-condensed" style="border: 1px ridge lightgray">
+            <div style="overflow: scroll; border: 3px ridge black;">
+                <table id="actionTable" class="table table-condensed size compact nowrap" style="border: 1px ridge lightgray">
                     <thead>
                         <tr>
                             <th>Action</th>
@@ -470,8 +468,6 @@
                     </tbody>
                 </table>
             </div>
-            <br />
-            <br />
             <div>
                 <label for="fullTextMessage" class="labelStyle">Full Text of Message:</label><br />
                 <textarea id="fullTextMessage" rows="5" cols="150" readonly style="outline:double; max-width:100%; resize:none"></textarea>
