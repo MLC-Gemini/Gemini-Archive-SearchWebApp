@@ -12,14 +12,13 @@ using Gemini.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-
+using System.Globalization;
 
 namespace GeminiSearchWebApp.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        List<Case> cases = new List<Case>();
         private IConfiguration configuration;
         
         //private readonly ILogger<HomeController> _logger;
@@ -87,18 +86,28 @@ namespace GeminiSearchWebApp.Controllers
         }
 
        
-        public string GetSearchDoc(string fLevel, string uId, DateTime fDate, DateTime tDate, string caseType)
+        public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
-            DataSet ds = new DataSet();
             DataTable dt = new DataTable();
-          
+            string format;
+            format = "dd/MM/yyyy";
+            CultureInfo provider = CultureInfo.InvariantCulture;
+
             try
             {
                 UserInput userInput = new UserInput();
                 userInput.FilterLevel = fLevel;
                 userInput.UserId = uId;
-                userInput.FromDate = fDate;
-                userInput.ToDate = tDate;
+                if (fDate == null || tDate == null)
+                {
+                    userInput.FromDate = DateTime.MinValue;
+                    userInput.ToDate = DateTime.MinValue;
+                }
+                else
+                {
+                    userInput.FromDate = DateTime.ParseExact(fDate, format, provider);
+                    userInput.ToDate = DateTime.ParseExact(tDate, format, provider);
+                }
                 userInput.CaseTypeDate = caseType;
                 ConnectionClass connectionClass = new ConnectionClass(configuration);
                 dt = connectionClass.Getrecord(userInput);
@@ -123,18 +132,28 @@ namespace GeminiSearchWebApp.Controllers
 
 
 
-        public string GetCasesRecord(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
         {
-            DataSet ds = new DataSet();
             DataTable dt = new DataTable();
+            string format;
+            format = "dd/MM/yyyy";
+            CultureInfo provider = CultureInfo.InvariantCulture;
 
             try
             {
                 UserInput userInput = new UserInput();
                 userInput.FilterLevel = filterLevel;
                 userInput.UserId = userId;
-                userInput.FromDate = fromDate;
-                userInput.ToDate = toDate;
+                if (fromDate==null || toDate==null)
+                {
+                    userInput.FromDate = DateTime.MinValue;
+                    userInput.ToDate = DateTime.MinValue;
+                }
+                else
+                {
+                    userInput.FromDate = DateTime.ParseExact(fromDate, format, provider);
+                    userInput.ToDate = DateTime.ParseExact(toDate, format, provider);
+                }
                 userInput.CaseTypeDate = caseDateType;
                 ConnectionClass connectionClass = new ConnectionClass(configuration);
                 dt = connectionClass.GetCasesRecord(userInput);
