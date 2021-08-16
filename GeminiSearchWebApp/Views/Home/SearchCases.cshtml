@@ -1,6 +1,6 @@
 @using System.Data
 @*@model IEnumerable<Gemini.Models.Case>*@
- 
+
 @{
 
     ViewBag.title = "Search Cases";
@@ -20,6 +20,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            var tableAction;
+            var tableDoc;
 
             $("#btnSearch").click(function () {
                 var from = $("#dateRange").val();
@@ -69,50 +71,55 @@
                     $("#output2").show();
                 }
 
-                
                 var aFilterValue = $("#filter_level option:selected").val();
                 var aIdValue = $("#Pid").val();
                 var aFromDate = $("input[id='dateRange']").val();
                 var aToDate = $("input[id='toRange']").val();
                 var aCaseType = $('input[name="date_case"]:checked').val();
 
-                
+
                 $.ajax(
                     {
                         type: "POST",
                         url: "/Home/GetCasesRecord",
                         dataType: "JSON",
-                        data: { filterLevel: aFilterValue, userId: aIdValue, fromDate: aFromDate, toDate: aToDate, caseDateType: aCaseType },
+                        data: { filterLevel: aFilterValue, userId: aIdValue, fromDate: aFromDate.toString(), toDate: aToDate.toString(), caseDateType: aCaseType },
                         success: function (result) {
-                            
-                            $("#myTable").DataTable({
-                                pageLength: 10,
-                                searching: false,
-                                select:true,
-                                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
-                                data: result,
-                                columns: [
-                                    { 'data': 'Account' },
-                                    { 'data': 'Status' },
-                                    { 'data': 'CaseType' },
-                                    { 'data': 'Created' },
-                                    { 'data': 'Completed' },
-                                    { 'data': 'Priority' },
-                                    { 'data': 'Adviser' },
-                                    { 'data': 'Flag' },
-                                    { 'data': 'CustomerId' },
-                                    { 'data': 'Requestor' },
-                                    { 'data': 'CaseID' },
-                                    { 'data': 'WorkpackID' },
-                                    { 'data': 'InPFC' },
-                                    { 'data': 'Employee' }
-                                ]
-                            });
 
+                            try {
+                                if (!$.fn.DataTable.isDataTable("#myTable")) {
+                                    $("#myTable").DataTable({
+                                        pageLength: 10,
+                                        searching: false,
+                                        select: true,
+                                        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
+                                        data: result,
+                                        columns: [
+                                            { 'data': 'Account' },
+                                            { 'data': 'Status' },
+                                            { 'data': 'CaseType' },
+                                            { 'data': 'Created' },
+                                            { 'data': 'Completed' },
+                                            { 'data': 'Priority' },
+                                            { 'data': 'Adviser' },
+                                            { 'data': 'Flag' },
+                                            { 'data': 'CustomerId' },
+                                            { 'data': 'Requestor' },
+                                            { 'data': 'CaseID' },
+                                            { 'data': 'WorkpackID' },
+                                            { 'data': 'InPFC' },
+                                            { 'data': 'Employee' }
+                                        ]
+                                    });
+                                }
+                            }
+                            catch (e) {
+                                Console.log(e);
+                            }
 
                             var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
                             var caseIdText = caseTable.text();
-                            
+
                             var aFValue = $("#filter_level option:selected").val();
                             var aId = $("#Pid").val();
                             var aFDate = $("input[id='dateRange']").val();
@@ -121,103 +128,159 @@
 
                             $.ajax(
                                 {
-                                   
+
                                     type: "POST",
                                     url: "/Home/GetSearchDoc",
                                     dataType: "JSON",
-                                    data: { fLevel: aFValue, uId: aId, fDate: aFDate, tDate: aTDate, caseType: aCase },
+                                    data: { fLevel: aFValue, uId: aId, fDate: aFDate.toString(), tDate: aTDate.toString(), caseType: aCase },
                                     success: function (response) {
-                                        debugger;
-                                        var tableDoc = $('#docTable').DataTable();
 
-                                        tableDoc.clear();
-                                        $.each(response, function (i, index) {
-                                            if (caseIdText == index.CaseID) {
-                                                tableDoc.row.add([
-                                                    index.DocumentType,
-                                                    index.DocCreated,
-                                                    index.Id,
-                                                    index.Source,
-                                                    index.BoxID,
-                                                    index.BundleID,
-                                                    index.DateTimeReceived,
-                                                    index.LetterDescription
-                                                ]);
-                                                tableDoc.draw();
+                                        try {
+                                            if (!$.fn.DataTable.isDataTable("#actionTable")) {
+                                                $.fn.dataTable.ext.errMode = 'none';
+
+                                                $('#actionTable').on('error.dt', function (e, settings, techNote, message) {
+                                                    console.log('An error has been reported by DataTables: ', message);
+                                                });
+                                                tableAction = $('#actionTable').DataTable({
+                                                    "autoWidth": false
+                                                });
+                                                tableAction.column(4).visible(false);
                                             }
-                                        });
+                                        } catch (e) {
+                                            Console.log(e);
+                                        }
 
+                                        try {
+                                            if (!$.fn.DataTable.isDataTable("#docTable")) {
+                                                $.fn.dataTable.ext.errMode = 'none';
 
-                                        $('#myTable').on('click', 'tr', function (e) {
-                                            var $row = $(this).closest("tr");
-                                            var $tds = $row.find("td:nth-child(11)");
+                                                $('#docTable').on('error.dt', function (e, settings, techNote, message) {
+                                                    console.log('An error has been reported by DataTables: ', message);
+                                                });
+                                                tableDoc = $('#docTable').DataTable();
+                                            }
+                                        } catch (e) {
+                                            Console.log(e);
+                                        }
+                                        
+
+                                        try {
                                             tableDoc.clear();
-                                            $.each(response, function (i, index) {
-                                                if ($tds.text() == index.CaseID) {
-                                                    tableDoc.row.add([
-                                                        index.DocumentType,
-                                                        index.DocCreated,
-                                                        index.Id,
-                                                        index.Source,
-                                                        index.BoxID,
-                                                        index.BundleID,
-                                                        index.DateTimeReceived,
-                                                        index.LetterDescription
-                                                    ]);
-                                                    tableDoc.draw();
+                                            if (response.length != 0) {
+                                                $.each(response, function (i, index) {
+                                                    if (caseIdText == index.CaseID) {
+                                                        tableDoc.row.add([
+                                                            index.DocumentType,
+                                                            index.DocCreated,
+                                                            index.Id,
+                                                            index.Source,
+                                                            index.BoxID,
+                                                            index.BundleID,
+                                                            index.DateTimeReceived,
+                                                            index.LetterDescription
+                                                        ]);
+                                                        tableDoc.draw();
+                                                    }
+                                                });
+                                            }
+
+                                        } catch (e) {
+                                            Console.log(e);
+                                        }
+
+
+                                        var DELAY = 700, clicks = 0, timer = null;
+                                        var rowId = null;
+                                        $(function () {
+
+                                            $("#myTable").on("click", 'tr', function (e) {
+
+                                                clicks++;
+
+                                                if (clicks === 1) {
+                                                    rowId = this.rowIndex;
+                                                    var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
+                                                    var selectedCaseId = caseText.text();
+                                                    timer = setTimeout(function () {
+                                                        try {
+                                                            tableDoc.clear();
+                                                            if (response.length != 0) {
+                                                                $.each(response, function (i, index) {
+                                                                    if (selectedCaseId == index.CaseID) {
+                                                                        tableDoc.row.add([
+                                                                            index.DocumentType,
+                                                                            index.DocCreated,
+                                                                            index.Id,
+                                                                            index.Source,
+                                                                            index.BoxID,
+                                                                            index.BundleID,
+                                                                            index.DateTimeReceived,
+                                                                            index.LetterDescription
+                                                                        ]);
+                                                                        tableDoc.draw();
+                                                                    }
+                                                                });
+
+                                                            }
+                                                        } catch (e) {
+                                                            Console.log(e);
+                                                        }
+
+
+                                                        clicks = 0;
+
+                                                    }, DELAY);
+
+                                                } else {
+
+                                                    clearTimeout(timer);
+
+                                                    rowId = this.rowIndex;
+                                                    var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
+                                                    var selectedCaseId = caseText.text();
+                                                    try {
+                                                        tableAction.clear();
+                                                        $("#fullTextMessage").text('');
+                                                        if (response.length != 0) {
+                                                            $.each(response, function (i, index) {
+                                                                if (selectedCaseId == index.CaseID) {
+                                                                    tableAction.row.add([
+                                                                        index.ActionText,
+                                                                        index.DateandTime,
+                                                                        index.FirstName,
+                                                                        index.Text,
+                                                                        index.Text2
+                                                                    ]);
+                                                                    tableAction.draw();
+                                                                }
+                                                            });
+                                                            modal.style.display = "block";
+                                                        }
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    clicks = 0;
                                                 }
-                                            });
+
+                                            })
+                                                .on("dblclick", function (e) {
+                                                    e.preventDefault();
+                                                });
+
                                         });
 
-                                        var tableAction = $('#actionTable').DataTable();
-                                        var msg = "";
-                                        var extraMsgTxt = "";
-                                        var finalMsg = "";
-                                        $('#myTable').on('dblclick', 'tr', function (e) {
-                                            var rowId = this.rowIndex;
-                                            var selectedCaseId = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
-                                            var caseText = selectedCaseId.text();
-                                            tableAction.clear();
-                                            $.each(response, function (i, index) {
-                                                if (index.Text.length > 200 && caseText == index.CaseID) {
-                                                    msg = index.Text.substring(0, 200);
-                                                    extraMsgTxt = index.Text.substring(200)
-                                                    var dots = "...........";
-                                                    finalMsg = msg.concat(dots);
-                                                    tableAction.row.add([
-                                                        index.ActionText,
-                                                        index.DateandTime,
-                                                        index.FirstName,
-                                                        finalMsg
-                                                    ]);
-                                                    tableAction.draw();
-                                                }
-                                                else if (caseText == index.CaseID) {
-                                                    tableAction.row.add([
-                                                        index.ActionText,
-                                                        index.DateandTime,
-                                                        index.FirstName,
-                                                        index.Text
-                                                    ]);
-                                                    tableAction.draw();
-                                                }
-                                            });
-                                            modal.style.display = "block";
-                                        });
+
                                         $('#actionTable').on('click', 'tr', function (e) {
-                                            var $row = $(this).closest("tr");
-                                            var $tds = "";
-                                            $tds = $row.find("td:nth-child(4)");
-                                            if ($tds.text().includes("...........")) {
-                                                $("#fullTextMessage").text('').append(msg + extraMsgTxt);
-                                            }
-                                            else {
-                                                $("#fullTextMessage").text('').append($tds.text());
-                                            }
-                                            
+                                            var rowId = this.rowIndex;
+                                            var selectedMsg1 = $("#actionTable tr").eq(rowId).find("td:nth-child(4)");
+                                            var msg1 = selectedMsg1.text();
+                                            var rowValue = tableAction.row(rowId-1).data();
+                                            var msg2 = rowValue[4];
+                                            $("#fullTextMessage").text('').append(msg1 + msg2);
                                         });
                                     },
-                                    error: function () {                                       
+                                    error: function () {
                                         console.log("Error");
                                     }
                                 });
@@ -228,7 +291,20 @@
 
                     });
             });
-            
+            var modal = document.getElementById("caseModal")
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
+                modal.style.display = "none";
+                tableAction.clear().draw();
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    tableAction.clear().draw();
+                }
+            }
 
         });
     </script>
@@ -326,7 +402,7 @@
     </style>
 </head>
 
-<body id="htmlBody">
+<body>
     <div style="border-style:double;">
 
         <table style="border:1px solid black;">
@@ -412,32 +488,32 @@
         <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
 
 
-    
-    <div style="overflow:scroll">
-    <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
-        <thead>
-            <tr>
-                <th>Account</th>
-                <th>Status</th>
-                <th>Case Type</th>
-                <th>Created</th>
-                <th>Completed</th>
-                <th>Priority</th>
-                <th>Adviser</th>
-                <th>Flag</th>
-                <th>Customer Id</th>
-                <th>Requestor</th>
-                <th>Case ID</th>
-                <th>Workpack ID</th>
-                <th>Team</th>
-                <th>InPFC</th>
-                <th>Employee</th>
-            </tr>
-        </thead>
-        <tbody id="caseContainer" class="rowHighlighter">     
-        </tbody>
-    </table>
-   
+
+        <div style="overflow:scroll">
+            <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Status</th>
+                        <th>Case Type</th>
+                        <th>Created</th>
+                        <th>Completed</th>
+                        <th>Priority</th>
+                        <th>Adviser</th>
+                        <th>Flag</th>
+                        <th>Customer Id</th>
+                        <th>Requestor</th>
+                        <th>Case ID</th>
+                        <th>Workpack ID</th>
+                        <th>Team</th>
+                        <th>InPFC</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody id="caseContainer" class="rowHighlighter">
+                </tbody>
+            </table>
+
         </div>
     </div>
 
@@ -461,7 +537,6 @@
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighlighter">
-                   
                 </tbody>
             </table>
         </div>
@@ -478,10 +553,10 @@
                             <th>Date and Time</th>
                             <th>Employee</th>
                             <th>Message</th>
+                            <th>Text2</th>
                         </tr>
                     </thead>
                     <tbody id="actionContainer" class="rowHighlighter">
-                        
                     </tbody>
                 </table>
             </div>
@@ -493,27 +568,7 @@
             </div>
         </div>
     </div>
-    <script>
-        
-
-        var modal = document.getElementById("caseModal")
-        var span = document.getElementsByClassName("close")[0];
-        
-        //document.oncontextmenu = function () { return false; };
     
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-    </script>
-
-
 </body>
 
 
