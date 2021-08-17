@@ -21,18 +21,7 @@
 
         $(document).ready(function () {
 
-            //$("#myForm").on("change", "#eventType", function (event) {
-            //    event.delegateTarget.reset();
-            //});
-            //$.fn.resetForm = function () {
-            //    if ($("#filter_level").change() || $("#Pid").change() || $("#dateRange").change() || $("#toRange").change() || $("#rdbCaseCreationDate").change()) {
-            //        if (!$("caseContainer").empty()) {
-            //            $("#myForm").reset();
-            //        }
-            //    }
-
-            //};
-            $.fn.resetForm = function () {
+             $.fn.resetForm = function () {
                 $("input").change(function () {
                     if ($.fn.ifEmpty() == false) {
                         location.reload();
@@ -156,7 +145,7 @@
                                 }
                             }
                             catch (e) {
-                                Console.log(e);
+                                console.log(e);
                             }
 
                             var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
@@ -185,12 +174,14 @@
                                                     console.log('An error has been reported by DataTables: ', message);
                                                 });
                                                 tableAction = $('#actionTable').DataTable({
-                                                    "autoWidth": false
+                                                    "paginate": false,
+                                                    "searching": false,
+                                                    "bInfo": false
                                                 });
                                                 tableAction.column(4).visible(false);
                                             }
                                         } catch (e) {
-                                            Console.log(e);
+                                            console.log(e);
                                         }
 
                                         try {
@@ -200,10 +191,18 @@
                                                 $('#docTable').on('error.dt', function (e, settings, techNote, message) {
                                                     console.log('An error has been reported by DataTables: ', message);
                                                 });
-                                                tableDoc = $('#docTable').DataTable();
+                                                tableDoc = $('#docTable').DataTable({
+                                                    "searching": false,
+                                                    "fixedColumns": {
+                                                        "heightMatch": 'none',
+                                                    },
+                                                    "lengthChange": false,
+                                                    "paginate": false,
+                                                    "bInfo": false
+                                                });
                                             }
                                         } catch (e) {
-                                            Console.log(e);
+                                            console.log(e);
                                         }
 
 
@@ -228,7 +227,7 @@
                                             }
 
                                         } catch (e) {
-                                            Console.log(e);
+                                            console.log(e);
                                         }
 
 
@@ -266,7 +265,7 @@
 
                                                             }
                                                         } catch (e) {
-                                                            Console.log(e);
+                                                            console.log(e);
                                                         }
 
 
@@ -340,32 +339,23 @@
             });
             var modal = document.getElementById("caseModal")
             var span = document.getElementsByClassName("close")[0];
-            var caseRow = document.getElementById("myTable");
-            document.oncontextmenu = function () { return false; };
-            $(caseRow).mousedown(function (e) {
-                if (e.button == 2) {
-                    modal.style.display = "block";
-                    return false;
-                }
-            });
+
+
 
             span.onclick = function () {
                 modal.style.display = "none";
                 tableAction.clear().draw();
-
             }
+
+
 
             window.onclick = function (event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
+                    tableAction.clear().draw();
                 }
             }
-            $("#actionContainer tr").click(function () {
-                var $row = $(this).closest("tr"),
-                    $tds = $row.find("td:nth-child(4)");
-                $("#fullTextMessage").text('').append($tds.text());
-            });
-
+            
              
             });
 
@@ -625,8 +615,6 @@
                     </tbody>
                 </table>
             </div>
-            <br />
-            <br />
             <div>
                 <label for="fullTextMessage" class="labelStyle">Full Text of Message:</label><br />
                 <textarea id="fullTextMessage" rows="5" cols="150" readonly style="outline:double; max-width:100%; resize:none"></textarea>

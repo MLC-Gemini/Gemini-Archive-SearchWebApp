@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {}
+    "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {}
   },
   "projects": {
-    "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {
+    "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "projectUniqueName": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
         "projectName": "GeminiSearchWebApp",
-        "projectPath": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
-        "packagesPath": "C:\\Users\\X033021d\\.nuget\\packages\\",
-        "outputPath": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\obj\\",
+        "projectPath": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "packagesPath": "C:\\Users\\x033027d\\.nuget\\packages\\",
+        "outputPath": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\X033021d\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\x033027d\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -48,7 +48,7 @@
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.Negotiate": {
               "target": "Package",
-              "version": "[5.0.9, )"
+              "version": "[5.0.8, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
