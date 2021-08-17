@@ -17,9 +17,6 @@ namespace GeminiSearchWebApp.DAL
     {
         private IConfiguration Configuration;
         public UserInput userInput;
-        public int filterInput;
-        public int caseDateInput;
-        List<Case> cases = new List<Case>();
 
         public ConnectionClass(IConfiguration _configuration)
         {
