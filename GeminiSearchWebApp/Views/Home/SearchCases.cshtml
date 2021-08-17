@@ -385,30 +385,34 @@
         th, td {
             white-space: nowrap;
         }
-
         div.dataTables_wrapper {
             width: 100%;
             margin: 0 auto;
             font-size: small;
             padding: 0px 0px 0px 0px;
         }
-
         .size {
             font-size: small;
         }
 
-        #myTable.dataTable tbody th, #docTable.dataTable tbody th, #actionTable.dataTable tbody th,
-        #myTable.dataTable tbody td, #docTable.dataTable tbody td, #actionTable.dataTable tbody td {
+        #myTable.dataTable tbody th, #docTable.dataTable tbody th,
+        #myTable.dataTable tbody td, #docTable.dataTable tbody td {
             padding: 0px 18px;
             text-align: left;
         }
 
-        #myTable.dataTable thead th, #docTable.dataTable thead th, #actionTable.dataTable thead th,
-        #myTable.dataTable thead td, #docTable.dataTable thead td, #actionTable.dataTable thead td {
+        #myTable.dataTable thead th, #docTable.dataTable thead th,
+        #myTable.dataTable thead td, #docTable.dataTable thead td {
             padding: 0px 18px;
             text-align: left;
         }
-
+        #actionTable.dataTable thead th, #actionTable.dataTable thead td,
+        #actionTable.dataTable tbody th, #actionTable.dataTable tbody td {
+            padding: 0px 18px;
+            text-align: left;
+            white-space: normal;
+            word-wrap: break-word;
+        }
         #btnSearch {
             padding: 0px 20px 0px 20px;
             font-size: 16px;
@@ -483,7 +487,7 @@
                 <td>
                     <table>
                         <tr>
-                            <td style="padding-right:60px; padding-left:50px; padding-top:10px;">
+                            <td style="padding-right:50px; padding-left:20px; padding-top:10px;">
                                 <label for="filter_level" class="labelStyle">Search By: </label>
                                 <select name="filter_level" id="filter_level" style="width:150px; height:30px;">
                                     <option value="" style="display:none; text-align:center;">--Select--</option>
@@ -492,10 +496,10 @@
                                     <option value="Customer Level">Customer Level</option>
                                 </select>
                             </td>
-                            <td style="padding-right: 50px; padding-top: 10px;">
+                            <td style="padding-right: 40px; padding-top: 10px;">
                                 <input id="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
                             </td>
-                            <td style="padding-right: 50px; padding-top: 10px;">
+                            <td style="padding-right: 40px; padding-top: 10px;">
                                 <label for="dateRange" class="labelStyle">From Date:</label>
                                 @*<input id="dateRange" type="date" name="date_element" style="outline:double" />*@
                                 <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly />
@@ -512,7 +516,7 @@
                                     });
                                 </script>
                             </td>
-                            <td style="padding-right: 60px; padding-top:10px;">
+                            <td style="padding-top:10px;">
                                 <label for="toRange" class="labelStyle">To Date:</label>
                                 <input type="text" id="toRange" class="datepicker" title="To" style="outline:double" readonly>
                                 <script>
@@ -530,16 +534,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="padding-left:60px; padding-bottom: 0px;">
-                                <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
-                            </td>
-                            <td align="left" style="padding-right: 50px; padding-left: 60px; padding-bottom: 0px;">
+                            <td colspan="2"></td>
+                            <td align="left" style=" padding-left:10px; padding-bottom: 0px;">
                                 <input id="rdbCaseCreationDate" type="radio" name="date_case" value="Case Creation Date" checked="checked" />
                                 <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label>
                             </td>
-                            <td align="left" style="padding-right: 50px; padding-bottom: 0px;">
+                            <td align="left" style="padding-left: 10px; padding-bottom: 0px;">
                                 <input id="rdbCaseClosedDate" type="radio" name="date_case" value="CaseClosed Date" />
                                 <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label>
+                            </td>
+                            <td colspan="2" style="padding-bottom: 0px; padding-right:5px;">
+                                <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
                             </td>
                         </tr>
                     </table>
@@ -602,7 +607,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div style="overflow:scroll">
-                <table id="actionTable" class="table table-condensed" style="border: 1px ridge lightgray">
+                <table id="actionTable" class="table table-condensed size compact" style="border: 1px ridge lightgray;">
                     <thead>
                         <tr>
                             <th>Action</th>
