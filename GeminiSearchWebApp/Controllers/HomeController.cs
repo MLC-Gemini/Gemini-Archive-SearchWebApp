@@ -12,11 +12,14 @@ using Gemini.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace GeminiSearchWebApp.Controllers
 {
-    [Authorize]
+   
     public class HomeController : Controller
     {
         List<Case> cases = new List<Case>();
@@ -66,7 +69,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        [Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
@@ -86,12 +89,48 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-       // [HttpPost]
-        public string GetSearchCases(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+       
+        public string GetSearchDoc(string fLevel, string uId, DateTime fDate, DateTime tDate, string caseType)
         {
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
           
+            try
+            {
+                UserInput userInput = new UserInput();
+                userInput.FilterLevel = fLevel;
+                userInput.UserId = uId;
+                userInput.FromDate = fDate;
+                userInput.ToDate = tDate;
+                userInput.CaseTypeDate = caseType;
+                ConnectionClass connectionClass = new ConnectionClass(configuration);
+                dt = connectionClass.Getrecord(userInput);
+               
+            }
+            catch (Exception)
+            {
+
+                Console.WriteLine("error");
+            }
+
+           return DataTableToJSONWithJSONNet(dt);
+
+        }
+
+        public string DataTableToJSONWithJSONNet(DataTable table)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(table);
+            return JSONString;
+        }
+
+
+
+        public string GetCasesRecord(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        {
+            DataSet ds = new DataSet();
+            DataTable dt = new DataTable();
+
             try
             {
                 UserInput userInput = new UserInput();
@@ -101,7 +140,8 @@ namespace GeminiSearchWebApp.Controllers
                 userInput.ToDate = toDate;
                 userInput.CaseTypeDate = caseDateType;
                 ConnectionClass connectionClass = new ConnectionClass(configuration);
-                ds = connectionClass.Getrecord(userInput);
+                dt = connectionClass.GetCasesRecord(userInput);
+
             }
             catch (Exception)
             {
@@ -109,20 +149,17 @@ namespace GeminiSearchWebApp.Controllers
                 Console.WriteLine("error");
             }
 
-            //ViewBag.Data = ds;
+            return CasesToJson(dt);
 
-            //   Json(JsonConvert.SerializeObject(cases), JsonRequestBehaviour.AllowGet);
-           return DataTableToJSONWithJSONNet(ds.Tables[0]);
-
-            //return Json(ds);
         }
 
-        public string DataTableToJSONWithJSONNet(DataTable table)
+        public string CasesToJson(DataTable table)
         {
             string JSONString = string.Empty;
             JSONString = JsonConvert.SerializeObject(table);
             return JSONString;
         }
+
 
         //[HttpGet]
         //public IActionResult CaseGrid(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
@@ -152,6 +189,35 @@ namespace GeminiSearchWebApp.Controllers
         //    }
         //    return PartialView("CaseGrid",cases);
         //}
+
+        // code for PI tower service call
+
+        [HttpPost]
+        public async Task<IActionResult> GetDoc(int id)
+        {
+            Documents documents = new Documents();
+
+            using (var httpClient = new HttpClient())
+            {
+                // httpClient.DefaultRequestHeaders.Add("Key", "Secret@123");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "username:password");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(documents), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.GetAsync("" + id))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        documents = JsonConvert.DeserializeObject<Documents>(apiResponse);
+                    }
+                    else
+                        ViewBag.StatusCode = response.StatusCode;
+                }
+            }
+            return View(documents);
+        }
+
+
+
 
 
     }
