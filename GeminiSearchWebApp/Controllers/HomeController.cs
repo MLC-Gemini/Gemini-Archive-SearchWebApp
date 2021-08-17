@@ -12,11 +12,15 @@ using Gemini.Models;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Text;
 using System.Globalization;
 
 namespace GeminiSearchWebApp.Controllers
 {
-    [Authorize]
+   
     public class HomeController : Controller
     {
         private IConfiguration configuration;
@@ -65,7 +69,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        [Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
@@ -175,6 +179,65 @@ namespace GeminiSearchWebApp.Controllers
             JSONString = JsonConvert.SerializeObject(table);
             return JSONString;
         }
+
+
+        //[HttpGet]
+        //public IActionResult CaseGrid(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
+        //{
+        //    try
+        //    {
+        //        UserInput userInput = new UserInput();
+        //        userInput.FilterLevel = filterLevel;
+        //        userInput.UserId = userId;
+        //        userInput.FromDate = fromDate;
+        //        userInput.ToDate = toDate;
+        //        userInput.CaseTypeDate = caseDateType;
+
+        //        //userInput.FilterLevel = "Account Level";
+        //        //userInput.UserId = "17241705";
+        //        //userInput.FromDate = DateTime.MinValue;
+        //        //userInput.ToDate = DateTime.MinValue;
+        //        //userInput.CaseTypeDate = "Case Creation Date";
+
+        //        ConnectionClass connectionClass = new ConnectionClass(configuration);
+        //        cases = connectionClass.Getrecord(userInput);
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        Console.WriteLine("error");
+        //    }
+        //    return PartialView("CaseGrid",cases);
+        //}
+
+        // code for PI tower service call
+
+        [HttpPost]
+        public async Task<IActionResult> GetDoc(int id)
+        {
+            Documents documents = new Documents();
+
+            using (var httpClient = new HttpClient())
+            {
+                // httpClient.DefaultRequestHeaders.Add("Key", "Secret@123");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "username:password");
+                StringContent content = new StringContent(JsonConvert.SerializeObject(documents), Encoding.UTF8, "application/json");
+                using (var response = await httpClient.GetAsync("" + id))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        documents = JsonConvert.DeserializeObject<Documents>(apiResponse);
+                    }
+                    else
+                        ViewBag.StatusCode = response.StatusCode;
+                }
+            }
+            return View(documents);
+        }
+
+
+
 
 
     }
