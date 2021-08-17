@@ -11,8 +11,17 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js" type="text/javascript"></script>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" type="text/javascript"></script>*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js" type="text/javascript"></script>*@
+    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>*@
+    @*<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>*@
     <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    @*<script src="Web.config.js" type="text/javascript"></script>*@
+
+  
+
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
 
@@ -20,7 +29,6 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-
             //$("#myForm").on("change", "#eventType", function (event) {
             //    event.delegateTarget.reset();
             //});
@@ -67,7 +75,6 @@
             };
             
             console.log($.fn.ifEmpty());
-
             $("#btnSearch").click(function () {
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
@@ -108,6 +115,9 @@
                     alert('@ViewBag.emptyCaseTypeDate');
                 }
                 else {
+                    alert("Filter Level:" + $("#filter_level option:selected").val() + "\r\nID:" + $("#Pid").val() + "\r\nFrom Date:" + $("input[id='dateRange']").val() + "\r\nTo Date:" + $("input[id='toRange']").val() + "\r\nCase Date:" + $('input[name="date_case"]:checked').val());
+                    //$("#myTable").show();
+                    //$("#docTable").show();
                     $("#output1").show();
                     $("#output2").show();
                 }
@@ -115,43 +125,16 @@
                 
                 var aFilterValue = $("#filter_level option:selected").val();
                 var aIdValue = $("#Pid").val();
-                var aFromDate = $("input[id='dateRange']").val();
-                var aToDate = $("input[id='toRange']").val();
+                var aFromDate = $("#dateRange").val();
+                var aToDate = $("#toRange").val();
                 var aCaseType = $('input[name="date_case"]:checked').val();
-
-                
                 $.ajax(
                     {
                         type: "POST",
-                        url: "/Home/GetCasesRecord",
+                        url: "/Home/GetSearchCases",
                         dataType: "JSON",
                         data: { filterLevel: aFilterValue, userId: aIdValue, fromDate: aFromDate, toDate: aToDate, caseDateType: aCaseType },
                         success: function (result) {
-
-                            
-                            $("#myTable").DataTable({
-                                pageLength: 10,
-                                searching: false,
-                                select:true,
-                                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
-                                data: result,
-                                columns: [
-                                    { 'data': 'Account' },
-                                    { 'data': 'Status' },
-                                    { 'data': 'CaseType' },
-                                    { 'data': 'Created' },
-                                    { 'data': 'Completed' },
-                                    { 'data': 'Priority' },
-                                    { 'data': 'Adviser' },
-                                    { 'data': 'Flag' },
-                                    { 'data': 'CustomerId' },
-                                    { 'data': 'Requestor' },
-                                    { 'data': 'CaseID' },
-                                    { 'data': 'WorkpackID' },
-                                    { 'data': 'InPFC' },
-                                    { 'data': 'Employee' }
-                                ]
-
                             console.log("success");
                             console.log(result);
                             console.log($.fn.ifEmpty());
@@ -195,132 +178,15 @@
                                     + "</tr>";
                                 $('#docContainer').append(rowsDoc);
 
-
                             });
 
 
-                            var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
-                            var caseIdText = caseTable.text();
-                            
-                            var aFValue = $("#filter_level option:selected").val();
-                            var aId = $("#Pid").val();
-                            var aFDate = $("input[id='dateRange']").val();
-                            var aTDate = $("input[id='toRange']").val();
-                            var aCase = $('input[name="date_case"]:checked').val();
-
-                            $.ajax(
-                                {
-                                   
-                                    type: "POST",
-                                    url: "/Home/GetSearchDoc",
-                                    dataType: "JSON",
-                                    data: { fLevel: aFValue, uId: aId, fDate: aFDate, tDate: aTDate, caseType: aCase },
-                                    success: function (response) {
-                                        debugger;
-                                        var tableDoc = $('#docTable').DataTable();
-
-                                        tableDoc.clear();
-                                        $.each(response, function (i, index) {
-                                            if (caseIdText == index.CaseID) {
-                                                tableDoc.row.add([
-                                                    index.DocumentType,
-                                                    index.DocCreated,
-                                                    index.Id,
-                                                    index.Source,
-                                                    index.BoxID,
-                                                    index.BundleID,
-                                                    index.DateTimeReceived,
-                                                    index.LetterDescription
-                                                ]);
-                                                tableDoc.draw();
-                                            }
-                                        });
-
-
-                                        $('#myTable').on('click', 'tr', function (e) {
-                                            var $row = $(this).closest("tr");
-                                            var $tds = $row.find("td:nth-child(11)");
-                                            tableDoc.clear();
-                                            $.each(response, function (i, index) {
-                                                if ($tds.text() == index.CaseID) {
-                                                    tableDoc.row.add([
-                                                        index.DocumentType,
-                                                        index.DocCreated,
-                                                        index.Id,
-                                                        index.Source,
-                                                        index.BoxID,
-                                                        index.BundleID,
-                                                        index.DateTimeReceived,
-                                                        index.LetterDescription
-                                                    ]);
-                                                    tableDoc.draw();
-                                                }
-                                            });
-                                        });
-
-                                        var tableAction = $('#actionTable').DataTable();
-                                        var msg = "";
-                                        var extraMsgTxt = "";
-                                        var finalMsg = "";
-                                        $('#myTable').on('dblclick', 'tr', function (e) {
-                                            var rowId = this.rowIndex;
-                                            var selectedCaseId = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
-                                            var caseText = selectedCaseId.text();
-                                            tableAction.clear();
-                                            $.each(response, function (i, index) {
-                                                if (index.Text.length > 200 && caseText == index.CaseID) {
-                                                    msg = index.Text.substring(0, 200);
-                                                    extraMsgTxt = index.Text.substring(200)
-                                                    var dots = "...........";
-                                                    finalMsg = msg.concat(dots);
-                                                    tableAction.row.add([
-                                                        index.ActionText,
-                                                        index.DateandTime,
-                                                        index.FirstName,
-                                                        finalMsg
-                                                    ]);
-                                                    tableAction.draw();
-                                                }
-                                                else if (caseText == index.CaseID) {
-                                                    tableAction.row.add([
-                                                        index.ActionText,
-                                                        index.DateandTime,
-                                                        index.FirstName,
-                                                        index.Text
-                                                    ]);
-                                                    tableAction.draw();
-                                                }
-                                            });
-                                            modal.style.display = "block";
-                                        });
-                                        $('#actionTable').on('click', 'tr', function (e) {
-                                            var $row = $(this).closest("tr");
-                                            var $tds = "";
-                                            $tds = $row.find("td:nth-child(4)");
-                                            if ($tds.text().includes("...........")) {
-                                                $("#fullTextMessage").text('').append(msg + extraMsgTxt);
-                                            }
-                                            else {
-                                                $("#fullTextMessage").text('').append($tds.text());
-                                            }
-                                            
-                                        });
-                                    },
-                                    error: function () {                                       
-                                        console.log("Error");
-                                    }
-                                });
                         },
                         error: function () {
                             console.log("Error");
                         }
 
                     });
-
-            });
-            
-
-
 
                 $.fn.resetForm();
 
@@ -329,42 +195,37 @@
             $("#myTable").dataTable({
                 pageLength: 10,
                 searching: false,
-                scrollX:true,
-                scrollY: true,
-                scrollCollapse: true,
                 fixedColumns: {
                     heightMatch: 'none',
                 },
                 lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
             });
             $("#docTable").dataTable({
-                pageLength: 10,
                 searching: false,
-                scrollX: true,
-                scrollY: true,
                 fixedColumns: {
                     heightMatch: 'none',
                 },
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+                lengthChange:false
             });
             $("#actionTable").dataTable({
-                pageLength: 10,
+                paginate: false,
                 searching: false,
-                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']]
+                bInfo: false
             });
-
         });
     </script>
 
     <style>
         table {
             white-space: nowrap;
-            width: 550px;
+            width: auto;
+            align-content:center;
             background-color: aliceblue;
-            font-size: 17px;
+            font-size: 15px;
             font-family: 'Times New Roman';
             font-style: normal;
             text-align: center;
+            vertical-align:top;
             max-height: 10px;
         }
         .rowHighlighter tr:hover td {
@@ -376,23 +237,37 @@
         div.dataTables_wrapper {
             width: 100%;
             margin: 0 auto;
+            font-size:small;
+            padding:0px 0px 0px 0px;
+        }
+        .size{
+            font-size:small;
+        }
+        #myTable.dataTable tbody th, #docTable.dataTable tbody th, #actionTable.dataTable tbody th,
+        #myTable.dataTable tbody td, #docTable.dataTable tbody td, #actionTable.dataTable tbody td {
+            padding: 0px 18px;
+            text-align: left;
+        }
+        #myTable.dataTable thead th, #docTable.dataTable thead th, #actionTable.dataTable thead th,
+        #myTable.dataTable thead td, #docTable.dataTable thead td, #actionTable.dataTable thead td {
+            padding: 0px 18px;
+            text-align: left;
         }
         #btnSearch {
             padding: 0px 20px 0px 20px;
             font-size: 16px;
-            font-weight:bold;
+            font-weight: bold;
             margin: 10px 10px 10px 10px;
         }
             #btnSearch:hover{
                 background-color:lightskyblue;
             }
         .datepicker {
-            width: 130px;
-            margin: 20px 0px 10px 0px
+            width: 140px;
         }
 
         .textBoxInput {
-            width: 100px;
+            width: 150px;
             outline: double;
         }
 
@@ -401,6 +276,7 @@
             font-weight: bold;
             font-style: normal;
             text-align: left;
+            font-size:15px;
         }
 
         .modal {
@@ -438,20 +314,18 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+
     </style>
 </head>
 
-
-<body id="htmlBody">
-    <div style="border-style:double;">
-
-        <table style="border:1px solid black;">
-
+<body>
+    <div style="position:center;">
+        <table style="align-content:center; border: 1px solid black; border-style: double; border-color:black; border-width:thick">
             <tr>
                 <td>
                     <table>
                         <tr>
-                            <td colspan="1" align="center">
+                            <td style="padding-right:60px; padding-left:50px; padding-top:10px;">
                                 <label for="filter_level" class="labelStyle">Search By: </label>
                                 <select name="filter_level" id="filter_level" style="width:150px; height:30px;">
                                     <option value="" style="display:none; text-align:center;">--Select--</option>
@@ -460,22 +334,13 @@
                                     <option value="Customer Level">Customer Level</option>
                                 </select>
                             </td>
-                            <td colspan="1" align="left">
+                            <td style="padding-right: 50px; padding-top: 10px;">
                                 <input id="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
                             </td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
-
-                                <label for="dateRange" class="labelStyle">Date Range:</label>
-                                <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly>
-
-
-
+                            <td style="padding-right: 50px; padding-top: 10px;">
+                                <label for="dateRange" class="labelStyle">From Date:</label>
+                                @*<input id="dateRange" type="date" name="date_element" style="outline:double" />*@
+                                <input type="text" id="dateRange" class="datepicker" title="From" style="outline:double" readonly />
                                 <script>
                                     $(".datepicker").datepicker({
                                         dateFormat: 'dd/mm/yy',
@@ -488,11 +353,10 @@
                                         }
                                     });
                                 </script>
-                            <td />
-                            <td>
+                            </td>
+                            <td style="padding-right: 60px; padding-top:10px;">
                                 <label for="toRange" class="labelStyle">To Date:</label>
                                 <input type="text" id="toRange" class="datepicker" title="To" style="outline:double" readonly>
-
                                 <script>
                                     $(".datepicker").datepicker({
                                         dateFormat: 'dd/mm/yy',
@@ -508,13 +372,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td colspan="2" style="padding-left:60px; padding-bottom: 0px;">
+                                <button id="btnSearch" type="button" name="btn_search" value="search">Search</button>
+                            </td>
+                            <td align="left" style="padding-right: 50px; padding-left: 60px; padding-bottom: 0px;">
                                 <input id="rdbCaseCreationDate" type="radio" name="date_case" value="Case Creation Date" checked="checked" />
                                 <label for="rdbCaseCreationDate" class="labelStyle">Case Creation Date</label>
                             </td>
-                        </tr>
-                        <tr>
-                            <td align="left">
+                            <td align="left" style="padding-right: 50px; padding-bottom: 0px;">
                                 <input id="rdbCaseClosedDate" type="radio" name="date_case" value="CaseClosed Date" />
                                 <label for="rdbCaseClosedDate" class="labelStyle">Case Closed Date</label>
                             </td>
@@ -522,54 +387,42 @@
                     </table>
                 </td>
             </tr>
-            <tr align="center">
-                <td colspan="2" style="vertical-align:top;">
-                    <button id="btnSearch" type="button" name="btn_search" value="search" >Search</button>
-                </td>
-            </tr>
         </table>
     </div>
-
-    <br />
-    <br />
-    <div id="output1" style="display:none">
-        <label for="caseText" style="text-align:left" class="labelStyle">Cases:</label>
-
-
-    
-    <div style="overflow:scroll">
-    <table id="myTable" class="table table-condensed" style="border: 1px ridge lightgray">
-        <thead>
-            <tr>
-                <th>Account</th>
-                <th>Status</th>
-                <th>Case Type</th>
-                <th>Created</th>
-                <th>Completed</th>
-                <th>Priority</th>
-                <th>Adviser</th>
-                <th>Flag</th>
-                <th>Customer Id</th>
-                <th>Requestor</th>
-                <th>Case ID</th>
-                <th>Workpack ID</th>
-                <th>Team</th>
-                <th>InPFC</th>
-                <th>Employee</th>
-            </tr>
-        </thead>
-        <tbody id="caseContainer" class="rowHighlighter">     
-        </tbody>
-    </table>  
-   
+    <div id="output1" style="display: none;">
+        <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
+        <div style=" border: 3px ridge black; overflow:auto;">
+            <table id="myTable" class="table table-condensed rowHighlighter size compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
+                <thead>
+                    <tr style="vertical-align:top;font-size:small;">
+                        <th>Account</th>
+                        <th>Status</th>
+                        <th>Case Type</th>
+                        <th>Created</th>
+                        <th>Completed</th>
+                        <th>Priority</th>
+                        <th>Adviser</th>
+                        <th>Flag</th>
+                        <th>Customer Id</th>
+                        <th>Requestor</th>
+                        <th>Case ID</th>
+                        <th>Workpack ID</th>
+                        <th>Team</th>
+                        <th>InPFC</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <tbody id="caseContainer">
+                </tbody>
+            </table>
         </div>
     </div>
     <div id="output2" style=" display:none">
-        <label for="documentText" class="labelStyle">Documents:</label>
-        <div style="border: 3px ridge black; ">
-            <table id="docTable" class="table table-condensed" style="width: contain; border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color: lightskyblue; ">
+        <label for="documentText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Documents:</label>
+        <div style="border: 3px ridge black; overflow:auto;">
+            <table id="docTable" class="table table-condensed size compact nowrap" style="width: contain; border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color: lightskyblue; ">
                 <thead>
-                    <tr style="vertical-align:top">
+                    <tr style="vertical-align: top; font-size:small;">
                         <th>Document Type</th>
                         <th>Created</th>
                         <th>Id</th>
@@ -578,11 +431,9 @@
                         <th>Bundle Id</th>
                         <th>Date/Time Received</th>
                         <th>Id - Letter Description</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="docContainer" class="rowHighlighter">
-
                 </tbody>
             </table>
         </div>
@@ -591,8 +442,8 @@
     <div id="caseModal" class="modal" title="Case Activities">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div style="overflow:scroll">
-                <table id="actionTable" class="table table-condensed" style="border: 1px ridge lightgray">
+            <div style="overflow: scroll; border: 3px ridge black;">
+                <table id="actionTable" class="table table-condensed size compact nowrap" style="border: 1px ridge lightgray">
                     <thead>
                         <tr>
                             <th>Action</th>
@@ -601,13 +452,22 @@
                             <th>Message</th>
                         </tr>
                     </thead>
-                    <tbody id="actionContainer" class="rowHighlighter">
-                        
+                    <tbody id="actionContainer" class="rowHighliter">
+                        <tr>
+                            <td>Case Created</td>
+                            <td>24 Apr 2002</td>
+                            <td>ABCD</td>
+                            <td>Case created by ABCD</td>
+                        </tr>
+                        <tr>
+                            <td>Case Message</td>
+                            <td>29 Apr 2002</td>
+                            <td>ABCD</td>
+                            <td>Product is ready for use</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            <br />
-            <br />
             <div>
                 <label for="fullTextMessage" class="labelStyle">Full Text of Message:</label><br />
                 <textarea id="fullTextMessage" rows="5" cols="150" readonly style="outline:double; max-width:100%; resize:none"></textarea>
@@ -615,25 +475,36 @@
         </div>
     </div>
     <script>
-
-        
-
-
+        var caseRow = document.getElementById("myTable")
         var modal = document.getElementById("caseModal")
         var span = document.getElementsByClassName("close")[0];
-        
-        //document.oncontextmenu = function () { return false; };
-    
+
+        document.oncontextmenu = function () { return false; };
+
+        $(caseRow).mousedown(function (e) {
+            if (e.button == 2) {
+                modal.style.display = "block";
+                return false;
+            }
+        });
+
+        // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
 
+        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
 
+        $("#actionContainer tr").click(function () {
+            var $row = $(this).closest("tr"),
+                $tds = $row.find("td:nth-child(4)");
+            $("#fullTextMessage").text('').append($tds.text());
+        });
     </script>
 
 
