@@ -105,8 +105,6 @@ namespace GeminiSearchWebApp.DAL
         public DataTable Getrecord(UserInput userInput)
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
-           
-            DataSet dsResult = new DataSet();
             DataTable dtResult = new DataTable();
             using (SqlConnection conn = new SqlConnection(connString))
             {
@@ -178,6 +176,43 @@ namespace GeminiSearchWebApp.DAL
             }
            
             return dtResult;
+        }
+
+
+
+
+        public DataTable GetActionRecord(int selectedCaseId)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+
+            DataTable dtAction = new DataTable();
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand dbCommand = new SqlCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandType = CommandType.StoredProcedure;
+                dbCommand.CommandText = "[dbo].[usp_GetAction]";
+                conn.Open();
+                try
+                {
+                    dbCommand.Parameters.Add("@SelectedCaseID", SqlDbType.Int, 20).Value = selectedCaseId;
+                    
+                    SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                    da.Fill(dtAction);
+
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
+            return dtAction;
         }
     }
 }
