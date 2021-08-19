@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,6 +64,14 @@ namespace GeminiSearchWebApp
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            // below code is needed to get User name for Log
+            app.Use(async (httpContext, next) =>
+            {
+                var userName = httpContext.User.Identity.IsAuthenticated ? httpContext.User.Identity.Name : "Guest"; //Gets user Name from user Identity  
+                LogContext.PushProperty("Username", userName); //Push user in LogContext;  
+                await next.Invoke();
+            }
+            );
 
             app.UseEndpoints(endpoints =>
             {
@@ -70,6 +79,8 @@ namespace GeminiSearchWebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
         }
     }
 }
