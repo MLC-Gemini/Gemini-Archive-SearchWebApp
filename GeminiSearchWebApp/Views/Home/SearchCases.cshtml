@@ -176,7 +176,8 @@
                                                 tableAction = $('#actionTable').DataTable({
                                                     "paginate": false,
                                                     "searching": false,
-                                                    "bInfo": false
+                                                    "bInfo": false,
+                                                    "sorting": false
                                                 });
                                                 tableAction.column(4).visible(false);
                                             }
@@ -199,6 +200,7 @@
                                                     "lengthChange": false,
                                                     "paginate": false,
                                                     "bInfo": false
+                                                    
                                                 });
                                             }
                                         } catch (e) {
@@ -245,10 +247,11 @@
                                                     var selectedCaseId = caseText.text();
                                                     timer = setTimeout(function () {
                                                         try {
-                                                            tableDoc.clear();
+                                                            tableDoc.clear().draw();
                                                             if (response.length != 0) {
                                                                 $.each(response, function (i, index) {
                                                                     if (selectedCaseId == index.CaseID) {
+                                                                        console.log(index.CaseID);
                                                                         tableDoc.row.add([
                                                                             index.DocumentType,
                                                                             index.DocCreated,
@@ -262,7 +265,6 @@
                                                                         tableDoc.draw();
                                                                     }
                                                                 });
-
                                                             }
                                                         } catch (e) {
                                                             console.log(e);
@@ -276,31 +278,60 @@
                                                 } else {
 
                                                     clearTimeout(timer);
-
+                                                    
                                                     rowId = this.rowIndex;
                                                     var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
-                                                    var selectedCaseId = caseText.text();
-                                                    try {
-                                                        tableAction.clear();
-                                                        $("#fullTextMessage").text('');
-                                                        if (response.length != 0) {
-                                                            $.each(response, function (i, index) {
-                                                                if (selectedCaseId == index.CaseID) {
-                                                                    tableAction.row.add([
-                                                                        index.ActionText,
-                                                                        index.DateandTime,
-                                                                        index.FirstName,
-                                                                        index.Text,
-                                                                        index.Text2
-                                                                    ]);
-                                                                    tableAction.draw();
+                                                    var caseIdSelected = caseText.text();
+
+                                                    $.ajax(
+                                                        {
+                                                            type: "POST",
+                                                            url: "/Home/GetActionRecord",
+                                                            dataType: "JSON",
+                                                            data: { selectedCaseId: caseIdSelected},
+
+                                                            success: function (outcome) {
+                                                                try {
+                                                                    tableAction.clear();
+                                                                    $("#fullTextMessage").text('');
+                                                                    if (outcome.length != 0) {
+                                                                        $.each(outcome, function (i, index) {
+                                                                            tableAction.row.add([
+                                                                                index.Action,
+                                                                                index.DateandTime,
+                                                                                index.Employee,
+                                                                                index.Message,
+                                                                                index.Text2
+                                                                            ]);
+                                                                            tableAction.draw();    
+                                                                        });
+                                                                        modal.style.display = "block";
+                                                                    }
+                                                                } catch (e) {
+                                                                    console.log(e);
                                                                 }
-                                                            });
-                                                            modal.style.display = "block";
-                                                        }
-                                                    } catch (e) {
-                                                        console.log(e);
-                                                    }
+
+
+                                                                $('#actionTable').on('click', 'tr', function (e) {
+                                                                    debugger;
+                                                                    var actionRowId = this.rowIndex;
+                                                                    var selectedMsg1 = $("#actionTable tr").eq(actionRowId).find("td:nth-child(4)");
+                                                                    var msg1 = selectedMsg1.text();
+                                                                    var rowValue = tableAction.row(actionRowId-1).data();
+                                                                    var msg2 = rowValue[4];
+                                                                    if (msg2 == null) {
+                                                                        msg2 = '';
+                                                                    }
+                                                                    $("#fullTextMessage").text('').append(msg1 + msg2);
+                                                                });
+                                                            },
+                                                            error: function () {
+                                                                console.log("Error");
+                                                            }
+
+
+                                                        });
+
                                                     clicks = 0;
                                                 }
 
@@ -312,14 +343,7 @@
                                         });
 
 
-                                        $('#actionTable').on('click', 'tr', function (e) {
-                                            var rowId = this.rowIndex;
-                                            var selectedMsg1 = $("#actionTable tr").eq(rowId).find("td:nth-child(4)");
-                                            var msg1 = selectedMsg1.text();
-                                            var rowValue = tableAction.row(rowId - 1).data();
-                                            var msg2 = rowValue[4];
-                                            $("#fullTextMessage").text('').append(msg1 + msg2);
-                                        });
+                                        
                                     },
                                     error: function () {
                                         console.log("Error");

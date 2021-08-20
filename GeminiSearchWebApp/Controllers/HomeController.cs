@@ -181,34 +181,32 @@ namespace GeminiSearchWebApp.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult CaseGrid(string filterLevel, string userId, DateTime fromDate, DateTime toDate, string caseDateType)
-        //{
-        //    try
-        //    {
-        //        UserInput userInput = new UserInput();
-        //        userInput.FilterLevel = filterLevel;
-        //        userInput.UserId = userId;
-        //        userInput.FromDate = fromDate;
-        //        userInput.ToDate = toDate;
-        //        userInput.CaseTypeDate = caseDateType;
+        public string GetActionRecord(int selectedCaseId)
+        {
+            DataTable dt = new DataTable();
 
-        //        //userInput.FilterLevel = "Account Level";
-        //        //userInput.UserId = "17241705";
-        //        //userInput.FromDate = DateTime.MinValue;
-        //        //userInput.ToDate = DateTime.MinValue;
-        //        //userInput.CaseTypeDate = "Case Creation Date";
+            try
+            {
+                ConnectionClass connectionClass = new ConnectionClass(configuration);
+                dt = connectionClass.GetActionRecord(selectedCaseId);
 
-        //        ConnectionClass connectionClass = new ConnectionClass(configuration);
-        //        cases = connectionClass.Getrecord(userInput);
-        //    }
-        //    catch (Exception)
-        //    {
+            }
+            catch (Exception)
+            {
 
-        //        Console.WriteLine("error");
-        //    }
-        //    return PartialView("CaseGrid",cases);
-        //}
+                Console.WriteLine("error");
+            }
+
+            return ActionToJson(dt);
+
+        }
+
+        public string ActionToJson(DataTable table)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(table);
+            return JSONString;
+        }
 
         // code for PI tower service call
 
