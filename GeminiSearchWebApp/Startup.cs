@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +29,20 @@ namespace GeminiSearchWebApp
         {
             services.AddControllersWithViews();
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ADRoleOnly", policy => policy.RequireRole(Configuration["SecuritySettings:ADGroup"]));
+            });
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+
+
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +64,14 @@ namespace GeminiSearchWebApp
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            // below code is needed to get User name for Log
+            app.Use(async (httpContext, next) =>
+            {
+                var userName = httpContext.User.Identity.IsAuthenticated ? httpContext.User.Identity.Name : "Guest"; //Gets user Name from user Identity  
+                LogContext.PushProperty("Username", userName); //Push user in LogContext;  
+                await next.Invoke();
+            }
+            );
 
             app.UseEndpoints(endpoints =>
             {
@@ -54,6 +79,8 @@ namespace GeminiSearchWebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
         }
     }
 }
