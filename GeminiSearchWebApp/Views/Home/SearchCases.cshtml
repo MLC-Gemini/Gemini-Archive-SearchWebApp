@@ -15,10 +15,13 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
+    @*<script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <link href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" rel="stylesheet" />*@
 
 
-    <script type="text/javascript">
-
+<script type="text/javascript">
+    var caseIdVal;
+    var caseTypeVal;
         $(document).ready(function () {
 
              $.fn.resetForm = function () {
@@ -54,7 +57,7 @@
                 })
                 return false;
             };
-            
+
            // console.log($.fn.ifEmpty());
             var tableDoc;
             var tableAction;
@@ -73,29 +76,36 @@
                 var endDate = mmt + "/" + ddt + "/" + yyt;
 
                 if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0) {
-
                     alert('@ViewBag.emptySearch');
+                    location.reload();
                 }
                 else if (!$('#filter_level').val()) {
                     alert('@ViewBag.emptySearchLevel');
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyAccountID')
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Adviser Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyAdviserID')
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptyCustomerID')
+                    location.reload();
                 }
                 else if (document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptySearchPid');
+                    location.reload();
                 }
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
+                    location.reload();
                 }
                 else if ($('input[name="date_case"]:checked').length == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
+                    location.reload();
                 }
                 else {
                     $("#output1").show();
@@ -108,7 +118,6 @@
                 var aToDate = $("input[id='toRange']").val();
                 var aCaseType = $('input[name="date_case"]:checked').val();
 
-
                 $.ajax(
                     {
                         type: "POST",
@@ -119,7 +128,7 @@
 
                             try {
                                 if (!$.fn.DataTable.isDataTable("#myTable")) {
-                                    $("#myTable").DataTable({
+                                    var myTable = $("#myTable").DataTable({
                                         pageLength: 10,
                                         searching: false,
                                         select: true,
@@ -141,6 +150,33 @@
                                             { 'data': 'InPFC' },
                                             { 'data': 'Employee' }
                                         ]
+                                    });
+                                    $('#myTable tbody').on('click', 'tr', function () {
+                                        if ($(this).hasClass('selected')) {
+                                            $(this).removeClass('selected');
+                                        }
+                                        else {
+                                            myTable.$('tr.selected').removeClass('selected');
+                                            $(this).addClass('selected');
+                                        }
+                                        var data = myTable.row(this).data();
+                                        caseIdVal = data.CaseID;
+                                        console.log(caseIdVal);
+                                        caseTypeVal = data.CaseType;
+                                        console.log(caseTypeVal);
+                                        if (caseIdVal == null && caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities:';
+                                        }
+                                        else if (caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for (id ' + caseIdVal + ')';
+                                        }
+                                        else if (caseIdVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for "' + caseTypeVal + '"';
+                                        }
+                                        else {
+                                            document.getElementById("res").innerHTML = 'Case Activities for " ' + caseTypeVal + '" (id ' + caseIdVal + ')';
+                                        }
+                                        
                                     });
                                 }
                             }
@@ -184,7 +220,24 @@
                                         } catch (e) {
                                             console.log(e);
                                         }
-
+                                        $('#actionTable tbody').on('click', 'tr', function () {
+                                            if ($(this).hasClass('selected')) {
+                                                $(this).removeClass('selected');
+                                            }
+                                            else {
+                                                tableAction.$('tr.selected').removeClass('selected');
+                                                $(this).addClass('selected');
+                                            }
+                                        });
+                                        $('#actionTable tbody').on('dblclick', 'tr', function () {
+                                            if ($(this).hasClass('selected')) {
+                                                $(this).removeClass('selected');
+                                            }
+                                            else {
+                                                tableAction.$('tr.selected').removeClass('selected');
+                                                $(this).addClass('selected');
+                                            }
+                                        });
                                         try {
                                             if (!$.fn.DataTable.isDataTable("#docTable")) {
                                                 $.fn.dataTable.ext.errMode = 'none';
@@ -200,13 +253,12 @@
                                                     "lengthChange": false,
                                                     "paginate": false,
                                                     "bInfo": false
-                                                    
+
                                                 });
                                             }
                                         } catch (e) {
                                             console.log(e);
                                         }
-
 
                                         try {
                                             tableDoc.clear();
@@ -278,7 +330,7 @@
                                                 } else {
 
                                                     clearTimeout(timer);
-                                                    
+
                                                     rowId = this.rowIndex;
                                                     var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
                                                     var caseIdSelected = caseText.text();
@@ -303,7 +355,7 @@
                                                                                 index.Message,
                                                                                 index.Text2
                                                                             ]);
-                                                                            tableAction.draw();    
+                                                                            tableAction.draw();
                                                                         });
                                                                         modal.style.display = "block";
                                                                     }
@@ -329,7 +381,6 @@
                                                                 console.log("Error");
                                                             }
 
-
                                                         });
 
                                                     clicks = 0;
@@ -343,7 +394,7 @@
                                         });
 
 
-                                        
+
                                     },
                                     error: function () {
                                         console.log("Error");
@@ -356,22 +407,16 @@
 
                     });
 
-
-
                 $.fn.resetForm();
 
             });
             var modal = document.getElementById("caseModal")
             var span = document.getElementsByClassName("close")[0];
 
-
-
             span.onclick = function () {
                 modal.style.display = "none";
                 tableAction.clear().draw();
             }
-
-
 
             window.onclick = function (event) {
                 if (event.target == modal) {
@@ -379,14 +424,12 @@
                     tableAction.clear().draw();
                 }
             }
-            
-             
             });
 
-            
 
 
-    </script>
+
+</script>
 
     <style>
         table {
@@ -409,16 +452,25 @@
         th, td {
             white-space: nowrap;
         }
+
         div.dataTables_wrapper {
             width: 100%;
             margin: 0 auto;
             font-size: small;
             padding: 0px 0px 0px 0px;
         }
+
         .size {
             font-size: small;
         }
-
+        #myTable.dataTable tbody > tr.selected,
+        #myTable.dataTable tbody > tr > .selected {
+            background-color: dodgerblue;
+        }
+        #actionTable.dataTable tbody > tr.selected,
+        #actionTable.dataTable tbody > tr > .selected {
+            background-color: dodgerblue;
+        }
         #myTable.dataTable tbody th, #docTable.dataTable tbody th,
         #myTable.dataTable tbody td, #docTable.dataTable tbody td {
             padding: 0px 18px;
@@ -430,6 +482,7 @@
             padding: 0px 18px;
             text-align: left;
         }
+
         #actionTable.dataTable thead th, #actionTable.dataTable thead td,
         #actionTable.dataTable tbody th, #actionTable.dataTable tbody td {
             padding: 0px 18px;
@@ -437,6 +490,7 @@
             white-space: normal;
             word-wrap: break-word;
         }
+
         #btnSearch {
             padding: 0px 20px 0px 20px;
             font-size: 16px;
@@ -502,7 +556,6 @@
             }
     </style>
 </head>
-
 
 <body>
     <div>
@@ -580,7 +633,7 @@
     <div id="output1" style="display: none;">
         <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
         <div style=" border: 3px ridge black; overflow:auto;">
-            <table id="myTable" class="table table-condensed rowHighlighter size compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
+            <table id="myTable" class="table table-condensed rowHighlighter compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
                 <thead>
                     <tr style="vertical-align:top;font-size:small;">
                         <th>Account</th>
@@ -631,6 +684,8 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div style="overflow:scroll">
+                <label for="actionText" id="res" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">
+                </label>
                 <table id="actionTable" class="table table-condensed size compact" style="border: 1px ridge lightgray;">
                     <thead>
                         <tr>
