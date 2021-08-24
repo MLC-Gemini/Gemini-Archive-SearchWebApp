@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog.Context;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,11 @@ namespace GeminiSearchWebApp
 {
     public class Startup
     {
+      //  private IHttpContextAccessor HttpContextAccessor;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           // HttpContextAccessor = httpContextAccessor;
         }
 
         public IConfiguration Configuration { get; }
@@ -43,6 +46,7 @@ namespace GeminiSearchWebApp
 
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,15 +68,6 @@ namespace GeminiSearchWebApp
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            // below code is needed to get User name for Log
-            app.Use(async (httpContext, next) =>
-            {
-                var userName = httpContext.User.Identity.IsAuthenticated ? httpContext.User.Identity.Name : "Guest"; //Gets user Name from user Identity  
-                LogContext.PushProperty("Username", userName); //Push user in LogContext;  
-                await next.Invoke();
-            }
-            );
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

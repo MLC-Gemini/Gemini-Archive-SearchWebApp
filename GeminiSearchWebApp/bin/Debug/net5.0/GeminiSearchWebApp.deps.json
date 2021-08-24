@@ -33,7 +33,7 @@
     ".NETCoreApp,Version=v5.0": {
       "GeminiSearchWebApp/1.0.0": {
         "dependencies": {
-          "Microsoft.AspNetCore.Authentication.Negotiate": "5.0.8",
+          "Microsoft.AspNetCore.Authentication.Negotiate": "5.0.9",
           "Newtonsoft.Json": "13.0.1",
           "Serilog.AspNetCore": "4.1.0",
           "Serilog.Settings.Configuration": "3.2.0",
@@ -326,36 +326,36 @@
           "GeminiSearchWebApp.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Authentication.Negotiate/5.0.8": {
+      "Microsoft.AspNetCore.Authentication.Negotiate/5.0.9": {
         "dependencies": {
-          "Microsoft.AspNetCore.Connections.Abstractions": "5.0.8",
+          "Microsoft.AspNetCore.Connections.Abstractions": "5.0.9",
           "System.DirectoryServices.Protocols": "5.0.0"
         },
         "runtime": {
           "lib/net5.0/Microsoft.AspNetCore.Authentication.Negotiate.dll": {
-            "assemblyVersion": "5.0.8.0",
-            "fileVersion": "5.0.821.31805"
+            "assemblyVersion": "5.0.9.0",
+            "fileVersion": "5.0.921.36503"
           }
         },
         "compile": {
           "lib/net5.0/Microsoft.AspNetCore.Authentication.Negotiate.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Connections.Abstractions/5.0.8": {
+      "Microsoft.AspNetCore.Connections.Abstractions/5.0.9": {
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "5.0.8"
+          "Microsoft.AspNetCore.Http.Features": "5.0.9"
         },
         "runtime": {
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {
             "assemblyVersion": "5.0.0.0",
-            "fileVersion": "5.0.821.31805"
+            "fileVersion": "5.0.921.36503"
           }
         },
         "compile": {
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Http.Features/5.0.8": {
+      "Microsoft.AspNetCore.Http.Features/5.0.9": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "5.0.1",
           "System.IO.Pipelines": "5.0.1"
@@ -363,7 +363,7 @@
         "runtime": {
           "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
             "assemblyVersion": "5.0.0.0",
-            "fileVersion": "5.0.821.31805"
+            "fileVersion": "5.0.921.36503"
           }
         },
         "compile": {
@@ -3576,26 +3576,26 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.AspNetCore.Authentication.Negotiate/5.0.8": {
+    "Microsoft.AspNetCore.Authentication.Negotiate/5.0.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5GJxjizADAE9z0KjX6xeR4pSN20nN2KGe47IEwGx4q5QAhjNqK+PjcaGUZ6bk9SolfcMUw/sAp0RR/2z1xP5OA==",
-      "path": "microsoft.aspnetcore.authentication.negotiate/5.0.8",
-      "hashPath": "microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512"
+      "sha512": "sha512-RSCOYqhIrXRico6GGOdJxO3whCkGSo7GJoX+EIXRLcag5GxCFq5PiiOhe2s7WWLEsoL+Mg5UogP99z32dacy6Q==",
+      "path": "microsoft.aspnetcore.authentication.negotiate/5.0.9",
+      "hashPath": "microsoft.aspnetcore.authentication.negotiate.5.0.9.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Connections.Abstractions/5.0.8": {
+    "Microsoft.AspNetCore.Connections.Abstractions/5.0.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AmFIRfSc1uDy6BhxSSasBVvPEbB9MwrUKBit3zln2VWYO094x4XbzIqiNqoahR05gVk4dE0Ss5B81TlEbdsQ+g==",
-      "path": "microsoft.aspnetcore.connections.abstractions/5.0.8",
-      "hashPath": "microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512"
+      "sha512": "sha512-M3/k0KUfxCKUOSXa4kudunYL3XqybXSCtuOZpEKStjqTOG1G76u5CfASBZANWL2YVnqgyFPXLkKp+0oAS3j8aA==",
+      "path": "microsoft.aspnetcore.connections.abstractions/5.0.9",
+      "hashPath": "microsoft.aspnetcore.connections.abstractions.5.0.9.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Http.Features/5.0.8": {
+    "Microsoft.AspNetCore.Http.Features/5.0.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-DgUcq7E239pPsd5gfsx4JfR5E6d6QOEht7A/P/DGCDF1hEx1CgKY7va7Duhn3KxvqPmj0Dw+XUYXwGQeKVC66A==",
-      "path": "microsoft.aspnetcore.http.features/5.0.8",
-      "hashPath": "microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512"
+      "sha512": "sha512-6CiMPjR7yjnQ2dzSNOY88FMWeNRDmmiPKn9hM23bBO0mCUDdPUCEpFhaGfog/mpa/t+y6sMBFL5Mcqd4AKdMfw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.9",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.9.nupkg.sha512"
     },
     "Microsoft.Azure.Services.AppAuthentication/1.4.0": {
       "type": "package",

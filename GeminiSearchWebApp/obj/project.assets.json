@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     "net5.0": {
-      "Microsoft.AspNetCore.Authentication.Negotiate/5.0.8": {
+      "Microsoft.AspNetCore.Authentication.Negotiate/5.0.9": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Connections.Abstractions": "5.0.8",
+          "Microsoft.AspNetCore.Connections.Abstractions": "5.0.9",
           "System.DirectoryServices.Protocols": "5.0.0"
         },
         "compile": {
@@ -18,10 +18,10 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Microsoft.AspNetCore.Connections.Abstractions/5.0.8": {
+      "Microsoft.AspNetCore.Connections.Abstractions/5.0.9": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "5.0.8"
+          "Microsoft.AspNetCore.Http.Features": "5.0.9"
         },
         "compile": {
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
@@ -30,7 +30,7 @@
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Http.Features/5.0.8": {
+      "Microsoft.AspNetCore.Http.Features/5.0.9": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Primitives": "5.0.1",
@@ -2340,10 +2340,10 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.Authentication.Negotiate/5.0.8": {
-      "sha512": "5GJxjizADAE9z0KjX6xeR4pSN20nN2KGe47IEwGx4q5QAhjNqK+PjcaGUZ6bk9SolfcMUw/sAp0RR/2z1xP5OA==",
+    "Microsoft.AspNetCore.Authentication.Negotiate/5.0.9": {
+      "sha512": "RSCOYqhIrXRico6GGOdJxO3whCkGSo7GJoX+EIXRLcag5GxCFq5PiiOhe2s7WWLEsoL+Mg5UogP99z32dacy6Q==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.negotiate/5.0.8",
+      "path": "microsoft.aspnetcore.authentication.negotiate/5.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2351,14 +2351,14 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net5.0/Microsoft.AspNetCore.Authentication.Negotiate.dll",
         "lib/net5.0/Microsoft.AspNetCore.Authentication.Negotiate.xml",
-        "microsoft.aspnetcore.authentication.negotiate.5.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.negotiate.5.0.9.nupkg.sha512",
         "microsoft.aspnetcore.authentication.negotiate.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Connections.Abstractions/5.0.8": {
-      "sha512": "AmFIRfSc1uDy6BhxSSasBVvPEbB9MwrUKBit3zln2VWYO094x4XbzIqiNqoahR05gVk4dE0Ss5B81TlEbdsQ+g==",
+    "Microsoft.AspNetCore.Connections.Abstractions/5.0.9": {
+      "sha512": "M3/k0KUfxCKUOSXa4kudunYL3XqybXSCtuOZpEKStjqTOG1G76u5CfASBZANWL2YVnqgyFPXLkKp+0oAS3j8aA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.connections.abstractions/5.0.8",
+      "path": "microsoft.aspnetcore.connections.abstractions/5.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2372,14 +2372,14 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.Connections.Abstractions.xml",
         "lib/netstandard2.1/Microsoft.AspNetCore.Connections.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.AspNetCore.Connections.Abstractions.xml",
-        "microsoft.aspnetcore.connections.abstractions.5.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.connections.abstractions.5.0.9.nupkg.sha512",
         "microsoft.aspnetcore.connections.abstractions.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Http.Features/5.0.8": {
-      "sha512": "DgUcq7E239pPsd5gfsx4JfR5E6d6QOEht7A/P/DGCDF1hEx1CgKY7va7Duhn3KxvqPmj0Dw+XUYXwGQeKVC66A==",
+    "Microsoft.AspNetCore.Http.Features/5.0.9": {
+      "sha512": "6CiMPjR7yjnQ2dzSNOY88FMWeNRDmmiPKn9hM23bBO0mCUDdPUCEpFhaGfog/mpa/t+y6sMBFL5Mcqd4AKdMfw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.http.features/5.0.8",
+      "path": "microsoft.aspnetcore.http.features/5.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2391,7 +2391,7 @@
         "lib/net5.0/Microsoft.AspNetCore.Http.Features.xml",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.xml",
-        "microsoft.aspnetcore.http.features.5.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.http.features.5.0.9.nupkg.sha512",
         "microsoft.aspnetcore.http.features.nuspec"
       ]
     },
@@ -7844,7 +7844,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "Microsoft.AspNetCore.Authentication.Negotiate >= 5.0.8",
+      "Microsoft.AspNetCore.Authentication.Negotiate >= 5.0.9",
       "Newtonsoft.Json >= 13.0.1",
       "Serilog.AspNetCore >= 4.1.0",
       "Serilog.Settings.Configuration >= 3.2.0",
@@ -7853,25 +7853,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\X033022d\\.nuget\\packages\\": {},
+    "C:\\Users\\X033021d\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "projectUniqueName": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
       "projectName": "GeminiSearchWebApp",
-      "projectPath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
-      "packagesPath": "C:\\Users\\X033022d\\.nuget\\packages\\",
-      "outputPath": "C:\\Temp\\VisualStudio Source\\GemArchSearchWebApp\\GeminiSearchWebApp\\obj\\",
+      "projectPath": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+      "packagesPath": "C:\\Users\\X033021d\\.nuget\\packages\\",
+      "outputPath": "C:\\Temp\\GeminiProject\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\X033022d\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\X033021d\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -7901,7 +7901,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.Negotiate": {
             "target": "Package",
-            "version": "[5.0.8, )"
+            "version": "[5.0.9, )"
           },
           "Newtonsoft.Json": {
             "target": "Package",
