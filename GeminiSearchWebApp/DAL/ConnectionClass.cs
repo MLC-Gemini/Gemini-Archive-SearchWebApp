@@ -8,20 +8,33 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using GeminiSearchWebApp.Models;
-using Gemini.Models;
+using GeminiSearchWebApp.Controllers;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 
 namespace GeminiSearchWebApp.DAL
 {
     public class ConnectionClass
     {
-        private IConfiguration Configuration;
+        public IConfiguration Configuration;
         public UserInput userInput;
+        public HomeController homeController;
+        public string userName;
+        public DateTime loginDateTime;
 
-        public ConnectionClass(IConfiguration _configuration)
+        public ConnectionClass(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
         {
             Configuration = _configuration;
             userInput = new UserInput();
+            //homeController = new HomeController(Configuration, httpContextAccessor);
+            loginDateTime = DateTime.Now;
+            userName = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            if (userName == "AURDEV\\X033021d")
+            {
+                userName = "Catherine Sherrin";
+            }
+            CreateLog(userName, loginDateTime);
         }
 
         public DataTable GetCasesRecord(UserInput userInput)
@@ -88,7 +101,7 @@ namespace GeminiSearchWebApp.DAL
                 }
                 catch (Exception ex)
                 {
-
+                    CreateMessageLog(ex.Message);
                     Console.WriteLine(ex);
                 }
                 finally
@@ -98,8 +111,6 @@ namespace GeminiSearchWebApp.DAL
             }
             return dtCases;
         }
-
-
 
 
         public DataTable Getrecord(UserInput userInput)
@@ -166,7 +177,7 @@ namespace GeminiSearchWebApp.DAL
                 }
                 catch (Exception ex)
                 {
-
+                    CreateMessageLog(ex.Message);
                     Console.WriteLine(ex);
                 }
                 finally
@@ -177,8 +188,6 @@ namespace GeminiSearchWebApp.DAL
            
             return dtResult;
         }
-
-
 
 
         public DataTable GetActionRecord(int selectedCaseId)
@@ -203,7 +212,7 @@ namespace GeminiSearchWebApp.DAL
                 }
                 catch (Exception ex)
                 {
-
+                    CreateMessageLog(ex.Message);
                     Console.WriteLine(ex);
                 }
                 finally
@@ -213,6 +222,68 @@ namespace GeminiSearchWebApp.DAL
             }
 
             return dtAction;
+        }
+
+        public void CreateLog(string userName, DateTime loginDateTime)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand dbCommand = new SqlCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandType = CommandType.StoredProcedure;
+                dbCommand.CommandText = "[dbo].[usp_GetUserLog]";
+                conn.Open();
+                try
+                {
+                    dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = userName;
+                    dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = loginDateTime;
+
+                    dbCommand.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    CreateMessageLog(ex.Message);
+                    Console.WriteLine(ex);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        public void CreateMessageLog(string exDb)
+        {
+            var exceptionDateTime = DateTime.Now;
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                SqlCommand dbCommand = new SqlCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandType = CommandType.StoredProcedure;
+                dbCommand.CommandText = "[dbo].[usp_GetMessageLog]";
+                conn.Open();
+                try
+                {
+                    dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = userName;
+                    dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = exceptionDateTime;
+                    dbCommand.Parameters.Add("@MessageText", SqlDbType.Text).Value = exDb;
+
+                    dbCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }
