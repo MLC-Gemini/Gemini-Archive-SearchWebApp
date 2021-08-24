@@ -17,6 +17,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -24,18 +26,13 @@ namespace GeminiSearchWebApp.Controllers
     public class HomeController : Controller
     {
         private IConfiguration configuration;
-        
-        //private readonly ILogger<HomeController> _logger;
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-        public HomeController(IConfiguration _configuration)
+        private ConnectionClass connectionClass;
+        public HomeController(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
         {
+           
             configuration = _configuration;
+            connectionClass = new ConnectionClass(configuration, httpContextAccessor);
         }
-
         public IActionResult Index()
         {
             var lstClaim = User.Claims.ToList();
@@ -89,7 +86,6 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-       
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
             DataTable dt = new DataTable();
@@ -113,13 +109,12 @@ namespace GeminiSearchWebApp.Controllers
                     userInput.ToDate = DateTime.ParseExact(tDate, format, provider);
                 }
                 userInput.CaseTypeDate = caseType;
-                ConnectionClass connectionClass = new ConnectionClass(configuration);
                 dt = connectionClass.Getrecord(userInput);
                
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                connectionClass.CreateMessageLog(ex.Message);
                 Console.WriteLine("error");
             }
 
@@ -159,13 +154,12 @@ namespace GeminiSearchWebApp.Controllers
                     userInput.ToDate = DateTime.ParseExact(toDate, format, provider);
                 }
                 userInput.CaseTypeDate = caseDateType;
-                ConnectionClass connectionClass = new ConnectionClass(configuration);
                 dt = connectionClass.GetCasesRecord(userInput);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                connectionClass.CreateMessageLog(ex.Message);
                 Console.WriteLine("error");
             }
 
@@ -187,13 +181,12 @@ namespace GeminiSearchWebApp.Controllers
 
             try
             {
-                ConnectionClass connectionClass = new ConnectionClass(configuration);
                 dt = connectionClass.GetActionRecord(selectedCaseId);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                connectionClass.CreateMessageLog(ex.Message);
                 Console.WriteLine("error");
             }
 
@@ -206,6 +199,11 @@ namespace GeminiSearchWebApp.Controllers
             string JSONString = string.Empty;
             JSONString = JsonConvert.SerializeObject(table);
             return JSONString;
+        }
+
+        public void ExceptionMessageFromView(string exView)
+        {
+            connectionClass.CreateMessageLog(exView);
         }
 
         // code for PI tower service call
