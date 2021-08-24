@@ -54,7 +54,7 @@
                 })
                 return false;
             };
-            
+
            // console.log($.fn.ifEmpty());
             var tableDoc;
             var tableAction;
@@ -145,6 +145,7 @@
                                 }
                             }
                             catch (e) {
+                                writeLogFileFromView(e);
                                 console.log(e);
                             }
 
@@ -182,6 +183,7 @@
                                                 tableAction.column(4).visible(false);
                                             }
                                         } catch (e) {
+                                            writeLogFileFromView(e);
                                             console.log(e);
                                         }
 
@@ -200,10 +202,11 @@
                                                     "lengthChange": false,
                                                     "paginate": false,
                                                     "bInfo": false
-                                                    
+
                                                 });
                                             }
                                         } catch (e) {
+                                            writeLogFileFromView(e);
                                             console.log(e);
                                         }
 
@@ -229,6 +232,7 @@
                                             }
 
                                         } catch (e) {
+                                            writeLogFileFromView(e);
                                             console.log(e);
                                         }
 
@@ -267,6 +271,7 @@
                                                                 });
                                                             }
                                                         } catch (e) {
+                                                            writeLogFileFromView(e);
                                                             console.log(e);
                                                         }
 
@@ -278,7 +283,7 @@
                                                 } else {
 
                                                     clearTimeout(timer);
-                                                    
+
                                                     rowId = this.rowIndex;
                                                     var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
                                                     var caseIdSelected = caseText.text();
@@ -303,17 +308,17 @@
                                                                                 index.Message,
                                                                                 index.Text2
                                                                             ]);
-                                                                            tableAction.draw();    
+                                                                            tableAction.draw();
                                                                         });
                                                                         modal.style.display = "block";
                                                                     }
                                                                 } catch (e) {
+                                                                    writeLogFileFromView(e);
                                                                     console.log(e);
                                                                 }
 
 
                                                                 $('#actionTable').on('click', 'tr', function (e) {
-                                                                    debugger;
                                                                     var actionRowId = this.rowIndex;
                                                                     var selectedMsg1 = $("#actionTable tr").eq(actionRowId).find("td:nth-child(4)");
                                                                     var msg1 = selectedMsg1.text();
@@ -343,7 +348,7 @@
                                         });
 
 
-                                        
+
                                     },
                                     error: function () {
                                         console.log("Error");
@@ -379,11 +384,26 @@
                     tableAction.clear().draw();
                 }
             }
-            
-             
-            });
 
-            
+            function writeLogFileFromView(exFromCatch) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Home/ExceptionMessageFromView",
+                        dataType: "JSON",
+                        data: { exView: exFromCatch },
+                        success: function (response) {
+                            console.log("success from View")
+                        },
+                        error: function () {
+                            console.log("error from View");
+                        }
+                    });
+
+            }
+
+
+        });
 
 
     </script>
