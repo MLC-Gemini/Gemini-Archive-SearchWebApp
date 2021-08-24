@@ -30,6 +30,10 @@ namespace GeminiSearchWebApp.DAL
             //homeController = new HomeController(Configuration, httpContextAccessor);
             loginDateTime = DateTime.Now;
             userName = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            if(userName.ToLower()=="aurdev\\x033027d")
+            {
+                userName = "Catherine Sherrin";
+            }
             CreateLog(userName, loginDateTime);
         }
 

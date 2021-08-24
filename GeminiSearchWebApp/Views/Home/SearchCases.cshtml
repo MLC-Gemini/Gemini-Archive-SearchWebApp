@@ -18,7 +18,8 @@
 
 
     <script type="text/javascript">
-
+        var caseIdVal;
+        var caseTypeVal;
         $(document).ready(function () {
 
              $.fn.resetForm = function () {
@@ -75,27 +76,34 @@
                 if (!$('#filter_level').val() && document.getElementById("Pid").value.length == 0) {
 
                     alert('@ViewBag.emptySearch');
+                    location.reload();
                 }
                 else if (!$('#filter_level').val()) {
                     alert('@ViewBag.emptySearchLevel');
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length == 0) {
-                    alert('@ViewBag.emptyAccountID')
+                    alert('@ViewBag.emptyAccountID');
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Adviser Level" && document.getElementById("Pid").value.length == 0) {
-                    alert('@ViewBag.emptyAdviserID')
+                    alert('@ViewBag.emptyAdviserID');
+                    location.reload();
                 }
                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length == 0) {
-                    alert('@ViewBag.emptyCustomerID')
+                    alert('@ViewBag.emptyCustomerID');
+                    location.reload();
                 }
                 else if (document.getElementById("Pid").value.length == 0) {
                     alert('@ViewBag.emptySearchPid');
+                    location.reload();
                 }
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
                 }
                 else if ($('input[name="date_case"]:checked').length == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
+                    location.reload();
                 }
                 else {
                     $("#output1").show();
@@ -119,7 +127,7 @@
 
                             try {
                                 if (!$.fn.DataTable.isDataTable("#myTable")) {
-                                    $("#myTable").DataTable({
+                                    var myTable = $("#myTable").DataTable({
                                         pageLength: 10,
                                         searching: false,
                                         select: true,
@@ -142,12 +150,42 @@
                                             { 'data': 'Employee' }
                                         ]
                                     });
+
+                                    $('#myTable tbody').on('click', 'tr', function () {
+                                        if ($(this).hasClass('selected')) {
+                                            $(this).removeClass('selected');
+                                        }
+                                        else {
+                                            myTable.$('tr.selected').removeClass('selected');
+                                            $(this).addClass('selected');
+                                        }
+                                        var data = myTable.row(this).data();
+                                        caseIdVal = data.CaseID;
+                                        console.log(caseIdVal);
+                                        caseTypeVal = data.CaseType;
+                                        console.log(caseTypeVal);
+                                        if (caseIdVal == null && caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities:';
+                                        }
+                                        else if (caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for (id ' + caseIdVal + ')';
+                                        }
+                                        else if (caseIdVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for "' + caseTypeVal + '"';
+                                        }
+                                        else {
+                                            document.getElementById("res").innerHTML = 'Case Activities for " ' + caseTypeVal + '" (id ' + caseIdVal + ')';
+                                        }
+
+                                    });
                                 }
                             }
                             catch (e) {
                                 writeLogFileFromView(e);
                                 console.log(e);
                             }
+
+
 
                             var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
                             var caseIdText = caseTable.text();
@@ -186,6 +224,26 @@
                                             writeLogFileFromView(e);
                                             console.log(e);
                                         }
+
+                                        $('#actionTable tbody').on('click', 'tr', function () {
+                                            if ($(this).hasClass('selected')) {
+                                                $(this).removeClass('selected');
+                                            }
+                                            else {
+                                                tableAction.$('tr.selected').removeClass('selected');
+                                                $(this).addClass('selected');
+                                            }
+                                        });
+                                        $('#actionTable tbody').on('dblclick', 'tr', function () {
+                                            if ($(this).hasClass('selected')) {
+                                                $(this).removeClass('selected');
+                                            }
+                                            else {
+                                                tableAction.$('tr.selected').removeClass('selected');
+                                                $(this).addClass('selected');
+                                            }
+                                        });
+
 
                                         try {
                                             if (!$.fn.DataTable.isDataTable("#docTable")) {
@@ -438,6 +496,15 @@
         .size {
             font-size: small;
         }
+        #myTable.dataTable tbody > tr.selected,
+        #myTable.dataTable tbody > tr > .selected {
+            background-color: greenyellow;
+        }
+
+        #actionTable.dataTable tbody > tr.selected,
+        #actionTable.dataTable tbody > tr > .selected {
+            background-color: greenyellow;
+        }
 
         #myTable.dataTable tbody th, #docTable.dataTable tbody th,
         #myTable.dataTable tbody td, #docTable.dataTable tbody td {
@@ -600,7 +667,7 @@
     <div id="output1" style="display: none;">
         <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
         <div style=" border: 3px ridge black; overflow:auto;">
-            <table id="myTable" class="table table-condensed rowHighlighter size compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
+            <table id="myTable" class="table table-condensed rowHighlighter compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
                 <thead>
                     <tr style="vertical-align:top;font-size:small;">
                         <th>Account</th>
@@ -651,6 +718,8 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <div style="overflow:scroll">
+                <label for="actionText" id="res" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">
+                </label>
                 <table id="actionTable" class="table table-condensed size compact" style="border: 1px ridge lightgray;">
                     <thead>
                         <tr>
