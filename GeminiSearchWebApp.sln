@@ -3,7 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeminiSearchWebApp", "GeminiSearchWebApp\GeminiSearchWebApp.csproj", "{5DE6ED78-DD38-46CB-BDCA-8B8BB40A9574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiSearchWebApp", "GeminiSearchWebApp\GeminiSearchWebApp.csproj", "{5DE6ED78-DD38-46CB-BDCA-8B8BB40A9574}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Batch", "Batch", "{89085AA8-AE1C-48C8-BE8E-6DA939B336A8}"
+	ProjectSection(SolutionItems) = preProject
+		Batch\config_batch_ad.sh = Batch\config_batch_ad.sh
+		Batch\config_batch_env.sh = Batch\config_batch_env.sh
+		Batch\config_batch_final.sh = Batch\config_batch_final.sh
+		Batch\config_batch_server.sh = Batch\config_batch_server.sh
+		Batch\config_batch_smb.sh = Batch\config_batch_smb.sh
+		Batch\ec2_install_software.sh = Batch\ec2_install_software.sh
+		Batch\gen_sql.sh = Batch\gen_sql.sh
+		Batch\get_batch_artifact.sh = Batch\get_batch_artifact.sh
+		Batch\get_robot_artifact.sh = Batch\get_robot_artifact.sh
+		Batch\get_towerfile.sh = Batch\get_towerfile.sh
+		Batch\jenkins.sh = Batch\jenkins.sh
+		Batch\prepare_for_jenkins_build.sh = Batch\prepare_for_jenkins_build.sh
+		Batch\update_smb_ip.sh = Batch\update_smb_ip.sh
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
