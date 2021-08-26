@@ -1,0 +1,15 @@
+[Unit]
+Description=nginx - high performance web server
+Documentation=http://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+[Service]
+User=root
+Group=root
+Type=forking
+PIDFile=/web/nginx/run/nginx.pid
+ExecStart=/web/nginx/sbin/nginx -c /web/nginx/conf/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+[Install]
+WantedBy=multi-user.target

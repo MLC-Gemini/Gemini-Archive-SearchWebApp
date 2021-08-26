@@ -15,4 +15,10 @@
     <Folder Include="DAL\" />
     <Folder Include="Images\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Scripts\jquery.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
