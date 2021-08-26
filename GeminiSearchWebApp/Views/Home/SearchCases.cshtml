@@ -145,6 +145,7 @@
                                             { 'data': 'Requestor' },
                                             { 'data': 'CaseID' },
                                             { 'data': 'WorkpackID' },
+                                            { 'data': 'Team' },
                                             { 'data': 'InPFC' },
                                             { 'data': 'Employee' }
                                         ]
@@ -395,6 +396,10 @@
                                                                             ]);
                                                                             tableAction.draw();
                                                                         });
+                                                                        modal.style.display = "block";
+                                                                    }
+                                                                    else {
+                                                                        tableAction.clear().draw();
                                                                         modal.style.display = "block";
                                                                     }
                                                                 } catch (e) {
