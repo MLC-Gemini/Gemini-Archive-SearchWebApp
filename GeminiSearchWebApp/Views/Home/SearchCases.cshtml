@@ -16,7 +16,6 @@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js" defer></script>
     <link href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-
     <script type="text/javascript">
         var caseIdVal;
         var caseTypeVal;
@@ -150,7 +149,6 @@
                                             { 'data': 'Employee' }
                                         ]
                                     });
-
                                     $('#myTable tbody').on('click', 'tr', function () {
                                         if ($(this).hasClass('selected')) {
                                             $(this).removeClass('selected');
@@ -159,6 +157,7 @@
                                             myTable.$('tr.selected').removeClass('selected');
                                             $(this).addClass('selected');
                                         }
+                                        $(this).addClass('selected');
                                         var data = myTable.row(this).data();
                                         caseIdVal = data.CaseID;
                                         console.log(caseIdVal);
@@ -176,7 +175,33 @@
                                         else {
                                             document.getElementById("res").innerHTML = 'Case Activities for " ' + caseTypeVal + '" (id ' + caseIdVal + ')';
                                         }
-
+                                    });
+                                    $('#myTable tbody').on('dblclick', 'tr', function () {
+                                        if ($(this).hasClass('selected')) {
+                                            $(this).removeClass('selected');
+                                        }
+                                        else {
+                                            myTable.$('tr.selected').removeClass('selected');
+                                            $(this).addClass('selected');
+                                        }
+                                        $(this).addClass('selected');
+                                        var data = myTable.row(this).data();
+                                        caseIdVal = data.CaseID;
+                                        console.log(caseIdVal);
+                                        caseTypeVal = data.CaseType;
+                                        console.log(caseTypeVal);
+                                        if (caseIdVal == null && caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities:';
+                                        }
+                                        else if (caseTypeVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for (id ' + caseIdVal + ')';
+                                        }
+                                        else if (caseIdVal == null) {
+                                            document.getElementById("res").innerHTML = 'Case Activities for "' + caseTypeVal + '"';
+                                        }
+                                        else {
+                                            document.getElementById("res").innerHTML = 'Case Activities for " ' + caseTypeVal + '" (id ' + caseIdVal + ')';
+                                        }
                                     });
                                 }
                             }
@@ -233,6 +258,7 @@
                                                 tableAction.$('tr.selected').removeClass('selected');
                                                 $(this).addClass('selected');
                                             }
+                                            $(this).addClass('selected');
                                         });
                                         $('#actionTable tbody').on('dblclick', 'tr', function () {
                                             if ($(this).hasClass('selected')) {
@@ -242,6 +268,7 @@
                                                 tableAction.$('tr.selected').removeClass('selected');
                                                 $(this).addClass('selected');
                                             }
+                                            $(this).addClass('selected');
                                         });
 
 
@@ -487,15 +514,18 @@
         th, td {
             white-space: nowrap;
         }
+
         div.dataTables_wrapper {
             width: 100%;
             margin: 0 auto;
             font-size: small;
             padding: 0px 0px 0px 0px;
         }
+
         .size {
             font-size: small;
         }
+
         #myTable.dataTable tbody > tr.selected,
         #myTable.dataTable tbody > tr > .selected {
             background-color: greenyellow;
@@ -517,6 +547,7 @@
             padding: 0px 18px;
             text-align: left;
         }
+
         #actionTable.dataTable thead th, #actionTable.dataTable thead td,
         #actionTable.dataTable tbody th, #actionTable.dataTable tbody td {
             padding: 0px 18px;
@@ -524,6 +555,7 @@
             white-space: normal;
             word-wrap: break-word;
         }
+
         #btnSearch {
             padding: 0px 20px 0px 20px;
             font-size: 16px;
