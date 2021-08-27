@@ -2,9 +2,9 @@ cleanup() {
 	echo "7. Drop this instance"
 	aws ec2 terminate-instances --instance-ids $instance_id
 	rm tmp_bake_batch_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$"
+	aws ec2 delete-key-pair --key-name "tmpkey-CRMS-BATCH-$env_id$$"
 	aws ec2 wait instance-terminated --instance-ids $instance_id
-	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
+	aws ec2 delete-security-group --group-id $crms_tmp_sec_group_id
 
 	rm -f kms_policy_ami_$$.json
 	rm -f encrypted_device_mapping_$$.json
@@ -15,16 +15,23 @@ cleanup() {
 trap cleanup EXIT
 
 env_id=$1
-source ./env_def/read_variables.sh $env_id
-
+dbname=$2
+echo "- Get environment variable"
+if [[ $dbname != '' ]]; then
+  source aws/checkout_stable_release.sh $dbname
+  #Make sure we don't accidentally overwrite test environment variables from build environment, use "SELECT"
+  source ./env_def/read_variables.sh $env_id SELECT "VPCID,BUILD_STAGE,VPCID,SUBNETID1,SUBNETID2,SUBNETID3"
+else
+  source ./env_def/read_variables.sh $env_id
+fi
 
 echo "1. Download from artifactory"
 ./Batch/get_batch_artifact.sh $env_id /tmp/batch_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
-geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
-aws ec2 authorize-security-group-ingress --group-id $geminiweb_tmp_sec_group_id --protocol tcp --port 22 --cidr $SSHACCESSCIDR
-aws ec2 create-key-pair --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$" --query 'KeyMaterial' --output text > tmp_bake_batch_$env_id.pem
+crms_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "BAKE-SSH-$env_id$$" --description "CRMS-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
+aws ec2 authorize-security-group-ingress --group-id $crms_tmp_sec_group_id --protocol tcp --port 22 --cidr $SSHACCESSCIDR
+aws ec2 create-key-pair --key-name "tmpkey-CRMS-BATCH-$env_id$$" --query 'KeyMaterial' --output text > tmp_bake_batch_$env_id.pem
 chmod g-rw tmp_bake_batch_$env_id.pem
 chmod o-rw tmp_bake_batch_$env_id.pem
 
@@ -34,7 +41,7 @@ chmod o-rw tmp_bake_batch_$env_id.pem
 ami_id=$(curl "https://hip.ext.national.com.au/images/aws/rhel/7/latest")
 kms_ec2_keyid=$(./aws/aws_get_parameter.sh $KMS_EC2)
 if [[ $kms_ec2_keyid == 'null' ]]; then
-  envsubst < aws/GEMINIWEB_CFM/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
+  envsubst < aws/CRMS_CFM/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
 	kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
 	#CAST requirement to enable key rotation
   aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
@@ -47,10 +54,10 @@ instance_id=`\
 aws ec2 run-instances \
     --block-device-mappings file://encrypted_device_mapping_$$.json \
     --subnet-id $SUBNETID1 \
-    --security-group-ids $geminiweb_tmp_sec_group_id \
+    --security-group-ids $crms_tmp_sec_group_id \
     --image-id $ami_id \
     --instance-type $INSTANCE_TYPE_BATCH \
-    --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$" \
+    --key-name "tmpkey-CRMS-BATCH-$env_id$$" \
     --iam-instance-profile Name=$IAM_PROFILE_PROV \
     | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
@@ -90,22 +97,21 @@ done
 echo "- Copy source code to image"
 scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem /tmp/batch_staging/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/nginx.service ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem PublishedCode/GeminiSearchWebApp ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
-
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_web_server.sh ec2-user@$endpoint:/tmp
-
-#scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem env_def/crms_decrypt ec2-user@$endpoint:/tmp
-#scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem aws/CRMS_CFM/Cloudwatch_EC2_config.json ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/scripts ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_batch_server.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_batch_env.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_batch_smb.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_batch_final.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem env_def/crms_decrypt ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_batch_ad.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem aws/CRMS_CFM/Cloudwatch_EC2_config.json ec2-user@$endpoint:/tmp
 
 echo "4. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_bake_batch_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 
 echo "5. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
-image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
+image_id=`aws ec2 create-image --name CRMS_BATCH_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
 
 echo "- wait for image to be created"
