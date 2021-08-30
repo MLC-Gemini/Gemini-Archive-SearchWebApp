@@ -1,0 +1,31 @@
+// vim: set ft=groovy:
+//
+pipeline {
+  agent any
+
+  environment {  // Required for AWS CLI to operate correctly.
+    http_proxy = 'http://forwardproxy:3128'
+    https_proxy = 'http://forwardproxy:3128'
+    no_proxy = 'localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com'
+    AWS_DEFAULT_REGION ='ap-southeast-2'
+  }
+
+  parameters {
+    choice(name: 'stack', choices: 'notSet\nbatch\nbatch_efs\nfileserver\ncw\nkms\ns3\nbuildbox\njenkins', description: 'Choose the stack to delete')
+    choice(name: 'envgroup', choices: 'nonprod\nprod', description: 'Choose the environment group prod or nonprod')
+    choice(name: 'environment', choices: 'dev\nprod\nsit', description: 'Choose the environment within the environment group')
+  }
+
+  stages {
+    stage('Checkout framework') {
+      steps {
+        sh "make include ; make pull"
+      }
+    }
+    stage('Create stack') {
+      steps {
+        sh "STACK=${params.stack} ENVGROUP=${params.envgroup} ENVIRONMENT=${params.environment} bash delete_stack.sh --force"
+      }
+    }
+  }
+}

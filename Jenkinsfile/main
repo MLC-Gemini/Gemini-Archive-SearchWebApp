@@ -1,0 +1,39 @@
+#!/usr/bin/env groovy
+
+/*
+ * Bootstrap will create Jenkins folders and jobs
+ */
+
+pipeline {
+
+  agent any
+
+  options {
+    disableConcurrentBuilds()
+    timestamps()
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+  }
+
+  stages {
+
+    stage('Create Jobs') {
+      steps {
+        script {
+
+          echo 'Creating Gemini folder'
+
+          jobDsl scriptText:
+          """
+              folder('Gemini') {
+                  description 'Gemini Pipelines'
+              }
+          """
+          load("jobs/bake.groovy")
+          load("jobs/deploy.groovy")
+          load("jobs/delete.groovy")
+        } // script
+      } // steps
+    } // stage(Create Jobs)
+
+  } // stages
+} // pipeline
