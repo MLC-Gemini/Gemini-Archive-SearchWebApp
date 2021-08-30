@@ -2,7 +2,7 @@
 
 jobDsl scriptText:
 """
-    pipelineJob("Gemini/packer-bake") {
+    pipelineJob("Gemini-Web/packer-bake") {
         concurrentBuild(false)
 
         displayName("Bake an AMI")
@@ -19,7 +19,7 @@ jobDsl scriptText:
                             url("git@github.aus.thenational.com:Gemini/Gemini-Archive-SearchWebApp.git")
                             credentials('svc-account')
                         }
-                        branches("Sandip")
+                        branches("Gemini_Dev")
                         extensions {
                             cleanBeforeCheckout()
                         }

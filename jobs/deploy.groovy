@@ -2,7 +2,7 @@
 
 jobDsl scriptText:
 """
-    pipelineJob("Gemini/cloudformation-deploy") { // Asset name in upper case
+    pipelineJob("Gemini-Web/cloudformation-deploy") { // Asset name in upper case
         concurrentBuild(false)
 
         displayName("Deploy a Cloudformation Stack")
@@ -20,10 +20,10 @@ jobDsl scriptText:
                 scm {
                     git {
                         remote {
-                            url("git@github.aus.thenational.com:Gemini/gemini-data-nonprod.git")
+                            url("git@github.aus.thenational.com:Gemini/Gemini-Archive-SearchWebApp.git")
                             credentials('svc-account')
                         }
-                        branches("master")
+                        branches("Gemini_Dev")
                     }
                 }
                 scriptPath("Jenkinsfile/deploy")

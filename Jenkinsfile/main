@@ -20,12 +20,12 @@ pipeline {
       steps {
         script {
 
-          echo 'Creating Gemini folder'
+          echo 'Creating Gemini-Web folder'
 
           jobDsl scriptText:
           """
-              folder('Gemini') {
-                  description 'Gemini Pipelines'
+              folder('Gemini-Web') {
+                  description 'Gemini-Web Pipelines'
               }
           """
           load("jobs/bake.groovy")
