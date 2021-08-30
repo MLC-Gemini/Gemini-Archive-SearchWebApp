@@ -12,15 +12,15 @@ sudo chmod +x GeminiSearchWebApp
 
 # Creating ser¬vice con¬fig¬u¬ra-tion file for environment (Development, Producation)
 cd /etc/systemd/system/
-sudo mv /tmp/kestral-gemini.service .
+sudo mv /tmp/kestrel-geminiweb.service .
 
 # Starting and checking the kestral service status.
-sudo systemctl start netcoreapp.service
-sudo systemctl status netcoreapp.service
+sudo systemctl start kestrel-geminiweb.service
+sudo systemctl status kestrel-geminiweb.service
 curl localhost:5000
 
 # En¬abling ser¬vice so it will run au¬to¬mat¬i¬cally af¬ter start of the op¬er¬at-ing sys¬tem.
-sudo systemctl enable netcoreapp.service
+sudo systemctl enable kestrel-geminiweb.service
 
 # Install require packages for NGINX server using "openssl-devel gcc"
 sudo yum -y install openssl-devel gcc
