@@ -1,8 +1,8 @@
 cleanup() {
 	echo "7. Drop this instance"
 	aws ec2 terminate-instances --instance-ids $instance_id
-	rm tmp_bake_batch_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$"
+	rm tmp_gemini_web_bake_$env_id.pem
+	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
 	aws ec2 wait instance-terminated --instance-ids $instance_id
 	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
 
@@ -19,14 +19,14 @@ source ./env_def/read_variables.sh $env_id
 
 
 echo "1. Download from artifactory"
-./Batch/get_batch_artifact.sh $env_id /tmp/batch_staging
+./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
-geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
+geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "GEMINI-WEB-BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
 aws ec2 authorize-security-group-ingress --group-id $geminiweb_tmp_sec_group_id --protocol tcp --port 22 --cidr $SSHACCESSCIDR
-aws ec2 create-key-pair --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$" --query 'KeyMaterial' --output text > tmp_bake_batch_$env_id.pem
-chmod g-rw tmp_bake_batch_$env_id.pem
-chmod o-rw tmp_bake_batch_$env_id.pem
+aws ec2 create-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$" --query 'KeyMaterial' --output text > tmp_gemini_web_bake_$env_id.pem
+chmod g-rw tmp_gemini_web_bake_$env_id.pem
+chmod o-rw tmp_gemini_web_bake_$env_id.pem
 
 #Encryption Option 1(current): Encrypt the root device when running the instance, this way,  we don't have to copy it as encrypted image
 #Encryption Option 2: Copy to a new image with encryption
@@ -50,7 +50,7 @@ aws ec2 run-instances \
     --security-group-ids $geminiweb_tmp_sec_group_id \
     --image-id $ami_id \
     --instance-type $INSTANCE_TYPE_BATCH \
-    --key-name "tmpkey-GEMINIWEB-BATCH-$env_id$$" \
+    --key-name "tmpkey-GEMINI-WEB-$env_id$$" \
     --iam-instance-profile Name=$IAM_PROFILE_PROV \
     | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
@@ -68,7 +68,7 @@ echo "" > /tmp/dummy
 X_READY='X'
 while [ $X_READY ]; do
     echo "- Waiting for ssh ready"
-    X_READY=$(scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem /tmp/dummy ec2-user@$endpoint:/tmp | grep "Permission denied")
+    X_READY=$(scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/dummy ec2-user@$endpoint:/tmp | grep "Permission denied")
     sleep 5
 done
 
@@ -78,7 +78,7 @@ maxConnectionAttempts=10
 sleepSeconds=10
 while (( $index <= $maxConnectionAttempts ))
 do
-  scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem /tmp/dummy ec2-user@$endpoint:/tmp
+  scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/dummy ec2-user@$endpoint:/tmp
   case $? in
     (0) echo "${index}> Success"; break ;;
     (*) echo "${index} of ${maxConnectionAttempts}> Bastion SSH server not ready yet, waiting ${sleepSeconds} seconds..." ;;
@@ -88,20 +88,20 @@ do
 done
 
 echo "- Copy source code to image"
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem /tmp/batch_staging/* ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/nginx.service ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem PublishedCode/GeminiSearchWebApp ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/gemini_web_staging/* ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.service ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published/* ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
 
-scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem Batch/config_web_server.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_batmp_gemini_web_bake_ke_batch_$env_id.pem Batch/config_web_server.sh ec2-user@$endpoint:/tmp
 
-#scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem env_def/crms_decrypt ec2-user@$endpoint:/tmp
-#scp -o StrictHostKeyChecking=no -r -i tmp_bake_batch_$env_id.pem aws/CRMS_CFM/Cloudwatch_EC2_config.json ec2-user@$endpoint:/tmp
+#scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem env_def/crms_decrypt ec2-user@$endpoint:/tmp
+#scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem aws/CRMS_CFM/Cloudwatch_EC2_config.json ec2-user@$endpoint:/tmp
 
 echo "4. Run SSH(ec2_install_software.sh) to install software"
-ssh -i tmp_bake_batch_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 
 echo "5. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
