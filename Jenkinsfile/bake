@@ -19,11 +19,6 @@ pipeline {
   }
 
   stages {
-    stage('Checkout framework') {
-      steps {
-        sh "make include ; make pull"
-      }
-    }
     stage('Bake AMI') {
       steps {
         wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
