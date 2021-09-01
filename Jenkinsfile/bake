@@ -1,0 +1,35 @@
+// vim: set ft=groovy:
+//
+pipeline {
+  agent any
+
+  environment {  // Required for AWS CLI to operate correctly.
+    http_proxy = 'http://forwardproxy:3128'
+    https_proxy = 'http://forwardproxy:3128'
+    no_proxy = 'localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com'
+    AWS_DEFAULT_REGION ='ap-southeast-2'
+  }
+
+  parameters {
+    string(name: 'source_ami', defaultValue: 'latest', description: 'The AMI ID of the HIP Base image')
+    choice(name: 'stack', choices: 'notSet\nbatch\nbuildbox\njenkins', description: 'Choose the AMI to bake')
+    choice(name: 'envgroup', choices: 'nonprod\nprod', description: 'Choose the envgroup to bake for')
+    choice(name: 'environment', choices: 'dev\nsit\nprod', description: 'Choose the environment to bake for')
+    choice(name: 'debug', choices: '\n-debug', description: 'Enable Packer -debug')
+  }
+
+  stages {
+    stage('Checkout framework') {
+      steps {
+        sh "make include ; make pull"
+      }
+    }
+    stage('Bake AMI') {
+      steps {
+        wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm']) {
+          sh "SOURCE_AMI=${params.source_ami} STACK=${params.stack} ENVGROUP=${params.envgroup} bash bake.sh ${params.debug}"
+        }
+      }
+    }
+  }
+}
