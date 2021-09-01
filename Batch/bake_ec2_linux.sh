@@ -1,22 +1,43 @@
-cleanup() {
-	echo "7. Drop this instance"
-	aws ec2 terminate-instances --instance-ids $instance_id
-	rm tmp_gemini_web_bake_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
-	aws ec2 wait instance-terminated --instance-ids $instance_id
-	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
+# cleanup() {
+# 	echo "7. Drop this instance"
+# 	aws ec2 terminate-instances --instance-ids $instance_id
+# 	rm tmp_gemini_web_bake_$env_id.pem
+# 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
+# 	aws ec2 wait instance-terminated --instance-ids $instance_id
+# 	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
 
-	rm -f kms_policy_ami_$$.json
-	rm -f encrypted_device_mapping_$$.json
-	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
-	rm -rf $Git_Working_Folder
-	echo "Baking Done ."
-}
-trap cleanup EXIT
+# 	rm -f kms_policy_ami_$$.json
+# 	rm -f encrypted_device_mapping_$$.json
+# 	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
+# 	rm -rf $Git_Working_Folder
+# 	echo "Baking Done ."
+# }
+# trap cleanup EXIT
 
-env_id=$1
-source ./env_def/read_variables.sh $env_id
+# Bake AMI require variables
+env_id="nonprod"
+# Tooling VPC
+VPCID="vpc-0a78b82ba9196ca94" 
+# tooling subnet a
+SUBNETID1="subnet-01470aa7fd78e4888" 
+SSHACCESSCIDR="10.0.0.0/8"
 
+GEM_KMS="HIP-gemini-app-ke"
+BATCH_SERVER_SIZE=50
+INSTANCE_TYPE_BATCH="t3.small"
+IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
+
+# Aws Tags
+T_CostCentre="V_Gemini" 
+T_ApplicationID="M4456"
+T_Environment="nonprod"
+T_AppCategory="B"
+T_SupportGroup="WorkManagementProductionSupport"
+T_Name="Gemini_web"
+T_EC2_PowerMgt="EXTSW,0,1"
+T_BackupOptOut="No"
+
+#source ./env_def/read_variables.sh $env_id
 
 echo "1. Download from artifactory"
 ./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
@@ -32,14 +53,15 @@ chmod o-rw tmp_gemini_web_bake_$env_id.pem
 #Encryption Option 2: Copy to a new image with encryption
 
 ami_id=$(curl "https://hip.ext.national.com.au/images/aws/rhel/7/latest")
-kms_ec2_keyid=$(./aws/aws_get_parameter.sh $KMS_EC2)
+kms_ec2_keyid= aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'
 if [[ $kms_ec2_keyid == 'null' ]]; then
-  envsubst < aws/GEMINIWEB_CFM/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
+  envsubst < template/kms_policy_ami_template.json > kms_policy_ami_$$.json
 	kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
 	#CAST requirement to enable key rotation
   aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
   aws kms create-alias --alias-name alias/$KMS_EC2 --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-	./aws/aws_put_parameter.sh $KMS_EC2 $kms_ec2_keyid
+  aws ssm put-parameter --name "$KMS_EC2" --value "$kms_ec2_keyid" --type "SecureString" --region "ap-southeast-2" --overwrite
+	#./aws/aws_put_parameter.sh $KMS_EC2 $kms_ec2_keyid
 fi
 aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"'|sed 's/VolumeSize": .*/VolumeSize":'$BATCH_SERVER_SIZE',/' > encrypted_device_mapping_$$.json
 
@@ -94,11 +116,6 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ngin
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
-
-scp -o StrictHostKeyChecking=no -r -i tmp_batmp_gemini_web_bake_ke_batch_$env_id.pem Batch/config_web_server.sh ec2-user@$endpoint:/tmp
-
-#scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem env_def/crms_decrypt ec2-user@$endpoint:/tmp
-#scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem aws/CRMS_CFM/Cloudwatch_EC2_config.json ec2-user@$endpoint:/tmp
 
 echo "4. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
