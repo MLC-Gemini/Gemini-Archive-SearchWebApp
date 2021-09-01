@@ -707,10 +707,10 @@
         </table>
     </div>
 
-    <div id="output1" style="display: none;">
+    <div id="output1" style="display: none;" >
         <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
         <div style=" border: 3px ridge black; overflow:auto;">
-            <table id="myTable" class="table table-condensed rowHighlighter compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
+            <table title="Double click on any case to view Case Activities" id="myTable" class="table table-condensed rowHighlighter compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
                 <thead>
                     <tr style="vertical-align:top;font-size:small;">
                         <th>Account</th>
@@ -760,10 +760,9 @@
     <div id="caseModal" class="modal" title="Case Activities">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div style="overflow:scroll">
-                <label for="actionText" id="res" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">
-                </label>
-                <table id="actionTable" class="table table-condensed size compact" style="border: 1px ridge lightgray;">
+            <label for="actionText" id="res" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;"></label>
+            <div style="overflow: scroll; border: 3px ridge black;">
+                <table id="actionTable" class="table table-condensed size compact">
                     <thead>
                         <tr>
                             <th>Action</th>

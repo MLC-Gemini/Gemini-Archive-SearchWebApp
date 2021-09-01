@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -21,12 +22,42 @@ namespace GeminiSearchWebApp
            
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+        //public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //    Host.CreateDefaultBuilder(args)
+        //        .ConfigureWebHostDefaults(webBuilder =>
+        //        {
+        //            webBuilder.UseStartup<Startup>();
+        //        });
+
+        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                });
+                    webBuilder.AddSystemsManager(configureSource =>
+                    {
+                        configureSource.Path = "/GeminiSearchWebApp";
+                        configureSource.ReloadAfter = TimeSpan.FromMinutes(5);
+                        //configureSource.AwsOptions = awsOptions;
+                        configureSource.Optional = true;
+                        //configureSource.OnLoadException += exceptionContext =>
+                        //  {
+
+                        //  };
+                        //configureSource.ParameterProcessor = customerProcess;
+                    }
+                    );
+                }).UseStartup<Startup>();
+
+
+        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .ConfigureAppConfiguration(webBuilder =>
+        //        {
+        //            webBuilder.AddSystemsManager("/GeminiSearchWebApp");
+        //        }).UseStartup<Startup>();
+
+
+
         //public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
         //.SetBasePath(Directory.GetCurrentDirectory())
         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
