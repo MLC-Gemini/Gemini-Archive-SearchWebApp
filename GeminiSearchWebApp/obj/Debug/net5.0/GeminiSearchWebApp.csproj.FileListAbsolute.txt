@@ -119,6 +119,11 @@ C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\GeminiSearchWebApp.Views.dll
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\GeminiSearchWebApp.Views.pdb
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Amazon.Extensions.Configuration.SystemsManager.dll
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.AppConfig.dll
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.Core.dll
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.SimpleSystemsManagement.dll
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.Negotiate.dll
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Microsoft.AspNetCore.Connections.Abstractions.dll
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Features.dll
@@ -167,8 +172,3 @@ C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\obj\Debug\net
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
-C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Amazon.Extensions.Configuration.SystemsManager.dll
-C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.AppConfig.dll
-C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.Core.dll
-C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.Extensions.NETCore.Setup.dll
-C:\Temp\VisualStudio Source\GemArchSearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\AWSSDK.SimpleSystemsManagement.dll
