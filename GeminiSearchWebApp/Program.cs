@@ -1,3 +1,5 @@
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,33 +23,33 @@ namespace GeminiSearchWebApp
             CreateHostBuilder(args).Build().Run();
            
         }
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //        {
-        //            webBuilder.UseStartup<Startup>();
-        //        });
-
         public static IWebHostBuilder CreateHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(webBuilder =>
                 {
-                    webBuilder.AddSystemsManager(configureSource =>
-                    {
-                        configureSource.Path = "/GeminiSearchWebApp";
-                        configureSource.ReloadAfter = TimeSpan.FromMinutes(5);
-                        //configureSource.AwsOptions = awsOptions;
-                        configureSource.Optional = true;
-                        //configureSource.OnLoadException += exceptionContext =>
-                        //  {
-
-                        //  };
-                        //configureSource.ParameterProcessor = customerProcess;
-                    }
-                    );
+                    webBuilder.AddSystemsManager("/GeminiSearchWebApp", new AWSOptions {
+                        Region = RegionEndpoint.APSoutheast2
+                    });
                 }).UseStartup<Startup>();
 
+        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .ConfigureAppConfiguration(webBuilder =>
+        //        {
+        //            webBuilder.AddSystemsManager(configureSource =>
+        //            {
+        //                configureSource.Path = "/GeminiSearchWebApp";
+        //                configureSource.ReloadAfter = TimeSpan.FromMinutes(5);
+        //                    //configureSource.AwsOptions = awsOptions;
+        //                    configureSource.Optional = true;
+        //                    //configureSource.OnLoadException += exceptionContext =>
+        //                    //  {
+
+        //                    //  };
+        //                    //configureSource.ParameterProcessor = customerProcess;
+        //                }
+        //            );
+        //        }).UseStartup<Startup>();
 
         //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
         //    WebHost.CreateDefaultBuilder(args)
@@ -55,8 +57,6 @@ namespace GeminiSearchWebApp
         //        {
         //            webBuilder.AddSystemsManager("/GeminiSearchWebApp");
         //        }).UseStartup<Startup>();
-
-
 
         //public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
         //.SetBasePath(Directory.GetCurrentDirectory())
