@@ -55,6 +55,15 @@ sudo make install
 
 # pwd > /web/nginx
 sudo rm -rf binaries/
+
+# SSl certificate 
+sudo cd /web/nginx/
+sudo mkdir sss-cert
+sudo chown root:root sss-cert
+sudo chmod -R 600 sss-cert
+sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem .
+sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.key .
+
 #sudo vi /web/nginx/conf/nginx.conf
 cd /web/nginx/conf/
 sudo mv nginx.conf nginx.Bk-Original-conf
@@ -68,3 +77,4 @@ sudo mv /tmp/nginx.service .
 sudo systemctl enable nginx.service
 sudo systemctl start nginx
 sudo systemctl status nginx
+ 
