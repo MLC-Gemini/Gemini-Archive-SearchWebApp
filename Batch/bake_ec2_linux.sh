@@ -15,6 +15,8 @@
 # trap cleanup EXIT
 
 # Bake AMI require variables
+
+#Git_Working_Folder=""
 env_id="nonprod"
 # Tooling VPC
 VPCID="vpc-0a78b82ba9196ca94" 
@@ -36,6 +38,8 @@ T_SupportGroup="WorkManagementProductionSupport"
 T_Name="Gemini_web"
 T_EC2_PowerMgt="EXTSW,0,1"
 T_BackupOptOut="No"
+
+AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
 
 #source ./env_def/read_variables.sh $env_id
 
@@ -113,7 +117,7 @@ echo "- Copy source code to image"
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/gemini_web_staging/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.service ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
 
@@ -134,4 +138,5 @@ do
 done
 
 echo "6. Add encrypted image to aws parameter store"
-./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
+#./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
+aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
