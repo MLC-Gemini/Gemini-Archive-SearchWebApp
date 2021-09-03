@@ -1,4 +1,9 @@
 {
+    "OWNER_ACCOUNT": "998622627571",
+    "KMS_ROLE_DELETE_ALLOW": "AUR-Resource-AWS-gemininonprod-devops-appstack",
+    "IAM_PROFILE_PROV": "GeminiProvisioningRole",
+    "CRMS_PROV_ROLE_ID": "",
+    "IAM_PROFILE_INST": "GeminiProvisioningInstanceProfile",
     "Version": "2012-10-17",
     "Statement": [
         {
