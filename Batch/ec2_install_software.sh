@@ -13,7 +13,7 @@ sudo chown root:root GeminiSearchWebApp
 sudo chmod 775 GeminiSearchWebApp
 sudo chmod +x GeminiSearchWebApp
 
-# Creating ser¬vice con¬fig¬u¬ra-tion file for environment (Development, Producation)
+# Creating service configuration file for environment (Development, Producation)
 cd /etc/systemd/system/
 sudo mv /tmp/kestrel-geminiweb.service .
 
@@ -22,7 +22,7 @@ sudo systemctl start kestrel-geminiweb.service
 sudo systemctl status kestrel-geminiweb.service
 curl localhost:5000
 
-# En¬abling ser¬vice so it will run au¬to¬mat¬i¬cally af¬ter start of the op¬er¬at-ing sys¬tem.
+# Enabling service so it will run automatically af¬ter start of the operating system.
 sudo systemctl enable kestrel-geminiweb.service
 
 # Install require packages for NGINX server using "openssl-devel gcc"
@@ -49,7 +49,7 @@ cd binaries/
 # pwd > /web/nginx/binaries
 # ls  -lrt
 
-sudo ./configure --prefix=/web/nginx --modules-path=/web/nginx/modules --with-http_ssl_module  --without-http_fastcgi_module --without-http_uwsgi_module --without-http_grpc_module --without-http_scgi_module --without-mail_imap_module --without-mail_pop3_module --without-http_rewrite_module
+sudo ./configure --prefix=/web/nginx --modules-path=/web/nginx/modules --with-http_ssl_module  --without-http_fastcgi_module --without-http_uwsgi_module --without-http_grpc_module --without-http_scgi_module --without-mail_imap_module --without-mail_pop3_module
 sudo make
 sudo make install
 
