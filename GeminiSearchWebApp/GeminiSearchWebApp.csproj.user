@@ -4,7 +4,7 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
+    <ActiveDebugProfile>GeminiSearchWebApp</ActiveDebugProfile>
     <ShowAllFiles>false</ShowAllFiles>
     <NameOfLastUsedPublishProfile>C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>

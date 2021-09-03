@@ -23,14 +23,14 @@ namespace GeminiSearchWebApp
             CreateHostBuilder(args).Build().Run();
            
         }
-        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(webBuilder =>
-                {
-                    webBuilder.AddSystemsManager("/GeminiSearchWebApp", new AWSOptions {
-                        Region = RegionEndpoint.APSoutheast2
-                    });
-                }).UseStartup<Startup>();
+        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
+        //    WebHost.CreateDefaultBuilder(args)
+        //        .ConfigureAppConfiguration(webBuilder =>
+        //        {
+        //            webBuilder.AddSystemsManager("/GeminiSearchWebApp", new AWSOptions {
+        //                Region = RegionEndpoint.APSoutheast2
+        //            });
+        //        }).UseStartup<Startup>();
 
         //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
         //    WebHost.CreateDefaultBuilder(args)
@@ -63,6 +63,14 @@ namespace GeminiSearchWebApp
         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         //.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
         //.Build();
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+              Host.CreateDefaultBuilder(args).UseSystemd()
+         .ConfigureWebHostDefaults(webBuilder =>
+         {
+             webBuilder.UseStartup<Startup>();
+         });
+
 
     }
 }
