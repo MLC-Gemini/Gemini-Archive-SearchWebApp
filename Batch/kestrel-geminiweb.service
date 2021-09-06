@@ -3,9 +3,11 @@ Description=ASP.NET Core App
 
 [Service]
 Type=notify
+WorkingDirectory=/var/www/geminiweb/
 ExecStart=/var/www/geminiweb/GeminiSearchWebApp
 Restart=always
-Environment=ASPNETCORE_ENVIRONMENT=Production
+User=root
+Environment=ASPNETCORE_ENVIRONMENT=Development
 
 [Install]
 WantedBy=multi-user.target
