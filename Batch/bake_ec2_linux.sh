@@ -24,7 +24,7 @@ VPCID="vpc-0a78b82ba9196ca94"
 SUBNETID1="subnet-01470aa7fd78e4888" 
 SSHACCESSCIDR="10.0.0.0/8"
 
-GEM_KMS="HIP-gemini-app-ke"
+GEM_KMS="HIP-gemini-app-key"
 BATCH_SERVER_SIZE=50
 INSTANCE_TYPE_BATCH="t3.small"
 IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
