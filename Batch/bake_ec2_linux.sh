@@ -44,7 +44,8 @@ AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
 #source ./env_def/read_variables.sh $env_id
 
 echo "1. Download from artifactory"
-./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+#./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+./get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
 geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "GEMINI-WEB-BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
