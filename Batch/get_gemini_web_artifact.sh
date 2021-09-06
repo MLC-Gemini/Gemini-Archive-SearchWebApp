@@ -2,12 +2,11 @@ env_id=$1
 stage_folder=$2
 #source ./env_def/read_variables.sh $env_id
 #export no_proxy=$NO_PROXY
-no_proxy="localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com"
 
 gemini_arti_uid="Srv-gemi-build-np"
 #gemini_login_pwd="zY3eb2XJAPbW"
 
-#gemini_login_pwd=`aws ssm get-parameters --name $geminiweb_arti_uid --with-decryption --region $REGION| grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
+# Getting Gemini artifactory service account password form AWS SSM parameter.
 gemini_login_pwd=`aws ssm get-parameter --name $gemini_arti_uid --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
 
 if [ ! -d $stage_folder ]; then
