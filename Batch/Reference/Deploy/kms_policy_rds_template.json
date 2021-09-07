@@ -2,16 +2,16 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "Allow for EC2 Use",
-            "Effect": "Deny",
-            "Principal": "*",        
-            "Action": "kms:*",
-            "Resource":"*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:RequestedRegion": "ap-southeast-2*"
+            "Sid": "Allow for RDS Use",
+                "Effect": "Deny",
+                "Principal": "*",        
+                "Action": "kms:*",
+                "Resource":"*",
+                "Condition": {
+                    "StringEquals": {
+                        "aws:RequestedRegion": "ap-southeast-2*"
+                    }
                 }
-            }
         },
         {
             "Sid": "Enable IAM User Permissions",
@@ -50,10 +50,8 @@
             "Sid": "Allow access for Key Administrators without Deletion",
             "Effect": "Allow",
             "Principal": {
-                "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}"
-                    ]
+                "AWS": ["arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
+                    "arn:aws:iam::${CRMS_PROV_ROLE_ID}"]
             },
             "Action": [
                 "kms:Create*",
@@ -75,12 +73,11 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${CRMS_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
+                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"
                 ]
             },
             "Action": [
@@ -98,12 +95,11 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${CRMS_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
+                    "arn:aws:iam::${OWNER_ACCOUNT}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"
                 ]
             },
             "Action": "kms:CreateGrant",

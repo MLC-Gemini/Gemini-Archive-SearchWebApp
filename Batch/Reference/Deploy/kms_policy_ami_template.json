@@ -3,15 +3,15 @@
     "Statement": [
         {
             "Sid": "Allow for EC2 Use",
-            "Effect": "Deny",
-            "Principal": "*",        
-            "Action": "kms:*",
-            "Resource":"*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:RequestedRegion": "ap-southeast-2*"
+                "Effect": "Deny",
+                "Principal": "*",        
+                "Action": "kms:*",
+                "Resource":"*",
+                "Condition": {
+                    "StringEquals": {
+                        "aws:RequestedRegion": "ap-southeast-2*"
+                    }
                 }
-            }
         },
         {
             "Sid": "Enable IAM User Permissions",
@@ -50,10 +50,8 @@
             "Sid": "Allow access for Key Administrators without Deletion",
             "Effect": "Allow",
             "Principal": {
-                "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}"
-                    ]
+                "AWS": ["arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
+                        "arn:aws:iam::${CRMS_PROV_ROLE_ID}"]
             },
             "Action": [
                 "kms:Create*",
@@ -75,7 +73,7 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${CRMS_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
@@ -98,7 +96,7 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${CRMS_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
