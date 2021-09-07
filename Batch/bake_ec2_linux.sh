@@ -24,7 +24,7 @@ VPCID="vpc-0a78b82ba9196ca94"
 SUBNETID1="subnet-01470aa7fd78e4888" 
 SSHACCESSCIDR="10.0.0.0/8"
 
-GEM_KMS="HIP-gemini-app-key"
+GEM_KMS="Sandip_Test"
 BATCH_SERVER_SIZE=50
 INSTANCE_TYPE_BATCH="t3.small"
 IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
@@ -70,8 +70,8 @@ if [ ! -n "$kms_ec2_keyid" ]; then
 	kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
 	#CAST requirement to enable key rotation
   aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-  aws kms create-alias --alias-name alias/$KMS_EC2 --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-  aws ssm put-parameter --name "$KMS_EC2" --value "$kms_ec2_keyid" --type "SecureString" --region "ap-southeast-2" --overwrite
+  aws kms create-alias --alias-name alias/$GEM_KMS --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
+  aws ssm put-parameter --name $GEM_KMS --value $kms_ec2_keyid --type "SecureString" --region "ap-southeast-2" --overwrite
 	#./aws/aws_put_parameter.sh $KMS_EC2 $kms_ec2_keyid
 fi
 aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"'|sed 's/VolumeSize": .*/VolumeSize":'$BATCH_SERVER_SIZE',/' > encrypted_device_mapping_$$.json
