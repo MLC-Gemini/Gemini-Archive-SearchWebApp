@@ -1,5 +1,5 @@
 # cleanup() {
-# 	echo "7. Drop this instance"
+# 	echo "6. Drop this instance"
 # 	aws ec2 terminate-instances --instance-ids $instance_id
 # 	rm tmp_gemini_web_bake_$env_id.pem
 # 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
@@ -36,7 +36,8 @@ T_Environment="nonprod"
 T_AppCategory="B"
 T_SupportGroup="WorkManagementProductionSupport"
 T_Name="Gemini_web"
-T_EC2_PowerMgt="EXTSW,0,1"
+#T_EC2_PowerMgt="EXTSW,0,1"
+T_EC2_PowerMgt="EXTSW"
 T_BackupOptOut="No"
 
 AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
@@ -128,10 +129,10 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published/
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
 
-echo "4. Run SSH(ec2_install_software.sh) to install software"
+echo "3. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 
-echo "5. Create image form this instance"
+echo "4. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
 image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
@@ -144,6 +145,6 @@ do
 	sleep 30
 done
 
-echo "6. Add encrypted image to aws parameter store"
+echo "5. Add encrypted image to aws parameter store"
 #./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
