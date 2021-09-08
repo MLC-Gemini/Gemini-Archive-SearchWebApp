@@ -49,9 +49,9 @@ echo "1. Download from artifactory"
 ./get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
-geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "GEMINI-WEB-BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id $VPCID|jq ".GroupId"|sed "s/\"//g")
+geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "GEMINI-WEB-BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id "$VPCID"|jq ".GroupId"|sed "s/\"//g")
 aws ec2 authorize-security-group-ingress --group-id $geminiweb_tmp_sec_group_id --protocol tcp --port 22 --cidr $SSHACCESSCIDR
-aws ec2 create-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$" --query 'KeyMaterial' --output text > tmp_gemini_web_bake_$env_id.pem
+aws ec2 create-key-pair --key-name "tmpkey-gemini-web-$env_id$$" --query 'KeyMaterial' --output text > tmp_gemini_web_bake_$env_id.pem
 chmod g-rw tmp_gemini_web_bake_$env_id.pem
 chmod o-rw tmp_gemini_web_bake_$env_id.pem
 
@@ -92,6 +92,7 @@ echo "- Wait for instance status OK"
 aws ec2 wait instance-status-ok --instance-ids $instance_id
 
 endpoint=`aws ec2 describe-instances --instance-ids $instance_id | jq ".Reservations[0]|.Instances[0]|.PrivateIpAddress"|sed "s/\"//g"`
+echo $endpoint;
 
 #To avoid potential Man in the middle issue
 sed -i "/$endpoint/d" ~/.ssh/known_hosts
