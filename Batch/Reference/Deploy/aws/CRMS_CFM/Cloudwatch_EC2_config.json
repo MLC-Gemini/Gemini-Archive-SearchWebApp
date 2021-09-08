@@ -1,0 +1,89 @@
+{
+    "Agent":{
+       "Debug":"True"
+    },
+    "logs": {
+      "logs_collected": {
+        "files": {
+          "collect_list": [
+            {
+              "file_path": "/opt/ctlm/ctmagentv9/ctm/dailylog/daily_ctmag_*",
+              "log_group_name": "ControlMLogs",
+              "log_stream_name": "{instance_id}"
+            },
+            {
+              "file_path": "/extract/dbname/tower/log/get_tower_file_*.err",
+              "log_group_name": "TowerFTLog",
+              "log_stream_name": "{instance_id}"
+            },
+            {
+              "file_path": "/extract/dbname/akm/log/*",
+              "log_group_name": "AKMFTLog",
+              "log_stream_name": "{instance_id}"
+            },
+            {
+              "file_path": "/extract/dbname/edw/log/*",
+              "log_group_name": "EDWFTLog",
+              "log_stream_name": "{instance_id}"
+            },
+            {
+              "file_path": "/extract/dbname/prompt/log/*",
+              "log_group_name": "PromptFTLog",
+              "log_stream_name": "{instance_id}"
+            },
+            {
+              "file_path": "/extract/dbname/prompt/logs/*",
+              "log_group_name": "PromptFTLogs",
+              "log_stream_name": "{instance_id}"
+            }
+          ]
+        }
+      }
+    },
+    "metrics": {
+      "metrics_collected": {
+        "cpu": {
+          "measurement": [
+            "cpu_usage_idle",
+            "cpu_usage_iowait",
+            "cpu_usage_user",
+            "cpu_usage_system"
+          ],
+          "metrics_collection_interval": 60,
+          "resources": [
+            "*"
+          ],
+          "totalcpu": true
+        },
+        "diskio": {
+          "measurement": [
+            "io_time",
+            "write_bytes",
+            "read_bytes",
+            "writes",
+            "reads"
+          ],
+          "metrics_collection_interval": 60,
+          "resources": [
+            "*"
+          ]
+        },
+        "netstat": {
+          "measurement": [
+            "tcp_established",
+            "tcp_listen",
+            "tcp_time_wait"
+          ],
+          "metrics_collection_interval": 60
+        },
+        "swap": {
+          "measurement": [
+            "free",
+            "used",
+            "used_percent"
+          ],
+          "metrics_collection_interval": 60
+        }
+      }
+    }
+  }

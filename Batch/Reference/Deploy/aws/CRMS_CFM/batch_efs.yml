@@ -1,0 +1,73 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: BATCH EFS Stack
+Parameters:
+  KMSKeyAliasName:
+    Description: Alias of the Customer managed KMS key used for encryption
+    Type: String
+    AllowedPattern: .+
+  Subnet1ID:
+    Description: Subnet 1
+    Type: String
+  Subnet2ID:
+    Description: Subnet 2
+    Type: String
+  Subnet3ID:
+    Description: Subnet 3
+    Type: String
+  VpcCIDR:
+    Description: CIDR range of the private app vpc
+    Type: String
+    AllowedPattern: .+
+  VpcId:
+    Description: ID of the Virtual Public Cloud, assets are deployed into the private app vpc
+    Type: AWS::EC2::VPC::Id
+
+Resources:
+  BATCHEFSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EFS Mount Target Security Group
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: !Ref VpcCIDR
+
+  BATCHFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      Encrypted: true
+      KmsKeyId: !Ref KMSKeyAliasName
+
+  BATCHMountTarget1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref BATCHFileSystem
+      SubnetId: !Ref Subnet1ID
+      SecurityGroups:
+        - !Ref BATCHEFSSecurityGroup
+
+  BATCHMountTarget2:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref BATCHFileSystem
+      SubnetId: !Ref Subnet2ID
+      SecurityGroups:
+        - !Ref BATCHEFSSecurityGroup
+
+  BATCHMountTarget3:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref BATCHFileSystem
+      SubnetId: !Ref Subnet3ID
+      SecurityGroups:
+        - !Ref BATCHEFSSecurityGroup
+
+Outputs:
+  BATCHFileSystemID:
+    Description: BATCH File System ID
+    Value: !Ref BATCHFileSystem
+    Export:
+      Name: !Sub "${AWS::StackName}-FileSystemID"
