@@ -1,0 +1,532 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Cloudwatch Metrics, alarms and logging
+Parameters:
+  Application:
+    Description: The name of the Application - e.g. IIS , SSRS
+    Type: String
+    AllowedPattern: .+
+  DBName:
+    Description: Database identifier of stack, e.g. cimsd
+    Type: String
+    AllowedPattern: .+
+  DashboardName:
+    Description: The name of the cloudwatch dashboard
+    Type: String
+  Environment:
+    Description: The application environment for the cloudwatch Dashboard ( dev/test etc )
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyHighTopic:
+    Description: Remedy topics for High Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyLowTopic:
+    Description: Remedy topics for Low Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyMediumTopic:
+    Description: Remedy topics for Medium Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  CRMSSupport:
+    Description: Support Email Notification
+    Type: String
+    AllowedPattern: .+
+
+Resources:
+  RDSCPUAlarm50:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${Environment} - ${Application} CPU Utilisation Exceeds Threshold 50"
+      AlarmDescription: !Sub "${Environment} - ${Application} CPU Utilisation Exceeds Threshold 50"
+      AlarmActions:
+        - !Ref HIPNotifyLowTopic
+      MetricName: CPUUtilization
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 5
+      Threshold: 50
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DBName
+
+  RDSCPUAlarm80:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${Environment} - ${Application} CPU Utilisation Exceeds Medium Threshold 80"
+      AlarmDescription: !Sub "${Environment} - ${Application} CPU Utilisation Exceeds Threshold 80"
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: CPUUtilization
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 5
+      Threshold: 80
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DBName
+
+  RDSMemoryAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${Environment} - ${Application} Memory Utilisation Exceeds Threshold"
+      AlarmDescription: !Sub "${Environment} - ${Application} Memory Utilisation Exceeds Threshold"
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: FreeableMemory
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 5
+      Threshold: 250000000
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DBName
+
+  RDSReadLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${Environment} - ${Application} Read Latency Exceeds Threshold"
+      AlarmDescription: !Sub "${Environment} - ${Application} Read Latency Exceeds Threshold"
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: ReadLatency
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 5
+      Threshold: 10
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DBName
+
+  RDSWriteLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${Environment} - ${Application} Write Latency Exceeds Threshold"
+      AlarmDescription: !Sub "${Environment} - ${Application} Write Latency Exceeds Threshold"
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: WriteLatency
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 5
+      Threshold: 5
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref DBName
+
+  FORule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: !Sub "${Application} - Triggers an event on RDS Failover"
+      EventPattern:
+        source:
+          - aws.rds
+        detail-type:
+          - failover
+      State: ENABLED
+      Targets:
+        - Arn:
+            !Ref CRMSSupport
+          Id: CRMSSupportFailover
+
+  AVRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: !Sub "${Application} - Triggers an event on RDS Availability"
+      EventPattern:
+        source:
+          - aws.rds
+        detail-type:
+          - availability
+      State: ENABLED
+      Targets:
+        -
+          Arn:
+            !Ref CRMSSupport
+          Id: CRMSSupportAvailable
+
+  DERule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: !Sub "${Application} - Triggers an event on RDS Deletion"
+      EventPattern:
+        source:
+          - aws.rds
+        detail-type:
+          - deletion
+      State: ENABLED
+      Targets:
+        -
+          Arn:
+            !Ref CRMSSupport
+          Id: CRMSSupportDeletion
+
+  Dashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Ref DashboardName
+      DashboardBody:
+        !Sub |
+        {
+            "widgets": [
+                {
+                    "type": "text",
+                    "x": 0,
+                    "y": 0,
+                    "width": 24,
+                    "height": 1,
+                    "properties": {
+                        "markdown": "\n# ${Application} - ${DBName}\n"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 1,
+                    "width": 6,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${DBName}", { "label": "Database Connections" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Database Connections"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "${DBName}", { "label": "Database Connections" } ]
+                        ],
+                        "title": "Database Connections",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 1,
+                    "width": 6,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${DBName}", { "label": "CPU Utilization" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "CPU Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "${DBName}", { "label": "CPU Utilization" } ]
+                        ],
+                        "title": "CPU Utilisation",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 10,
+                    "width": 6,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${DBName}", { "label": "Free Storage Space" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Free Storage Space"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "${DBName}", { "label": "Free Storage Space" } ]
+                        ],
+                        "title": "Free Storage Space",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 10,
+                    "width": 18,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${DBName}", { "label": "Read IOPS" } ],
+                            [ ".", "ReadLatency", ".", ".", { "label": "Read Latency" } ],
+                            [ ".", "ReadThroughput", ".", ".", { "label": "Read Throughput" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Read Disk IO"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "ReadIOPS", "DBInstanceIdentifier", "${DBName}", { "label": "Read IOPS" } ]
+                        ],
+                        "title": "Disk Read (IOPS)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "ReadLatency", "DBInstanceIdentifier", "${DBName}", { "label": "Read Latency" } ]
+                        ],
+                        "title": "Disk Read Latency (Ms)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "ReadThroughput", "DBInstanceIdentifier", "${DBName}", { "label": "Read Throughput" } ]
+                        ],
+                        "title": "Disk Read Throughput (kb/s)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 15,
+                    "y": 19,
+                    "width": 9,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${DBName}", { "label": "Network Receive Throughput" } ],
+                            [ ".", "NetworkTransmitThroughput", ".", ".", { "label": "Network Transmit Throughput" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Network Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "NetworkReceiveThroughput", "DBInstanceIdentifier", "${DBName}", { "label": "Network Receive Throughput" } ],
+                            [ ".", "NetworkTransmitThroughput", ".", ".", { "label": "Network Transmit Throughput" } ]
+                        ],
+                        "title": "Network Throughput",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 1,
+                    "width": 6,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${DBName}", { "label": "Freeable Memory" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Freeable Memory"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 1,
+                    "width": 6,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "SwapUsage", "DBInstanceIdentifier", "${DBName}", { "label": "Swap Usage" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Swap Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "FreeableMemory", "DBInstanceIdentifier", "${DBName}", { "label": "Freeable Memory" } ]
+                        ],
+                        "title": "Freeable Memory",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "SwapUsage", "DBInstanceIdentifier", "${DBName}", { "label": "Swap Usage" } ]
+                        ],
+                        "title": "Swap Usage",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 19,
+                    "width": 15,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${DBName}", { "label": "Write IOPS" } ],
+                            [ ".", "WriteLatency", ".", ".", { "label": "Write Latency" } ],
+                            [ ".", "WriteThroughput", ".", ".", { "label": "Write Throughput" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "Write Disk IO"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "WriteIOPS", "DBInstanceIdentifier", "${DBName}", { "label": "Write IOPS" } ]
+                        ],
+                        "title": "Disk Write (IOPS)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "WriteLatency", "DBInstanceIdentifier", "${DBName}", { "label": "Write Latency" } ]
+                        ],
+                        "title": "Disk Write Latency (Ms)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/RDS", "WriteThroughput", "DBInstanceIdentifier", "${DBName}", { "label": "Write Throughput" } ]
+                        ],
+                        "title": "Disk Write Throughput (kb/s)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                }
+            ]
+        }

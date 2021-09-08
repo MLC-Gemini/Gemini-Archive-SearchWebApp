@@ -1,0 +1,269 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: BATCH Stack
+Parameters:
+  NotifyTopic:
+    Description: SNS topic arn for notification events not going via the HIP notify process
+    Type: String
+    AllowedPattern: .+
+  CTMAgentToServerPort:
+    Description: ControlM Agent to Server Port
+    Type: Number
+  CTMServerToAgentPort:
+    Description: ControlM Server to Agent Port
+    Type: Number
+  IAMInstanceProfile:
+    Description: Instance profile
+    Type: String
+    AllowedPattern: .+
+  ImageId:
+    Type: AWS::EC2::Image::Id
+  InstanceType:
+    Description: EC2 Type
+    Type: String
+  KeyPairName:
+    Description: >-
+      Mandatory. Enter a Public/private key pair. If you do not have one in this region,
+      please create it before continuing
+    Type: AWS::EC2::KeyPair::KeyName
+  RemoteAccessCIDR:
+    Description: Allowed CIDR block for external SSH access
+    Type: String
+    AllowedPattern: \d+\.\d+\.\d+\.\d+/\d+
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
+  Subnets:
+    Description: Subnets for the Auto Scaling Group
+    Type: List<AWS::EC2::Subnet::Id>
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  Owner:
+    Description: Mandatory Owner tag
+    Type: String
+    Default: 'CRMS'
+  CostCentre:
+    Description: Mandatory Cost Centre tag
+    Type: String
+    Default: 'V_CRMS'
+  ApplicationID:
+    Description: Mandatory ApplicationID tag
+    Type: String
+    Default: 'ML0056'
+  Environment:
+    Description: Mandatory Environment tag
+    Type: String
+    Default: 'DEV'
+  AppCategory:
+    Description: Mandatory AppCategory tag
+    Type: String
+    Default: 'B'
+  UserData1:
+    Type: String
+    Default: ''
+  UserData2:
+    Type: String
+    Default: ''
+
+Resources:
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      AutoScalingGroupName: !Sub "${AWS::StackName}-ASG"
+      VPCZoneIdentifier: !Ref Subnets
+      MinSize: 1
+      MaxSize: 1
+      Cooldown: 300
+      DesiredCapacity: 1
+      TargetGroupARNs:
+        - !Ref CTMTargetGroup
+        - !Ref AFTTargetGroup
+      NotificationConfigurations:
+        - TopicARN:
+            !Ref NotifyTopic
+          NotificationTypes:
+            - autoscaling:EC2_INSTANCE_LAUNCH
+            - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
+            - autoscaling:EC2_INSTANCE_TERMINATE
+            - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+          PropagateAtLaunch: true
+        - Key: CostCentre
+          Value: !Ref CostCentre
+          PropagateAtLaunch: true
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+          PropagateAtLaunch: true
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      AssociatePublicIpAddress: false
+      IamInstanceProfile: !Ref IAMInstanceProfile
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyPairName
+      PlacementTenancy: default
+      SecurityGroups:
+        - !Ref SecurityGroup
+      UserData:
+        !Join ["", [!Ref UserData1, !Ref UserData2]]
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      LoadBalancerAttributes:
+        - Key: load_balancing.cross_zone.enabled
+          Value: true
+      Scheme: internal
+      Name: !Sub "${AWS::StackName}-LoadBalancer"
+      Subnets: !Ref Subnets
+      Type: network
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+  AFTTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      Port: 8022
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 30
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+  AFTListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref AFTTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 8022
+      Protocol: TCP
+
+  CTMTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: TCP
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      Port: !Ref CTMServerToAgentPort
+      Protocol: TCP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 30
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+  CTMListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CTMTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: !Ref CTMServerToAgentPort
+      Protocol: TCP
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enables access
+      GroupName: !Sub "${AWS::StackName}-SG"
+      VpcId: !Ref VpcId
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: !Ref RemoteAccessCIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: tcp
+          FromPort: 8022
+          ToPort: 8022
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: tcp
+          FromPort: !Ref CTMAgentToServerPort
+          ToPort: !Ref CTMAgentToServerPort
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: tcp
+          FromPort: !Ref CTMServerToAgentPort
+          ToPort: !Ref CTMServerToAgentPort
+          CidrIp: !Ref RemoteAccessCIDR
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+Outputs:
+  DNSEndpoint:
+    Description: The DNS Name of the Load Balancer
+    Value: !GetAtt LoadBalancer.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-DNSEndpoint"
+  AutoScalingGroup:
+    Description: The ASG for debugging
+    Value: !Ref AutoScalingGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-AutoScalingGroup"
+  LaunchConfiguration:
+    Description: The LaunchConfig for debugging
+    Value: !Ref LaunchConfiguration
+    Export:
+      Name: !Sub "${AWS::StackName}-LaunchConfiguration"
+  LoadBalancer:
+    Description: LoadBalancer
+    Value: !Ref LoadBalancer
+    Export:
+      Name: !Sub "${AWS::StackName}-LoadBalancer"
+  AFTTargetGroup:
+    Description: AFT Target Group
+    Value: !Ref AFTTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-AFTTargetGroup"
+  CTMTargetGroup:
+    Description: CTM Target Group
+    Value: !Ref CTMTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-CTMTargetGroup"
