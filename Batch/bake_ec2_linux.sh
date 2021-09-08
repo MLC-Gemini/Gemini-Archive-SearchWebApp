@@ -59,10 +59,9 @@ chmod o-rw tmp_gemini_web_bake_$env_id.pem
 #Encryption Option 2: Copy to a new image with encryption
 
 ami_id=$(curl "https://hip.ext.national.com.au/images/aws/rhel/7/latest")
-kms_ec2_keyid= aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'
+kms_ec2_keyid=`aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 
-#if [ ! -n "$kms_ec2_keyid" ]; then
-if [[ "$kms_ec2_keyid" == "null" ]]; then
+if [[ $kms_ec2_keyid == 'null' ]]; then
 # export the varibale needed for kms josn files.
   export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
   MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
