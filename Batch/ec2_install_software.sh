@@ -56,10 +56,11 @@ sudo make install
 sudo rm -rf binaries/
 
 # SSl certificate 
-sudo cd /web/nginx/
-sudo mkdir ssl-cert
+cd /web/nginx/
+sudo mkdir -p /web/nginx/ssl-cert
 sudo chown root:root ssl-cert
 sudo chmod -R 600 ssl-cert
+cd /web/nginx/ssl-cert
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem .
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.key .
 
