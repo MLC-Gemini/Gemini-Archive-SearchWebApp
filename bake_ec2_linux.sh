@@ -52,7 +52,7 @@ AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
 #source ./env_def/read_variables.sh $env_id
 
 echo "1. Download from artifactory"
-sudo sh ./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 #./get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
