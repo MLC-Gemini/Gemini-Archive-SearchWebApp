@@ -32,7 +32,8 @@ IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
 
 # Aws Tags
 T_CostCentre="V_Gemini" 
-T_ApplicationID="M4456"
+#T_ApplicationID="M4456"
+T_ApplicationID="ML0095"
 T_Environment="nonprod"
 T_AppCategory="B"
 T_SupportGroup="WorkManagementProductionSupport"
@@ -46,8 +47,8 @@ AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
 #source ./env_def/read_variables.sh $env_id
 
 echo "1. Download from artifactory"
-#./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
-./get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+#./get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using HIP latest image in Baking VPC"
 geminiweb_tmp_sec_group_id=$(aws ec2 create-security-group --group-name "GEMINI-WEB-BAKE-SSH-$env_id$$" --description "GEMINIWEB-BAKE-SSH" --vpc-id "$VPCID"|jq ".GroupId"|sed "s/\"//g")
@@ -129,6 +130,8 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ngin
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ssl/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ssl/geminiarchive-app-tst.gemini.awsnp.national.com.au.key ec2-user@$endpoint:/tmp
 
 echo "3. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
