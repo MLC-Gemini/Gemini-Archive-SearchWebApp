@@ -6,7 +6,7 @@ Type=notify
 WorkingDirectory=/var/www/geminiweb/
 ExecStart=/var/www/geminiweb/GeminiSearchWebApp
 Restart=always
-User=root
+User=ec2-user
 Environment=ASPNETCORE_ENVIRONMENT=Development
 
 [Install]
