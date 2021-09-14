@@ -140,19 +140,19 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ssl/
 echo "3. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 
-# echo "4. Create image form this instance"
-# ts=`date +%Y-%m-%d-%H-%M-%S`
-# image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
-# aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
+echo "4. Create image form this instance"
+ts=`date +%Y-%m-%d-%H-%M-%S`
+image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
+aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
 
-# echo "- wait for image to be created"
-# aws ec2 wait image-available --image-ids $image_id
-# echo "- Wait for image to be available" 
-# while [ "$(aws ec2 describe-images --image-id $image_id | jq -r '.Images[0].State')" != "available" ]
-# do 
-# 	sleep 30
-# done
+echo "- wait for image to be created"
+aws ec2 wait image-available --image-ids $image_id
+echo "- Wait for image to be available" 
+while [ "$(aws ec2 describe-images --image-id $image_id | jq -r '.Images[0].State')" != "available" ]
+do 
+	sleep 30
+done
 
-# echo "5. Add encrypted image to aws parameter store"
-# #./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
-# aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
+echo "5. Add encrypted image to aws parameter store"
+#./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
+aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
