@@ -8,8 +8,7 @@ cd /var/www/geminiweb
 # Copy ASP.NET core self-contained published file in web directory, change permisson and ownership and making file self-executable.
 sudo mv /tmp/Published/* .
 #sudo mv Published geminiweb
-#sudo chown root:root GeminiSearchWebApp
-sudo chown ec2-user:ec2-user GeminiSearchWebApp
+sudo chown root:root GeminiSearchWebApp
 sudo chmod 775 GeminiSearchWebApp
 sudo chmod +x GeminiSearchWebApp
 
@@ -59,7 +58,7 @@ sudo rm -rf binaries/
 # SSl certificate 
 cd /web/nginx/
 sudo mkdir -p /web/nginx/ssl-cert
-sudo chown ec2-user:ec2-user ssl-cert
+sudo chown root:root ssl-cert
 sudo chmod -R 600 ssl-cert
 cd /web/nginx/ssl-cert
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem .

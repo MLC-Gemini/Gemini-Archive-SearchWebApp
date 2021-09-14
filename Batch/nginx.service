@@ -4,8 +4,8 @@ Documentation=http://nginx.org/en/docs/
 After=network-online.target remote-fs.target nss-lookup.target
 Wants=network-online.target
 [Service]
-User=ec2-user
-Group=ec2-user
+User=root
+Group=root
 Type=forking
 PIDFile=/web/nginx/run/nginx.pid
 ExecStart=/web/nginx/sbin/nginx -c /web/nginx/conf/nginx.conf
