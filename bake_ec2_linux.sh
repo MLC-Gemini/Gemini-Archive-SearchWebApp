@@ -15,6 +15,7 @@
 # trap cleanup EXIT
 
 # Bake AMI require variables
+
 #Git_Working_Folder=""
 env_id="nonprod"
 
