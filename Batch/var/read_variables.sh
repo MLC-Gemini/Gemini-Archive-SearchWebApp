@@ -19,8 +19,8 @@ if [[ $env_id == 'nonprod' ]]; then
     SUBNETID1="subnet-01132417d1533351a" 
 
     SSHACCESSCIDR="10.0.0.0/8"
-    #GEM_KMS="KMS_EC2_DEFAULT"
-    GEM_KMS="gemini_archive_web_ec2"
+    GEM_KMS="myTest"
+    #GEM_KMS="gemini_archive_web_ec2"
     BATCH_SERVER_SIZE=50
     INSTANCE_TYPE_BATCH="t3.small"
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
@@ -46,8 +46,8 @@ if [[ $env_id == 'nonprod' ]]; then
     Name="GeminiWeb-bake-deploy"
 
 elif [[ $env_id == 'prod' ]]; then
-  echo "The reading  variable for prod"
-  
+  echo "The variable for prod env"
+
 else
-  echo "Please provide the valid env_id for eg. nonpord for Nonprod or prod for Production"
+  echo "Please provide the valid env_id for eg. nonpord for NonProd or prod for Production"
 fi
