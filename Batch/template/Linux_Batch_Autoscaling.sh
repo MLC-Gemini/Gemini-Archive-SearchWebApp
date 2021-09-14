@@ -1,14 +1,14 @@
 echo '#!/bin/bash' > tmp_batch_userdata_$$
-echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT /etc/ssh/ssh_host_ecdsa_key" >> tmp_batch_userdata_$$
-echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT.pub /etc/ssh/ssh_host_ecdsa_key.pub" >> tmp_batch_userdata_$$
+#echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT /etc/ssh/ssh_host_ecdsa_key" >> tmp_batch_userdata_$$
+#echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT.pub /etc/ssh/ssh_host_ecdsa_key.pub" >> tmp_batch_userdata_$$
 
-echo 'echo $(cat /tmp/mount-targets.lst| jq -r ''.MountTargets[]|select (.SubnetId=="''$(aws ec2 describe-instances --instance-ids $(curl http://169.254.169.254/latest/meta-data/instance-id) | jq -r ".Reservations[0].Instances[0].SubnetId")''").IpAddress'')  $efsid.efs.ap-southeast-2.amazonaws.com >> /etc/hosts' >> tmp_batch_userdata_$$
+#echo 'echo $(cat /tmp/mount-targets.lst| jq -r ''.MountTargets[]|select (.SubnetId=="''$(aws ec2 describe-instances --instance-ids $(curl http://169.254.169.254/latest/meta-data/instance-id) | jq -r ".Reservations[0].Instances[0].SubnetId")''").IpAddress'')  $efsid.efs.ap-southeast-2.amazonaws.com >> /etc/hosts' >> tmp_batch_userdata_$$
 
 
 # Launch config/app server does not have permission to do this
 ##Update DNS Name for SMB Server - todo
 #echo 'aws route53 change-resource-record-sets --hosted-zone-id '$CRMS_DNS_ZONE_ID' --change-batch ''
-#{ "Changes":
+# { "Changes":
 #        [
 #
 #                {       "Action": "UPSERT",
