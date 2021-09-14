@@ -84,23 +84,10 @@ aws ec2 run-instances \
     --image-id $ami_id \
     --instance-type $INSTANCE_TYPE_BATCH \
     --iam-instance-profile Name=$IAM_PROFILE_PROV \
-   # --user-data file://tmp_batch_userdata_$$ \
-    --tag-specifications \
-        "ResourceType=instance,
-        Tags=[
-                {Key=CostCentre,Value=$T_CostCentre},
-                {Key=ApplicationID,Value=$T_ApplicationID},
-                {Key=Environment,Value=$T_Environment},
-                {Key=AppCategory,Value=$T_AppCategory},
-                {Key=SupportGroup,Value=$T_SupportGroup},
-                {Key=PowerMgt,Value=$T_EC2_PowerMgt},
-                {Key=BackupOptOut,Value=$T_BackupOptOut},
-                {Key=HIPImage,Value=$ami_id},
-                {Key=TechnicalService,Value=$TechnicalService},
-                {Key=Owner,Value=$Owner},
-                {Key=Account,Value=$Account},
-                {Key=Name,Value=$Name}
-        ]" | jq -r ".Instances[0]|.InstanceId")
+    | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
+
+aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id Key=TechnicalService,Value=$TechnicalService Key=Owner,Value=$Owner Key=Name,Value=$Name Key=Account,Value=$Account
+
 aws ec2 wait instance-status-ok --instance-ids $instance_id
 
 echo $instance_id
