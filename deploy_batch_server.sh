@@ -58,7 +58,7 @@ echo "1. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
 #ami_id=$(./aws/aws_get_parameter.sh $AWS_PAR_BATCH_IMAGE)
 #kms_ec2_keyid=$(./aws/aws_get_parameter.sh $KMS_EC2)
-ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAG --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAGE --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 kms_ec2_keyid=`aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 echo $ami_id
 echo $kms_ec2_keyid
