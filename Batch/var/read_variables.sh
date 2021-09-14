@@ -7,6 +7,7 @@ echo $env_id
 
 #artifactory variable
 gemini_arti_uid="Srv-gemi-build-np"
+gemini_arti_ssm="/gemini_archive_web/artifactory-np"
 
 if [[ $env_id == 'nonprod' ]]; then
     # kMS JSON template variable 
@@ -26,8 +27,7 @@ if [[ $env_id == 'nonprod' ]]; then
     SUBNETID1="subnet-01132417d1533351a" 
 
     SSHACCESSCIDR="10.0.0.0/8"
-    GEM_KMS="myTest2"
-    #GEM_KMS="gemini_archive_web_ec2"
+    GEM_KMS="/gemini_archive_web/ec2_key"
     BATCH_SERVER_SIZE=50
     INSTANCE_TYPE_BATCH="t3.small"
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
@@ -44,7 +44,7 @@ if [[ $env_id == 'nonprod' ]]; then
     T_EC2_PowerMgt="EXTSW"
     T_BackupOptOut="No"
 
-    AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
+    AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
 
     #Deploy Bake 
     TechnicalService="GeminiWeb"
