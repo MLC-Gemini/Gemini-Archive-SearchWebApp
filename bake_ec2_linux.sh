@@ -70,8 +70,14 @@ kms_ec2_keyid=`aws ssm get-parameters --name $GEM_KMS --with-decryption --region
 
 if [[ $kms_ec2_keyid == 'null' ]]; then
 # export the varibale needed for kms josn files.
-  export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
-  MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
+  export OWNER_ACCOUNT="${OWNER_ACCOUNT}"
+  export KMS_ROLE_DELETE_ALLOW="${KMS_ROLE_DELETE_ALLOW}"
+  export IAM_PROFILE_PROV="${IAM_PROFILE_PROV}"
+  export CRMS_PROV_ROLE_ID="${CRMS_PROV_ROLE_ID}"
+  export IAM_PROFILE_INST="${IAM_PROFILE_INST}"
+
+  #export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
+  #MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
 
   envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
 	kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
