@@ -9,6 +9,13 @@ echo $env_id
 gemini_arti_uid="Srv-gemi-build-np"
 
 if [[ $env_id == 'nonprod' ]]; then
+    # kMS JSON template variable 
+    OWNER_ACCOUNT="998622627571"
+    KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
+    #IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
+    CRMS_PROV_ROLE_ID="GeminiProvisioningRole"
+    IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
+    
     # Tooling VPC
     #VPCID="vpc-0a78b82ba9196ca94" 
     # Private VPC

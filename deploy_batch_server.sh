@@ -68,7 +68,12 @@ echo $kms_ec2_keyid
 if [[ $kms_ec2_keyid == 'null' ]]; then
 # export the varibale needed for kms josn files.
   echo "Inside If"
-  export ./Batch/var/read_variables.sh $env_id
+  export OWNER_ACCOUNT="${OWNER_ACCOUNT}"
+  export KMS_ROLE_DELETE_ALLOW="${KMS_ROLE_DELETE_ALLOW}"
+  export IAM_PROFILE_PROV="${IAM_PROFILE_PROV}"
+  export CRMS_PROV_ROLE_ID="${CRMS_PROV_ROLE_ID}"
+  export IAM_PROFILE_INST="${IAM_PROFILE_INST}"
+
   #export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
   #MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
 
