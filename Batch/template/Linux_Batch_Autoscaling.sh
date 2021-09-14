@@ -1,4 +1,7 @@
 echo '#!/bin/bash' > tmp_batch_userdata_$$
+
+env_id="nonprod"
+source ./Batch/var/read_variables.sh $env_id
 #echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT /etc/ssh/ssh_host_ecdsa_key" >> tmp_batch_userdata_$$
 #echo "mv /etc/ssh/ssh_host_ecdsa_key_AFT.pub /etc/ssh/ssh_host_ecdsa_key.pub" >> tmp_batch_userdata_$$
 

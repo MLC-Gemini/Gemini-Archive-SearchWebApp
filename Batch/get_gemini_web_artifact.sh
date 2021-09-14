@@ -1,9 +1,10 @@
 env_id=$1
 stage_folder=$2
-#source ./env_def/read_variables.sh $env_id
+
+source ./Batch/var/read_variables.sh $env_id
 #export no_proxy=$NO_PROXY
 
-gemini_arti_uid="Srv-gemi-build-np"
+#gemini_arti_uid="Srv-gemi-build-np"
 #gemini_login_pwd="zY3eb2XJAPbW"
 
 # Getting Gemini artifactory service account password form AWS SSM parameter.

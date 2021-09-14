@@ -56,6 +56,9 @@
 env_id="nonprod"
 source ./Batch/var/read_variables.sh $env_id
 
+echo $TechnicalService
+echo "Sandip"
+
 ######################################
 echo "1. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
@@ -64,55 +67,55 @@ echo "1. Bake 100% ready ami"
 ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAGE --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 kms_ec2_keyid=`aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 echo $ami_id
-echo $kms_ec2_keyid
+# echo $kms_ec2_keyid
 
-if [[ $kms_ec2_keyid == 'null' ]]; then
-# export the varibale needed for kms josn files.
-  export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
-  MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
+# if [[ $kms_ec2_keyid == 'null' ]]; then
+# # export the varibale needed for kms josn files.
+#   export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
+#   MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
 
-  envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
-  kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
-	#CAST requirement to enable key rotation
-  aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-  aws kms create-alias --alias-name alias/$GEM_KMS --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-  aws ssm put-parameter --name $GEM_KMS --value $kms_ec2_keyid --type "SecureString" --region "ap-southeast-2" --overwrite
-fi
-aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"' > encrypted_device_mapping_$$.json
+#   envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
+#   kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
+# 	#CAST requirement to enable key rotation
+#   aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
+#   aws kms create-alias --alias-name alias/$GEM_KMS --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
+#   aws ssm put-parameter --name $GEM_KMS --value $kms_ec2_keyid --type "SecureString" --region "ap-southeast-2" --overwrite
+# fi
+# aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"' > encrypted_device_mapping_$$.json
 
-instance_id=`\
-aws ec2 run-instances \
-    --block-device-mappings file://encrypted_device_mapping_$$.json \
-    --subnet-id $SUBNETID1 \
-    --image-id $ami_id \
-    --instance-type $INSTANCE_TYPE_BATCH \
-    --iam-instance-profile Name=$IAM_PROFILE_PROV \
-    | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
+# instance_id=`\
+# aws ec2 run-instances \
+#     --block-device-mappings file://encrypted_device_mapping_$$.json \
+#     --subnet-id $SUBNETID1 \
+#     --image-id $ami_id \
+#     --instance-type $INSTANCE_TYPE_BATCH \
+#     --iam-instance-profile Name=$IAM_PROFILE_PROV \
+#     | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
 
-aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id Key=TechnicalService,Value=$TechnicalService Key=Owner,Value=$Owner Key=Name,Value=$Name Key=Account,Value=$Account
+# aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id Key=TechnicalService,Value=$TechnicalService Key=Owner,Value=$Owner Key=Name,Value=$Name Key=Account,Value=$Account
 
-aws ec2 wait instance-status-ok --instance-ids $instance_id
+# aws ec2 wait instance-status-ok --instance-ids $instance_id
 
-echo $instance_id
-#Give enough time to complete user-data section, if this was the cause of
-#problem(smb part of code was not executedss)
-sleep 300
+# echo $instance_id
+# #Give enough time to complete user-data section, if this was the cause of
+# #problem(smb part of code was not executedss)
+# sleep 300
 
-ts=`date +%Y-%m-%d-%H-%M-%S`
-image_id=$(aws ec2 create-image --name Gemini-web-deploy-$ts --instance-id $instance_id|jq -r ".ImageId")
-aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=Deploy-$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
+# ts=`date +%Y-%m-%d-%H-%M-%S`
+# image_id=$(aws ec2 create-image --name Gemini-web-deploy-$ts --instance-id $instance_id|jq -r ".ImageId")
+# aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=Deploy-$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
 
-echo "- wait for image to be created"
-aws ec2 wait image-available --image-ids $image_id
-echo "- Wait for image to be available"
-while [ "$(aws ec2 describe-images --image-id $image_id | jq -r '.Images[0].State')" != "available" ]
-do
-        sleep 30
-done
+# echo "- wait for image to be created"
+# aws ec2 wait image-available --image-ids $image_id
+# echo "- Wait for image to be available"
+# while [ "$(aws ec2 describe-images --image-id $image_id | jq -r '.Images[0].State')" != "available" ]
+# do
+#         sleep 30
+# done
 
-echo "- Register 100% baked image"
-#./aws/aws_put_parameter.sh Deploy-$AWS_PAR_BATCH_IMAGE $image_id
-aws ssm put-parameter --name Deploy-$AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
+# echo "- Register 100% baked image"
+# #./aws/aws_put_parameter.sh Deploy-$AWS_PAR_BATCH_IMAGE $image_id
+# aws ssm put-parameter --name Deploy-$AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
 
 # ######################################
 # echo "2. Start Autoscling group using 100% backed ami"
