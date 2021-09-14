@@ -56,33 +56,32 @@
 env_id="nonprod"
 source ./Batch/var/read_variables.sh $env_id
 
-echo $TechnicalService
-echo "Sandip"
-
 ######################################
 echo "1. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
-#ami_id=$(./aws/aws_get_parameter.sh $AWS_PAR_BATCH_IMAGE)
-#kms_ec2_keyid=$(./aws/aws_get_parameter.sh $KMS_EC2)
+
 ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAGE --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 kms_ec2_keyid=`aws ssm get-parameters --name $GEM_KMS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 echo $ami_id
-# echo $kms_ec2_keyid
+echo $kms_ec2_keyid
 
-# if [[ $kms_ec2_keyid == 'null' ]]; then
-# # export the varibale needed for kms josn files.
-#   export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
-#   MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
+if [[ $kms_ec2_keyid == 'null' ]]; then
+# export the varibale needed for kms josn files.
+  echo "Inside If"
+  export ./Batch/var/read_variables.sh $env_id
+  #export OWNER_ACCOUNT='998622627571' KMS_ROLE_DELETE_ALLOW='AUR-Resource-AWS-gemininonprod-devops-appstack' IAM_PROFILE_PROV='GeminiProvisioningInstanceProfile' CRMS_PROV_ROLE_ID='GeminiProvisioningRole' IAM_PROFILE_INST='GeminiAppServerInstanceProfile'
+  #MYVARS='$OWNER_ACCOUNT:$KMS_ROLE_DELETE_ALLOW:$IAM_PROFILE_PROV:$CRMS_PROV_ROLE_ID:$IAM_PROFILE_INST'
 
-#   envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
-#   kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
-# 	#CAST requirement to enable key rotation
-#   aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-#   aws kms create-alias --alias-name alias/$GEM_KMS --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
-#   aws ssm put-parameter --name $GEM_KMS --value $kms_ec2_keyid --type "SecureString" --region "ap-southeast-2" --overwrite
-# fi
-# aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"' > encrypted_device_mapping_$$.json
+  envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
+  kms_ec2_keyid=$(aws kms create-key --policy file://kms_policy_ami_$$.json|jq -r '.KeyMetadata.KeyId')
+	#CAST requirement to enable key rotation
+  aws kms enable-key-rotation --key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
+  aws kms create-alias --alias-name alias/$GEM_KMS --target-key-id $(echo $kms_ec2_keyid|sed 's/^.*\///')
+  aws ssm put-parameter --name $GEM_KMS --value $kms_ec2_keyid --type "SecureString" --region "ap-southeast-2" --overwrite
+fi
+aws ec2 describe-images --image-id $ami_id|jq -r '.Images[].BlockDeviceMappings|del(.[].Ebs.SnapshotId)|.[].Ebs.Encrypted=true|.[].Ebs.KmsKeyId="'$kms_ec2_keyid'"' > encrypted_device_mapping_$$.json
 
+echo "Outside If"
 # instance_id=`\
 # aws ec2 run-instances \
 #     --block-device-mappings file://encrypted_device_mapping_$$.json \
