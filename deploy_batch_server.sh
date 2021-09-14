@@ -114,7 +114,7 @@ done
 
 echo "- Register 100% baked image"
 #./aws/aws_put_parameter.sh Deploy-$AWS_PAR_BATCH_IMAGE $image_id
-aws ssm put-parameter --name Deploy-$AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
+aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE-Deploy --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
 
 # ######################################
 # echo "2. Start Autoscling group using 100% backed ami"
