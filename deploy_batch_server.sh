@@ -74,6 +74,21 @@ aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE-Deploy --value $image_id --typ
 
 # ######################################
 echo "2. Start Autoscling group using 100% backed ami"
+  export IAMInstanceProfile="${IAM_PROFILE_INST}"
+  export InstanceType="${INSTANCE_TYPE_BATCH}"
+  export KeyPairName="${KEYPAIR_NAME}"
+  export RemoteAccessCIDR="${SSHACCESSCIDR}"
+  export Subnets="${SUBNETID1,SUBNETID2,SUBNETID3}"
+  export VpcId="${VPCID}"
+  export ApplicationID="${T_ApplicationID}"
+  export Owner="${Owner}"
+
+  export CostCentre="${T_CostCentre}"
+  export Name="${T_Environment}"
+  export Environment="${T_Environment}"
+  export AppCategory="${T_AppCategory}"
+  export SupportGroup="${T_SupportGroup}"
+  export PowerMgt="${T_EC2_PowerMgt}"
 
 envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
 bash tmp_launch_asg_$$.sh

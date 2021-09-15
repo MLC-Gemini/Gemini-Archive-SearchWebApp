@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 echo '#!/bin/bash' > tmp_batch_userdata_$$
 
 env_id="nonprod"
@@ -31,23 +33,23 @@ aws cloudformation deploy \
         --template-file Batch/template/Linux_Batch_Autoscaling.yml \
         --stack-name GEMINI-WEB-$T_Environment \
         --parameter-overrides \
-                "IAMInstanceProfile=$IAM_PROFILE_INST" \
+                "IAMInstanceProfile=$IAMInstanceProfile" \
                 "ImageId=`aws ssm get-parameter --name "/gemini_archive_web/ami_image-Deploy" --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'"` \
-                "InstanceType=$INSTANCE_TYPE_BATCH" \
-                "KeyPairName=$KEYPAIR_NAME" \
-                "RemoteAccessCIDR=$SSHACCESSCIDR" \
-                "Subnets=$SUBNETID1,$SUBNETID2,$SUBNETID3" \
-                "VpcId=$VPCID" \
-                "ApplicationID=$T_ApplicationID" \
+                "InstanceType=$InstanceType" \
+                "KeyPairName=$KeyPairName" \
+                "RemoteAccessCIDR=$RemoteAccessCIDR" \
+                "Subnets=$Subnets" \
+                "VpcId=$VpcId" \
+                "ApplicationID=$ApplicationID" \
                 "Owner=$Owner" \
                 "UserData1=$(cat tmp_batch_userdata_$$|openssl base64 -A)" \
         --tags \
-                "CostCentre=$T_CostCentre" \
-                "Name=GeminiWeb-$T_Environment" \
-                "Environment=$T_Environment" \
-                "AppCategory=$T_AppCategory" \
-                "SupportGroup=$T_SupportGroup" \
-                "PowerMgt=$T_EC2_PowerMgt"
+                "CostCentre=$CostCentre" \
+                "Name=GeminiWeb-$Name" \
+                "Environment=$Environment" \
+                "AppCategory=$AppCategory" \
+                "SupportGroup=$SupportGroup" \
+                "PowerMgt=$PowerMgt"
 cat tmp_batch_userdata_$$
 rm tmp_batch_userdata_$$
 
