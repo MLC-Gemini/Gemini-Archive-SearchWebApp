@@ -2,11 +2,6 @@
 pipeline {
   agent any
 
-  parameters {
-    string( name: 'BUILDENV', defaultValue: 'CRMS-build', description: 'Artifactory: Build stage ID')
-    string( name: 'DB_NAME',    defaultValue: '', description: 'Optional: Environment eg. CRMSD01')
-  }
-
   environment {  // the following environment variables are required for aws cli to operate correclty.
     http_proxy = 'http://forwardproxy:3128'
     https_proxy = 'http://forwardproxy:3128'
@@ -17,6 +12,6 @@ pipeline {
 
    stages {
     stage('Bake CRMS EC2 image')
-    { steps { sh "Gemini-Archive-SearchWebApp/bake_ec2_linux.sh" } }
+    { steps { sh "/data/jenkins_home/workspace/Gemini/Gemini-Archive-SearchWebApp/bake_ec2_linux.sh" } }
   }
 }
