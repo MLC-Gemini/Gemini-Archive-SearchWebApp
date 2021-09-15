@@ -6,33 +6,21 @@
 
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="CSS\**" />
+    <Compile Remove="Images\**" />
+    <Compile Remove="obj\**" />
     <Content Remove="bin\**" />
+    <Content Remove="CSS\**" />
+    <Content Remove="Images\**" />
+    <Content Remove="obj\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="CSS\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <EmbeddedResource Remove="obj\**" />
     <None Remove="bin\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="obj\Debug\net5.0\.NETCoreApp,Version=v5.0.AssemblyAttributes.cs" />
-    <Compile Include="obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net5.0\GeminiSearchWebApp.RazorAssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net5.0\GeminiSearchWebApp.RazorTargetAssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Home\About.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Home\Contact.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Home\Privacy.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Home\SearchCases.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Shared\Error.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Shared\_Layout.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\_ViewImports.cshtml.g.cs" />
-    <Compile Include="obj\Debug\net5.0\Razor\Views\_ViewStart.cshtml.g.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="obj\Debug\net5.0\GeminiSearchWebApp.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\net5.0\staticwebassets\GeminiSearchWebApp.StaticWebAssets.xml" />
-    <Content Include="obj\GeminiSearchWebApp.csproj.nuget.dgspec.json" />
-    <Content Include="obj\project.assets.json" />
+    <None Remove="CSS\**" />
+    <None Remove="Images\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,37 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CSS\" />
-    <Folder Include="Images\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="obj\Debug\net5.0\apphost.exe" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.assets.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.csproj.AssemblyReference.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.csproj.CopyComplete" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.dll" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.GeneratedMSBuildEditorConfig.editorconfig" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.MvcApplicationPartsAssemblyInfo.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.pdb" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.RazorAssemblyInfo.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.RazorCoreGenerate.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.RazorTargetAssemblyInfo.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.TagHelpers.input.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.TagHelpers.output.cache" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.Views.dll" />
-    <None Include="obj\Debug\net5.0\GeminiSearchWebApp.Views.pdb" />
-    <None Include="obj\Debug\net5.0\ref\GeminiSearchWebApp.dll" />
-    <None Include="obj\Debug\net5.0\staticwebassets\GeminiSearchWebApp.StaticWebAssets.Manifest.cache" />
-    <None Include="obj\GeminiSearchWebApp.csproj.nuget.g.props" />
-    <None Include="obj\GeminiSearchWebApp.csproj.nuget.g.targets" />
-    <None Include="obj\project.nuget.cache" />
   </ItemGroup>
 
   <ItemGroup>

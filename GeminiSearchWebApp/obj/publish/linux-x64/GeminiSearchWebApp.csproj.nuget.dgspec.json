@@ -1,0 +1,112 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Temp\\GeminiProjectMaster\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {}
+  },
+  "projects": {
+    "C:\\Temp\\GeminiProjectMaster\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Temp\\GeminiProjectMaster\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "projectName": "GeminiSearchWebApp",
+        "projectPath": "C:\\Temp\\GeminiProjectMaster\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
+        "packagesPath": "C:\\Users\\X033021d\\.nuget\\packages\\",
+        "outputPath": "C:\\Temp\\GeminiProjectMaster\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\obj\\publish\\linux-x64\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\X033021d\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Amazon.Extensions.Configuration.SystemsManager": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Negotiate": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.Extensions.Hosting.Systemd": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
+              "version": "[5.0.8, 5.0.8]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[5.0.8, 5.0.8]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.linux-x64",
+              "version": "[5.0.8, 5.0.8]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.302\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
