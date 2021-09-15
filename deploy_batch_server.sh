@@ -1,57 +1,13 @@
 #!/usr/bin/bash
 
-#./_pipeline/deploy_batch_server.sh
-#To append an environment:	./_pipeline/deploy_batch_server.sh CRMSD05
-#be aware: CRMSD01 is pointing to provisioning VPC, it should not be part of this group
 # cleanup() {
-# 	rm -f tmp_batch_userdata_$$
+# 	#rm -f tmp_batch_userdata_$$
 # 	rm -f tmp_launch_asg_$$.sh
 # 	rm -f encrypted_device_mapping_$$.json
 # 	aws ec2 terminate-instances --instance-ids $instance_id
-# 	rm -rf $Git_Working_Folder        
+# 	#rm -rf $Git_Working_Folder        
 # }
 # trap cleanup EXIT
-
-# Bake AMI require variables
-
-# #Git_Working_Folder=""
-# env_id="nonprod"
-
-# # Tooling VPC
-# #VPCID="vpc-0a78b82ba9196ca94" 
-# # Private VPC
-# VPCID="vpc-0ecf6cd42dacf1a57"
-# # tooling subnet a
-# #SUBNETID1="subnet-01470aa7fd78e4888" 
-# # private subnet 2a
-# SUBNETID1="subnet-01132417d1533351a" 
-
-# SSHACCESSCIDR="10.0.0.0/8"
-# #GEM_KMS="KMS_EC2_DEFAULT"
-# GEM_KMS="gemini_archive_web_ec2"
-# BATCH_SERVER_SIZE=50
-# INSTANCE_TYPE_BATCH="t3.small"
-# IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
-
-# # Aws Tags
-# T_CostCentre="V_Gemini" 
-# #T_ApplicationID="M4456"
-# T_ApplicationID="ML0095"
-# T_Environment="nonprod"
-# T_AppCategory="B"
-# T_SupportGroup="WorkManagementProductionSupport"
-# T_Name="Gemini_web"
-# #T_EC2_PowerMgt="EXTSW,0,1"
-# T_EC2_PowerMgt="EXTSW"
-# T_BackupOptOut="No"
-
-# #Deploy Bake 
-# TechnicalService="GeminiWeb"
-# Owner="GeminiWeb"
-# Account="GeminiWeb"
-# Name="GeminiWeb-bake-deploy"
-
-# AWS_PAR_BATCH_IMAGE="GeminiArchiveWeb"
 
 env_id="nonprod"
 source ./Batch/var/read_variables.sh $env_id
@@ -66,7 +22,7 @@ echo $ami_id
 echo $kms_ec2_keyid
 
 if [[ $kms_ec2_keyid == 'null' ]]; then
-# export the varibale needed for kms josn files.
+# export the varibale needed for kms josn template files.
   export OWNER_ACCOUNT="${OWNER_ACCOUNT}"
   export KMS_ROLE_DELETE_ALLOW="${KMS_ROLE_DELETE_ALLOW}"
   export IAM_PROFILE_PROV="${IAM_PROFILE_PROV}"
@@ -98,7 +54,7 @@ aws ec2 wait instance-status-ok --instance-ids $instance_id
 echo $instance_id
 #Give enough time to complete user-data section, if this was the cause of
 #problem(smb part of code was not executedss)
-sleep 300
+#sleep 60
 
 ts=`date +%Y-%m-%d-%H-%M-%S`
 image_id=$(aws ec2 create-image --name Gemini-web-deploy-$ts --instance-id $instance_id|jq -r ".ImageId")
@@ -117,10 +73,10 @@ echo "- Register 100% baked image"
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE-Deploy --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
 
 # ######################################
-# echo "2. Start Autoscling group using 100% backed ami"
+echo "2. Start Autoscling group using 100% backed ami"
 
-# envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
-# bash tmp_launch_asg_$$.sh
+envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
+bash tmp_launch_asg_$$.sh
 
 # ######################################
 # echo "3. Set DNS entry"

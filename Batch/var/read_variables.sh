@@ -7,24 +7,26 @@ echo $env_id
 
 #artifactory variable
 gemini_arti_uid="Srv-gemi-build-np"
-gemini_arti_ssm="/gemini_archive_web/artifactory-np"
+gemini_arti_ssm="/gemini_archive_web/artifactory"
 
 if [[ $env_id == 'nonprod' ]]; then
     # kMS JSON template variable 
     OWNER_ACCOUNT="998622627571"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
     #IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
-    CRMS_PROV_ROLE_ID="GeminiProvisioningRole"
+    GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
     IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
     
     # Tooling VPC
     #VPCID="vpc-0a78b82ba9196ca94" 
     # Private VPC
     VPCID="vpc-0ecf6cd42dacf1a57"
-    # tooling subnet a
+    # tooling subnets 
     #SUBNETID1="subnet-01470aa7fd78e4888" 
-    # private subnet 2a
+    # private subnets
     SUBNETID1="subnet-01132417d1533351a" 
+    SUBNETID2="subnet-00f9ae140fbbeaa86"
+    SUBNETID3="subnet-01ba8cd53df612f02"
 
     SSHACCESSCIDR="10.0.0.0/8"
     GEM_KMS="/gemini_archive_web/ec2_key"
@@ -51,6 +53,10 @@ if [[ $env_id == 'nonprod' ]]; then
     Owner="GeminiWeb"
     Account="GeminiWeb"
     Name="GeminiWeb-bake-deploy"
+
+   # Lunch template variable 
+    IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
+    KEYPAIR_NAME="GeminiArchWebBuildBoxNonProd"
 
 elif [[ $env_id == 'prod' ]]; then
   echo "The variable for prod env"
