@@ -74,6 +74,9 @@ aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE-Deploy --value $image_id --typ
 
 # ######################################
 echo "2. Start Autoscling group using 100% backed ami"
+  ImageId=`aws ssm get-parameter --name "/gemini_archive_web/ami_image-Deploy" --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'"`
+  echo $ImageId
+  export ImageId="${ImageId}"
   export IAMInstanceProfile="${IAM_PROFILE_INST}"
   export InstanceType="${INSTANCE_TYPE_BATCH}"
   export KeyPairName="${KEYPAIR_NAME}"

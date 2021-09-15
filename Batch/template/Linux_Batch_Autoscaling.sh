@@ -31,7 +31,8 @@ echo "nohup sudo /usr/bin/bash /tmp/patch-me.sh &" >> tmp_batch_userdata_$$
 
 aws cloudformation deploy \
         --template-file Batch/template/Linux_Batch_Autoscaling.yml \
-        --stack-name GEMINI-WEB-$T_Environment \
+       # --stack-name GEMINI-WEB-$T_Environment \
+        --stack-name GEMINI-WEB-$Name \
         --parameter-overrides \
         #         "IAMInstanceProfile=$IAM_PROFILE_INST" \
         #         "ImageId=`aws ssm get-parameter --name "/gemini_archive_web/ami_image-Deploy" --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'"` \
@@ -51,7 +52,7 @@ aws cloudformation deploy \
         #         "SupportGroup=$T_SupportGroup" \
         #         "PowerMgt=$T_EC2_PowerMgt"
                 "IAMInstanceProfile=$IAMInstanceProfile" \
-                "ImageId=`aws ssm get-parameter --name "/gemini_archive_web/ami_image-Deploy" --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'"` \
+                "ImageId=$ImageId" \
                 "InstanceType=$InstanceType" \
                 "KeyPairName=$KeyPairName" \
                 "RemoteAccessCIDR=$RemoteAccessCIDR" \
