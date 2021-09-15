@@ -64,5 +64,5 @@ elif [[ $env_id == 'prod' ]]; then
   echo "The variable for prod env"
 
 else
-  echo "Please provide the valid env_id for eg. nonpord for NonProd or prod for Production"
+  echo "Please provide the valid env_id for eg. nonprod for NonProd or prod for Production"
 fi

@@ -54,10 +54,10 @@ rm tmp_batch_userdata_$$
 #restart all EC2 by killing them.
 #asg_group_name=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment| jq -r '.StackResources[]|select (.LogicalResourceId=="AutoScalingGroup").PhysicalResourceId'|sed 's/ /,/g')
 #instances=$(aws autoscaling describe-auto-scaling-instances | jq -r '.AutoScalingInstances[]|select (.AutoScalingGroupName=="'$asg_group_name'").InstanceId'|paste -sd " " -)
-# aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --instance-id  \
-#                 $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
-#                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
-#                         |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
-#                 |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
-#         |jq -r '.Reservations[].Instances[].InstanceId')
+aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --instance-id  \
+                $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
+                        $(aws cloudformation describe-stack-resources --stack-name CRMS-BATCH-$TEST_ENV \
+                        |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
+                |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
+        |jq -r '.Reservations[].Instances[].InstanceId')
 
