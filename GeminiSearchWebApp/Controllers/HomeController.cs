@@ -27,19 +27,17 @@ namespace GeminiSearchWebApp.Controllers
     {
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
+        public LdapConnect ldapConnect;
+        public string loggedInUserName { get; set; }
         public HomeController(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
         {
            
             configuration = _configuration;
             connectionClass = new ConnectionClass(configuration, httpContextAccessor);
+            ldapConnect = new LdapConnect();
         }
         public IActionResult Index()
         {
-            var lstClaim = User.Claims.ToList();
-            //if(User.IsInRole("Users"))
-            //{
-            //    Content("i belongs to admin");
-            //}
             return View();
         }
         public IActionResult About()
@@ -59,6 +57,25 @@ namespace GeminiSearchWebApp.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult Login()
+        {
+            ViewData["Message"] = "Your login page.";
+            return View();
+        }
+
+        public string ValidateLogin(string userName, string password)
+        {
+            loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+            return loginUserNameToJson(loggedInUserName);
+        }
+
+        public string loginUserNameToJson(string name)
+        {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(name);
+            return JSONString;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -96,8 +113,16 @@ namespace GeminiSearchWebApp.Controllers
             try
             {
                 UserInput userInput = new UserInput();
-                userInput.FilterLevel = fLevel;
-                userInput.UserId = uId;
+                if (fLevel!=null && uId!=null && caseType!=null)
+                {
+                    userInput.FilterLevel = fLevel;
+                    userInput.UserId = uId;
+                    userInput.CaseTypeDate = caseType;
+                }
+                else
+                {
+                    connectionClass.CreateMessageLog("HomeController GetSearchDoc method variables are null");
+                }
                 if (fDate == null || tDate == null)
                 {
                     userInput.FromDate = DateTime.MinValue;
@@ -108,7 +133,6 @@ namespace GeminiSearchWebApp.Controllers
                     userInput.FromDate = DateTime.ParseExact(fDate, format, provider);
                     userInput.ToDate = DateTime.ParseExact(tDate, format, provider);
                 }
-                userInput.CaseTypeDate = caseType;
                 dt = connectionClass.Getrecord(userInput);
                
             }
@@ -141,8 +165,17 @@ namespace GeminiSearchWebApp.Controllers
             try
             {
                 UserInput userInput = new UserInput();
-                userInput.FilterLevel = filterLevel;
-                userInput.UserId = userId;
+                if (filterLevel!=null && User!=null && caseDateType!=null)
+                {
+                    userInput.FilterLevel = filterLevel;
+                    userInput.UserId = userId;
+                    userInput.CaseTypeDate = caseDateType;
+                }
+                else
+                {
+                    connectionClass.CreateMessageLog("HomeController GetCasesRecord method variables are null");
+                }
+                
                 if (fromDate==null || toDate==null)
                 {
                     userInput.FromDate = DateTime.MinValue;
@@ -153,7 +186,6 @@ namespace GeminiSearchWebApp.Controllers
                     userInput.FromDate = DateTime.ParseExact(fromDate, format, provider);
                     userInput.ToDate = DateTime.ParseExact(toDate, format, provider);
                 }
-                userInput.CaseTypeDate = caseDateType;
                 dt = connectionClass.GetCasesRecord(userInput);
 
             }
@@ -178,16 +210,22 @@ namespace GeminiSearchWebApp.Controllers
         public string GetActionRecord(int selectedCaseId)
         {
             DataTable dt = new DataTable();
-
-            try
+            if (selectedCaseId!=0)
             {
-                dt = connectionClass.GetActionRecord(selectedCaseId);
+                try
+                {
+                    dt = connectionClass.GetActionRecord(selectedCaseId);
 
+                }
+                catch (Exception ex)
+                {
+                    connectionClass.CreateMessageLog(ex.Message);
+                    Console.WriteLine("error");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                connectionClass.CreateMessageLog(ex.Message);
-                Console.WriteLine("error");
+                connectionClass.CreateMessageLog("CaseId passed to GetActionRecord method in HomeController is null");
             }
 
             return ActionToJson(dt);
