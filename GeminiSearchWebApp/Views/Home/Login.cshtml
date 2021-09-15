@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        html,body{
+            width:100%;
+        }
+        table {
+            margin:0;
+            position:absolute;
+            top:50%;
+            left:50%;
+            -ms-transform:translate(-50%,-50%);
+            transform:translate(-50%,-50%);
+            background-color: aliceblue;
+            font-size:20px;
+            font-family: 'Times New Roman';
+            font-style:normal;
+            font-weight:bold;
+            text-align: center;
+        }
+        td{
+            padding:20px;
+        }
+        .textBoxInput {
+            height: 40px;
+            width:300px;
+            outline:thick;
+        }
+        #btnLogin {
+            padding: 0px 20px 0px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 10px 10px 10px;
+            width:150px;
+        }
+
+        #btnLogin:hover {
+            background-color: lightskyblue;
+        }
+    </style>
+</head>
+<body>
+    <div style="vertical-align:middle;">
+        <form id="form" method="POST" action="SearchCases" style="align-content:center;">
+            <table style="align-content: center; border: 1px solid black; border-width: thick;">
+                <tr>
+                    <td align="left" style="padding-right:20px;">User Name:</td>
+                    <td><input id="login_id" type="text" class="textBoxInput" placeholder="Enter Login ID" style="text-align:center;" /></td>
+                </tr>
+                <tr>
+                    <td align="left" style="padding-right: 20px; padding-top: 0px;">Password:</td>
+                    <td style="padding-top:0px;"><input id="pwd" type="password" class="textBoxInput" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="padding-top:0px;"> 
+                    <button id="btnLogin" name="btnLogin" type="submit">Log On</button> 
+                    </td>
+                </tr>
+            </table>
+            </form>
+    </div>
+</body>
+</html>
