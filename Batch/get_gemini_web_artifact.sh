@@ -4,8 +4,8 @@ env_id=$1
 stage_folder=$2
 source ./Batch/var/read_variables.sh $env_id
 
-export http_proxy=http://forwardproxy:3128
-export https_proxy=http://forwardproxy:3128
+#export http_proxy=http://forwardproxy:3128
+#export https_proxy=http://forwardproxy:3128
 #export no_proxy=localhost,169.254.169.254,hip.ext.national.com.au,github.aus.thenational.com,artifactory.ext.national.com.au
 export no_proxy=$NO_PROXY
 
