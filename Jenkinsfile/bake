@@ -13,6 +13,10 @@ pipeline {
    stages {
     stage('Learn the path')
     { steps { echo "workspace directory is ${workspace}" } }
+    stage('select'){
+      def workspace = pwd()
+      sh "ls ${workspace}"
+    }
     stage('Bake CRMS EC2 image')
     { steps { sh "/data/jenkins_home/workspace/Gemini/packer-bake@script/Gemini-Archive-SearchWebApp/bake_ec2_linux.sh" } }
   }
