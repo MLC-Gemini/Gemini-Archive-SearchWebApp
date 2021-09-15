@@ -10,11 +10,11 @@ pipeline {
     PATH = '/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin'
   }
 
+   parameters {
+    choice(name: 'Environment', choices: 'nonprod\nprod', description: 'Choose the envgroup to bake for')
+   }
+
    stages {
-    stage('Learn the path')
-    { steps { echo "workspace directory is ${workspace}" } }
-    stage('select')
-    { steps { sh "ls ${pwd()}" } }
     stage('Bake CRMS EC2 image')
     { steps { sh "/data/jenkins_home/workspace/Gemini/packer-bake/bake_ec2_linux.sh" } }
   }
