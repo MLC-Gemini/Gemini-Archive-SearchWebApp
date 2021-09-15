@@ -14,8 +14,8 @@
 # }
 # trap cleanup EXIT
 
-#env_id="nonprod"
-env_id=$1
+env_id="nonprod"
+#env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 
 echo "1. Download from artifactory"
