@@ -34,8 +34,6 @@ if [[ $env_id == 'nonprod' ]]; then
     INSTANCE_TYPE_BATCH="t3.small"
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
 
-    NO_PROXY="localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com"
-
     # Aws Tags
     T_CostCentre="V_Gemini" 
     #T_ApplicationID="M4456"
