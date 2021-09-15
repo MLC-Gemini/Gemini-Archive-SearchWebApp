@@ -1,7 +1,9 @@
+#!/usr/bin/bash
+
 env_id=$1
 stage_folder=$2
 source ./Batch/var/read_variables.sh $env_id
-#export no_proxy=$NO_PROXY
+export no_proxy=$NO_PROXY
 
 # Getting Gemini artifactory service account password form AWS SSM parameter.
 gemini_login_pwd=`aws ssm get-parameter --name $gemini_arti_ssm --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
