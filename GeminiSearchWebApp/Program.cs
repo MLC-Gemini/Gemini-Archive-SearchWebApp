@@ -1,6 +1,3 @@
-using Amazon;
-using Amazon.Extensions.NETCore.Setup;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -24,56 +21,12 @@ namespace GeminiSearchWebApp
            
         }
 
-        //    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //Host.CreateDefaultBuilder(args)
-        //    .ConfigureWebHostDefaults(webBuilder =>
-        //    {
-        //        webBuilder.UseStartup<Startup>();
-        //    })
-        //    .ConfigureAppConfiguration((builder) =>
-        //    {
-        //        builder.AddSystemsManager("/GeminiSearchWebApp", new AWSOptions
-        //        {
-        //            Region = RegionEndpoint.APSoutheast2
-        //        }) ;
-        //    });
-
-
-        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .ConfigureAppConfiguration(webBuilder =>
-        //        {
-        //            webBuilder.AddSystemsManager("/GeminiSearchWebApp", new AWSOptions {
-        //                Region = RegionEndpoint.APSoutheast2
-        //            });
-        //        }).UseStartup<Startup>();
-
-        public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(webBuilder =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.AddSystemsManager(configureSource =>
-                    {
-                        configureSource.Path = "/GeminiSearchWebApp";
-                        configureSource.ReloadAfter = TimeSpan.FromMinutes(5);
-                        //configureSource.AwsOptions = awsOptions;
-                        configureSource.Optional = true;
-                        //configureSource.OnLoadException += exceptionContext =>
-                        //  {
-
-                        //  };
-                        //configureSource.ParameterProcessor = customerProcess;
-                    }
-                    );
-                }).UseStartup<Startup>();
-
-        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .ConfigureAppConfiguration(webBuilder =>
-        //        {
-        //            webBuilder.AddSystemsManager("/GeminiSearchWebApp");
-        //        }).UseStartup<Startup>();
-
+                    webBuilder.UseStartup<Startup>();
+                });
         //public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
         //.SetBasePath(Directory.GetCurrentDirectory())
         //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

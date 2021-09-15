@@ -1,0 +1,13 @@
+{ 
+	"Changes": [
+		{
+			"Action": "$dns_action",
+			"ResourceRecordSet": {
+				"Name": "$dns_name",
+				"Type": "CNAME",
+				"TTL": 3600,
+				"ResourceRecords": [{ "Value": "$end_point"}]
+			}
+		}
+	]
+}
