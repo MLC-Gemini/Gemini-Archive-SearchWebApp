@@ -16,6 +16,6 @@ pipeline {
     stage('select')
     { steps { sh "ls ${pwd()}" } }
     stage('Bake CRMS EC2 image')
-    { steps { sh "/data/jenkins_home/workspace/Gemini/packer-bake@script/Gemini-Archive-SearchWebApp/bake_ec2_linux.sh" } }
+    { steps { sh "/data/jenkins_home/workspace/Gemini/packer-bake/bake_ec2_linux.sh" } }
   }
 }
