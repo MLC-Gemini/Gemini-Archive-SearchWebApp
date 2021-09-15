@@ -9,6 +9,8 @@ echo $env_id
 gemini_arti_uid="Srv-gemi-build-np"
 gemini_arti_ssm="/gemini_archive_web/artifactory"
 
+NO_PROXY="localhost,169.254.169.254,hip.ext.national.com.au,github.aus.thenational.com,artifactory.ext.national.com.au"
+
 if [[ $env_id == 'nonprod' ]]; then
     # kMS JSON template variable 
     OWNER_ACCOUNT="998622627571"
@@ -33,8 +35,6 @@ if [[ $env_id == 'nonprod' ]]; then
     BATCH_SERVER_SIZE=50
     INSTANCE_TYPE_BATCH="t3.small"
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
-
-    NO_PROXY="localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com"
 
     # Aws Tags
     T_CostCentre="V_Gemini" 
