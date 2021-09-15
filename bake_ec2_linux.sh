@@ -1,18 +1,18 @@
-cleanup() {
-	echo "6. Drop this instance"
-	aws ec2 terminate-instances --instance-ids $instance_id
-	rm tmp_gemini_web_bake_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
-	aws ec2 wait instance-terminated --instance-ids $instance_id
-	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
+# cleanup() {
+# 	echo "6. Drop this instance"
+# 	aws ec2 terminate-instances --instance-ids $instance_id
+# 	rm tmp_gemini_web_bake_$env_id.pem
+# 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
+# 	aws ec2 wait instance-terminated --instance-ids $instance_id
+# 	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
 
-	rm -f kms_policy_ami_$$.json
-	rm -f encrypted_device_mapping_$$.json
-	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
-	rm -rf $Git_Working_Folder
-	echo "Baking Done ."
-}
-trap cleanup EXIT
+# 	rm -f kms_policy_ami_$$.json
+# 	rm -f encrypted_device_mapping_$$.json
+# 	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
+# 	rm -rf $Git_Working_Folder
+# 	echo "Baking Done ."
+# }
+# trap cleanup EXIT
 
 #env_id="nonprod"
 env_id=$1
