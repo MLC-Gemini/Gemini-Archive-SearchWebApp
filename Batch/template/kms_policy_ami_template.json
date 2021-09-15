@@ -52,7 +52,7 @@
             "Principal": {
                 "AWS": [
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}"
+                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${GEMINI_PROV_ROLE_ID}"
                     ]
             },
             "Action": [
@@ -75,7 +75,7 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${GEMINI_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
@@ -98,7 +98,7 @@
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${CRMS_PROV_ROLE_ID}",
+                    "arn:aws:iam::${OWNER_ACCOUNT}:role/${GEMINI_PROV_ROLE_ID}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:root",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
                     "arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",

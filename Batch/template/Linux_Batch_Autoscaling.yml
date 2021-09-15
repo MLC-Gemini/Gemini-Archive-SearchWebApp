@@ -1,17 +1,7 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: BATCH Stack
+Description: GEMINI-WEB Stack
 Parameters:
-  NotifyTopic:
-    Description: SNS topic arn for notification events not going via the HIP notify process
-    Type: String
-    AllowedPattern: .+
-  CTMAgentToServerPort:
-    Description: ControlM Agent to Server Port
-    Type: Number
-  CTMServerToAgentPort:
-    Description: ControlM Server to Agent Port
-    Type: Number
   IAMInstanceProfile:
     Description: Instance profile
     Type: String
@@ -59,12 +49,9 @@ Parameters:
   UserData1:
     Type: String
     Default: ''
-  UserData2:
-    Type: String
-    Default: ''
-
+  
 Resources:
-
+  
   AutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
@@ -77,15 +64,6 @@ Resources:
       DesiredCapacity: 1
       TargetGroupARNs:
         - !Ref CTMTargetGroup
-        - !Ref AFTTargetGroup
-      NotificationConfigurations:
-        - TopicARN:
-            !Ref NotifyTopic
-          NotificationTypes:
-            - autoscaling:EC2_INSTANCE_LAUNCH
-            - autoscaling:EC2_INSTANCE_LAUNCH_ERROR
-            - autoscaling:EC2_INSTANCE_TERMINATE
-            - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -109,7 +87,8 @@ Resources:
       SecurityGroups:
         - !Ref SecurityGroup
       UserData:
-        !Join ["", [!Ref UserData1, !Ref UserData2]]
+        - !Ref UserData1
+        #!Join ["", [!Ref UserData1, !Ref UserData2]]
 
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -130,40 +109,6 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-  AFTTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      HealthCheckIntervalSeconds: 30
-      HealthCheckPort: traffic-port
-      HealthCheckProtocol: TCP
-      HealthCheckTimeoutSeconds: 10
-      HealthyThresholdCount: 2
-      Port: 8022
-      Protocol: TCP
-      TargetGroupAttributes:
-        - Key: deregistration_delay.timeout_seconds
-          Value: 30
-      TargetType: instance
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref VpcId
-      Tags:
-        - Key: Owner
-          Value: !Ref Owner
-        - Key: CostCentre
-          Value: !Ref CostCentre
-        - Key: ApplicationID
-          Value: !Ref ApplicationID
-
-  AFTListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      DefaultActions:
-        - Type: forward
-          TargetGroupArn: !Ref AFTTargetGroup
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 8022
-      Protocol: TCP
-
   CTMTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
@@ -172,7 +117,7 @@ Resources:
       HealthCheckProtocol: TCP
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 2
-      Port: !Ref CTMServerToAgentPort
+      Port: 80
       Protocol: TCP
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
@@ -195,7 +140,7 @@ Resources:
         - Type: forward
           TargetGroupArn: !Ref CTMTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
-      Port: !Ref CTMServerToAgentPort
+      Port: 80
       Protocol: TCP
 
   SecurityGroup:
@@ -213,20 +158,12 @@ Resources:
           ToPort: 22
           CidrIp: !Ref RemoteAccessCIDR
         - IpProtocol: tcp
-          FromPort: 8022
-          ToPort: 8022
-          CidrIp: !Ref RemoteAccessCIDR
-        - IpProtocol: icmp
-          FromPort: -1
-          ToPort: -1
+          FromPort: 80
+          ToPort: 80
           CidrIp: !Ref RemoteAccessCIDR
         - IpProtocol: tcp
-          FromPort: !Ref CTMAgentToServerPort
-          ToPort: !Ref CTMAgentToServerPort
-          CidrIp: !Ref RemoteAccessCIDR
-        - IpProtocol: tcp
-          FromPort: !Ref CTMServerToAgentPort
-          ToPort: !Ref CTMServerToAgentPort
+          FromPort: 443
+          ToPort: 443
           CidrIp: !Ref RemoteAccessCIDR
       Tags:
         - Key: Owner
@@ -257,11 +194,6 @@ Outputs:
     Value: !Ref LoadBalancer
     Export:
       Name: !Sub "${AWS::StackName}-LoadBalancer"
-  AFTTargetGroup:
-    Description: AFT Target Group
-    Value: !Ref AFTTargetGroup
-    Export:
-      Name: !Sub "${AWS::StackName}-AFTTargetGroup"
   CTMTargetGroup:
     Description: CTM Target Group
     Value: !Ref CTMTargetGroup
