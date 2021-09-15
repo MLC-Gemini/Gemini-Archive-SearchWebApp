@@ -9,8 +9,6 @@ echo $env_id
 gemini_arti_uid="Srv-gemi-build-np"
 gemini_arti_ssm="/gemini_archive_web/artifactory"
 
-NO_PROXY="localhost,169.254.169.254,hip.ext.national.com.au,s3.ap-southeast-2.amazonaws.com"
-
 if [[ $env_id == 'nonprod' ]]; then
     # kMS JSON template variable 
     OWNER_ACCOUNT="998622627571"
