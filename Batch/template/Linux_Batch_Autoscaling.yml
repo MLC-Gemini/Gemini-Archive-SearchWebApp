@@ -29,19 +29,19 @@ Parameters:
   Owner:
     Description: Mandatory Owner tag
     Type: String
-    Default: 'CRMS'
+    Default: 'GEMINI'
   CostCentre:
     Description: Mandatory Cost Centre tag
     Type: String
-    Default: 'V_CRMS'
+    Default: 'V_GeminiWeb'
   ApplicationID:
     Description: Mandatory ApplicationID tag
     Type: String
-    Default: 'ML0056'
+    Default: 'ML0095'
   Environment:
     Description: Mandatory Environment tag
     Type: String
-    Default: 'DEV'
+    Default: 'Nonprod'
   AppCategory:
     Description: Mandatory AppCategory tag
     Type: String

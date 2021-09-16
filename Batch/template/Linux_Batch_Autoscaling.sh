@@ -30,10 +30,8 @@ echo "nohup sudo /usr/bin/bash /tmp/patch-me.sh &" >> tmp_batch_userdata_$$
 
 aws cloudformation deploy \
         --template-file Batch/template/Linux_Batch_Autoscaling.yml \
-        --stack-name GEMINI-WEB-$T_Environment \
         --stack-name GEMINI-WEB-$Name \
         --parameter-overrides \
-        #         "IAMInstanceProfile=$IAM_PROFILE_INST" \
                   "IAMInstanceProfile=$IAMInstanceProfile" \
                   "ImageId=$ImageId" \
                   "InstanceType=$InstanceType" \
@@ -51,6 +49,7 @@ aws cloudformation deploy \
                   "AppCategory=$AppCategory" \
                   "SupportGroup=$SupportGroup" \
                   "PowerMgt=$PowerMgt"
+        #         "IAMInstanceProfile=$IAM_PROFILE_INST" \
         #         "ImageId=`aws ssm get-parameter --name "/gemini_archive_web/ami_image-Deploy" --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'"` \
         #         "InstanceType=$INSTANCE_TYPE_BATCH" \
         #         "KeyPairName=$KEYPAIR_NAME" \
@@ -73,10 +72,10 @@ rm tmp_batch_userdata_$$
 #restart all EC2 by killing them.
 #asg_group_name=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment| jq -r '.StackResources[]|select (.LogicalResourceId=="AutoScalingGroup").PhysicalResourceId'|sed 's/ /,/g')
 #instances=$(aws autoscaling describe-auto-scaling-instances | jq -r '.AutoScalingInstances[]|select (.AutoScalingGroupName=="'$asg_group_name'").InstanceId'|paste -sd " " -)
-aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --instance-id  \
-                $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
-                        $(aws cloudformation describe-stack-resources --stack-name CRMS-BATCH-$TEST_ENV \
-                        |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
-                |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
-        |jq -r '.Reservations[].Instances[].InstanceId')
+# aws ec2 terminate-instances --instance-ids $(aws ec2 describe-instances --instance-id  \
+#                 $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
+#                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$Name \
+#                         |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
+#                 |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
+#         |jq -r '.Reservations[].Instances[].InstanceId')
 
