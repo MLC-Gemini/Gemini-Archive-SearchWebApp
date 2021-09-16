@@ -153,10 +153,9 @@ namespace GeminiSearchWebApp.DAL
                         Console.WriteLine("{0} = {1}", pair.Key, pair.Value);
                         if (pair.Key.ToLower() == "cn")
                         {
-                            //char trimVal = Convert.ToChar(trimDev);
                             userID = pair.Value.Substring(pair.Value.Length - Convert.ToInt32(trimDev));
                             loginUserName = pair.Value.Replace(userID, " ").TrimEnd();
-                            //cntt.Session.SetString("LoggedInUser", name);                            
+                            Console.WriteLine(loginUserName);
                         }
                     }
 
