@@ -498,6 +498,21 @@
                     });
             }
 
+            $('#docTable').on('click', 'tr', function (e) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Home/TowerCheck",
+                        dataType: "JSON",
+                        data: {},
+                        success: function (result) {
+                            console.log("success")
+                        },
+                        error: function () {
+                            console.log("error");
+                        }
+                    });
+            });
 
         });
 

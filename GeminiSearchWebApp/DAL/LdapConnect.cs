@@ -192,7 +192,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
-
+                return loginUserName = string.Empty;
             }
             return loginUserName;
         }

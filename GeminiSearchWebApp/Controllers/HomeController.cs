@@ -19,6 +19,7 @@ using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using GeminiSearchWebApp.UtilityFolder;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -28,6 +29,7 @@ namespace GeminiSearchWebApp.Controllers
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
+        public TowerApiClass towerApiClass;
         public string loggedInUserName { get; set; }
         public HomeController(IConfiguration _configuration)
         {
@@ -35,6 +37,7 @@ namespace GeminiSearchWebApp.Controllers
             configuration = _configuration;
             connectionClass = new ConnectionClass(configuration);
             ldapConnect = new LdapConnect(configuration);
+            towerApiClass = new TowerApiClass();
         }
         public IActionResult Index()
         {
@@ -242,6 +245,11 @@ namespace GeminiSearchWebApp.Controllers
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
+        }
+
+        public void TowerCheck()
+        {
+            towerApiClass.ConsumeService();
         }
 
         // code for PI tower service call
