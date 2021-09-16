@@ -17,6 +17,14 @@ namespace GeminiSearchWebApp.DAL
         string name;
         string userID;
         bool resultDta = false;
+        public IConfiguration Configuration;
+        public ConnectionClass connectionClass;
+
+        public LdapConnect(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            connectionClass = new ConnectionClass(Configuration);
+        }
         public SearchResponse GetLdapConnection(string username, string password, string domain)
         {
             var ldapServer = "ldap.aurdev.national.com.au";
@@ -74,6 +82,7 @@ namespace GeminiSearchWebApp.DAL
                 {
                     resultDta = false;
                 }
+                connectionClass.CreateLog(loggedInUserName);
             }
             catch (Exception)
             {

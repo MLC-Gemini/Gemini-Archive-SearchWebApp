@@ -29,12 +29,12 @@ namespace GeminiSearchWebApp.Controllers
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
         public string loggedInUserName { get; set; }
-        public HomeController(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
+        public HomeController(IConfiguration _configuration)
         {
            
             configuration = _configuration;
-            connectionClass = new ConnectionClass(configuration, httpContextAccessor);
-            ldapConnect = new LdapConnect();
+            connectionClass = new ConnectionClass(configuration);
+            ldapConnect = new LdapConnect(configuration);
         }
         public IActionResult Index()
         {
@@ -83,7 +83,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        [Authorize(Policy = "ADRoleOnly")]
+        //[Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
