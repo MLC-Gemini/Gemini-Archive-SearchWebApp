@@ -13,9 +13,8 @@ namespace GeminiSearchWebApp.DAL
 {
     public class LdapConnect
     {
-        public string loggedInUserName { get; set; }
+        public string lgdName { get; set; }
         string name;
-        string userID;
         bool resultDta = false;
         public IConfiguration Configuration;
         public ConnectionClass connectionClass;
@@ -61,6 +60,7 @@ namespace GeminiSearchWebApp.DAL
         }
         public string ValidateUsernameAndPassword(string username, string password, string domain)
         {
+            string loggedInUserName = string.Empty;
             SearchResponse searchResponse=null;
             
             try
@@ -162,8 +162,7 @@ namespace GeminiSearchWebApp.DAL
                         Console.WriteLine("{0} = {1}", pair.Key, pair.Value);
                         if (pair.Key.ToLower() == "cn")
                         {
-                            userID = pair.Value.Substring(pair.Value.Length - Convert.ToInt32(trimDev));
-                            loginUserName = pair.Value.Replace(userID, " ").TrimEnd();
+                            lgdName = pair.Value;
                             Console.WriteLine(loginUserName);
                         }
                     }
@@ -182,8 +181,12 @@ namespace GeminiSearchWebApp.DAL
                                 name = pair.Value;
                                 if (name.ToLower() == adGroupVal.ToLower())
                                 {
-                                    //resultDta = true;
-                                    break;
+                                    loginUserName = lgdName;
+                                    return loginUserName;
+                                }
+                                else
+                                {
+                                    loginUserName = string.Empty;
                                 }
                             }
                         }

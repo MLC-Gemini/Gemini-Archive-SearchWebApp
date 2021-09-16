@@ -65,3 +65,4 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\R
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
+C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\SearchLayout.cshtml.g.cs

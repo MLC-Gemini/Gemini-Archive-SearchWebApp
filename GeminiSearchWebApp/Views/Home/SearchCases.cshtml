@@ -4,7 +4,7 @@
 @{
 
     ViewBag.title = "SearchCases";
-
+    Layout="SearchLayout.cshtml";
 }
 <head>
     <title>Gemini Case Search</title>
@@ -26,10 +26,6 @@
         var caseIdVal;
         var caseTypeVal;
         $(document).ready(function () {
-
-            var urlParams = new URLSearchParams(window.location.search);
-            var userName = urlParams.get('name');
-            $("#lblLoggedInUser").html("Hello, "+userName);
 
              $.fn.resetForm = function () {
                 $("input").change(function () {
@@ -112,6 +108,18 @@
                 }
                 else if ($('input[name="date_case"]:checked').length == 0) {
                     alert('@ViewBag.emptyCaseTypeDate');
+                    location.reload();
+                }
+                else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
+                    alert('@ViewBag.accountIdLength');
+                    location.reload();
+                }
+                else if ($('#filter_level').val() == "Adviser Level" && document.getElementById("Pid").value.length > 5) {
+                    alert('@ViewBag.advisorIdLength');
+                    location.reload();
+                }
+                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
+                    alert('@ViewBag.customerIdLength');
                     location.reload();
                 }
                 else {
@@ -520,11 +528,6 @@
     </script>
 
     <style>
-        #lblLoggedInUser {
-            float: right;
-            line-height: 5px;
-        }
-
         table {
             white-space: nowrap;
             width: auto;
@@ -655,7 +658,6 @@
 
 <body>
     <div>
-        <label id="lblLoggedInUser"></label>
         <table style="align-content:center; border: 1px solid black; border-style: double; border-color:black; border-width:thick">
             <tr>
                 <td>

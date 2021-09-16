@@ -239,7 +239,11 @@ namespace GeminiSearchWebApp.DAL
         public void CreateLog(string userName)
         {
             loginDateTime = DateTime.Now;
-            if (userName.ToLower()=="Roshini Mohan".ToLower())
+            if (userName == string.Empty)
+            {
+                userName = "Catherine Sherrin";
+            }
+            if (userName.ToLower()=="Roshini Mohan X033021d".ToLower())
             {
                 userName = "Catherine Sherrin";
             }
