@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: GEMINI-WEB Stack
+Description: Gemini-Archive Web-App Stack
 Parameters:
   IAMInstanceProfile:
     Description: Instance profile
@@ -63,7 +63,7 @@ Resources:
       Cooldown: 300
       DesiredCapacity: 1
       TargetGroupARNs:
-        - !Ref CTMTargetGroup
+        - !Ref GeminiWebTargetGroup
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -109,7 +109,7 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-  CTMTargetGroup:
+  GeminiWebTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
@@ -138,7 +138,7 @@ Resources:
     Properties:
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref CTMTargetGroup
+          TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: TCP
@@ -194,8 +194,8 @@ Outputs:
     Value: !Ref LoadBalancer
     Export:
       Name: !Sub "${AWS::StackName}-LoadBalancer"
-  CTMTargetGroup:
+  GeminiWebTargetGroup:
     Description: CTM Target Group
-    Value: !Ref CTMTargetGroup
+    Value: !Ref GeminiWebTargetGroup
     Export:
-      Name: !Sub "${AWS::StackName}-CTMTargetGroup"
+      Name: !Sub "${AWS::StackName}-GeminiWebTargetGroup"
