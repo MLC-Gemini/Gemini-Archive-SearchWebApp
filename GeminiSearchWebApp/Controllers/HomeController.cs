@@ -83,12 +83,13 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult Login()
-        {
-            ViewData["Message"] = "Your login page.";
+        //public IActionResult Login()
+        //{
+        //    ViewData["Message"] = "Your login page.";
 
-            return View();
-        }
+        //    return View();
+        //}
+
         [Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
