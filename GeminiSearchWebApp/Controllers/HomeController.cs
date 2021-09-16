@@ -71,7 +71,12 @@ namespace GeminiSearchWebApp.Controllers
         public string ValidateLogin(string userName, string password)
         {
             loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
-            return loginUserNameToJson(loggedInUserName);
+            if (!string.IsNullOrEmpty(loggedInUserName))
+            {
+                return loginUserNameToJson(loggedInUserName);
+            }
+            return null;
+           
         }
 
         public string loginUserNameToJson(string name)
@@ -79,6 +84,11 @@ namespace GeminiSearchWebApp.Controllers
             string JSONString = string.Empty;
             JSONString = JsonConvert.SerializeObject(name);
             return JSONString;
+        }
+
+        public IActionResult SearchLayout()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -103,6 +113,9 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
             ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.accountIdLength = config["Appsettings:accountIdLength"];
+            ViewBag.advisorIdLength = config["Appsettings:advisorIdLength"];
+            ViewBag.customerIdLength = config["Appsettings:customerIdLength"];
             return View();
         }
 

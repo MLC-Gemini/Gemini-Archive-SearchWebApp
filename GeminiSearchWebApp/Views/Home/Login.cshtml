@@ -26,10 +26,8 @@
                                 window.location.href = "/Home/SearchCases/?name="+result;
                             }
                             else {
-                                //window.location.href = "/Home/Login";
                                 $("#errorMsg").html("You are not authorized to view this page");
-                            }
-                            
+                            } 
                         },
                         error: function () {
                             writeLogFileFromView("Error from Login");
