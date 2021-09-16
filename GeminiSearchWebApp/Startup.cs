@@ -36,7 +36,7 @@ namespace GeminiSearchWebApp
         {
             try
             {
-                services.AddHttpContextAccessor();
+                //services.AddHttpContextAccessor();
                 services.AddControllersWithViews();
                 //services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
                 //services.AddAuthorization(options =>
@@ -55,10 +55,10 @@ namespace GeminiSearchWebApp
                 //});
                 services.AddDistributedMemoryCache();
 
-                services.AddSession(options =>
-                {
-                    options.IdleTimeout = TimeSpan.FromMinutes(10);
-                });
+                //services.AddSession(options =>
+                //{
+                //    options.IdleTimeout = TimeSpan.FromMinutes(10);
+                //});
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace GeminiSearchWebApp
                 }
                 //app.UseHttpsRedirection();
                 app.UseStaticFiles();
-                app.UseSession();
+                //app.UseSession();
                 app.UseRouting();
                 //app.UseAuthentication();
                 //app.UseAuthorization();

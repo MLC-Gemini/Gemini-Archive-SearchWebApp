@@ -26,32 +26,10 @@ namespace GeminiSearchWebApp.DAL
         public DateTime loginDateTime;
         public static int count = 0;
 
-        public ConnectionClass(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
+        public ConnectionClass(IConfiguration _configuration)
         {
             Configuration = _configuration;
             userInput = new UserInput();
-            loginDateTime = DateTime.Now;
-            if (httpContextAccessor!=null && httpContextAccessor.HttpContext!=null)
-            {
-                userName = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
-                if (userName.ToLower() == "aurdev\\x033021d")
-                {
-                    userName = "Catherine Sherrin";
-                }
-            }
-            else
-            {
-                CreateMessageLog("HttpContextAccessor is null");
-            }
-            if (count==0)
-            {
-                CreateLog(userName, loginDateTime);
-                count++;
-            }
-            else
-            {
-                Console.WriteLine("UserName is " + userName);
-            }
         }
 
         public DataTable GetCasesRecord(UserInput userInput)
@@ -258,8 +236,13 @@ namespace GeminiSearchWebApp.DAL
             return dtAction;
         }
 
-        public void CreateLog(string userName, DateTime loginDateTime)
+        public void CreateLog(string userName)
         {
+            loginDateTime = DateTime.Now;
+            if (userName.ToLower()=="Roshini Mohan".ToLower())
+            {
+                userName = "Catherine Sherrin";
+            }
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {
