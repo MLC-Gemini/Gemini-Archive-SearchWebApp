@@ -41,7 +41,7 @@ Parameters:
   Environment:
     Description: Mandatory Environment tag
     Type: String
-    Default: 'DEV'
+    Default: 'Nonprod'
   AppCategory:
     Description: Mandatory AppCategory tag
     Type: String
