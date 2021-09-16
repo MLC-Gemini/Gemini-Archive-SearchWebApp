@@ -5,6 +5,6 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\Published</_PublishTargetUrl>
-    <History>True|2021-09-16T06:35:48.6444289Z;True|2021-09-16T14:07:19.3033312+10:00;True|2021-09-15T21:40:38.1556209+10:00;</History>
+    <History>True|2021-09-16T07:41:52.0839034Z;True|2021-09-16T16:35:48.6444289+10:00;True|2021-09-16T14:07:19.3033312+10:00;True|2021-09-15T21:40:38.1556209+10:00;</History>
   </PropertyGroup>
 </Project>
