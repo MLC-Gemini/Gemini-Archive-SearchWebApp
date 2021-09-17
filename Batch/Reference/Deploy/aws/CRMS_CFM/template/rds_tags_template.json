@@ -1,0 +1,34 @@
+[
+        {
+            "Value": "${T_RDS_PowerMgt}",
+            "Key": "PowerMgt"
+        },
+        {
+            "Value": "${T_BackupOptOut}",
+            "Key": "BackupOptOut"
+        },
+        {
+            "Value": "${T_Environment}",
+            "Key": "Environment"
+        },
+        {
+            "Value": "${T_SupportGroup}",
+            "Key": "SupportGroup"
+        },
+        {
+            "Value": "${T_ApplicationID}",
+            "Key": "ApplicationID"
+        },
+        {
+            "Value": "${T_CostCentre}",
+            "Key": "CostCentre"
+        },
+        {
+            "Value": "${T_AppCategory}",
+            "Key": "AppCategory"
+        },
+        {
+            "Value": "${CRMS_DBNAME}",
+            "Key": "Name"
+        }
+]
