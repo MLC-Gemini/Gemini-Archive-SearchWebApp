@@ -10,6 +10,7 @@
 # trap cleanup EXIT
 
 env_id="nonprod"
+#env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 
 ######################################
@@ -26,7 +27,7 @@ if [[ $kms_ec2_keyid == 'null' ]]; then
   export OWNER_ACCOUNT="${OWNER_ACCOUNT}"
   export KMS_ROLE_DELETE_ALLOW="${KMS_ROLE_DELETE_ALLOW}"
   export IAM_PROFILE_PROV="${IAM_PROFILE_PROV}"
-  export CRMS_PROV_ROLE_ID="${CRMS_PROV_ROLE_ID}"
+  export GEMINI_PROV_ROLE_ID="${GEMINI_PROV_ROLE_ID}"
   export IAM_PROFILE_INST="${IAM_PROFILE_INST}"
 
   envsubst < Batch/template/kms_policy_ami_template.json > kms_policy_ami_$$.json
@@ -97,20 +98,20 @@ envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
 bash tmp_launch_asg_$$.sh
 
 # ######################################
-# echo "3. Set DNS entry"
-# lb_arn=$(aws cloudformation describe-stack-resources --stack-name CRMS-BATCH-$TEST_ENV \
-# 	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
-# lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
-# ./aws/aws_set_dns.sh $dbname $BATCH_DNS.$CRMS_DNS_ZONE_NAME $lb_dns
+echo "3. Set DNS entry"
+lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
+lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
+#./aws/aws_set_dns.sh $dbname $BATCH_DNS.$CRMS_DNS_ZONE_NAME $lb_dns
 
-# ##Added below code as CAST requirement to verify the resource is up and running
-# while [[   $(aws ec2 describe-instances --instance-id  \
-#                 $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
-#                         $(aws cloudformation describe-stack-resources --stack-name CRMS-BATCH-$TEST_ENV \
-#                         |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
-#                 |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
-#         | jq -r '.Reservations[].Instances[].State.Name') != 'running' ]]
-# do
-# 	echo "Wait for ec2 instance ready......"
-# 	sleep 60
-# done
+##Added below code as CAST requirement to verify the resource is up and running
+while [[   $(aws ec2 describe-instances --instance-id  \
+                $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
+                        $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+                        |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
+                |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
+        | jq -r '.Reservations[].Instances[].State.Name') != 'running' ]]
+do
+	echo "Wait for ec2 instance ready......"
+	sleep 60
+done
