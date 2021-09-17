@@ -101,19 +101,19 @@ bash tmp_launch_asg_$$.sh
 
 # ######################################
 # echo "3. Set DNS entry"
-# lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
-# 	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
-# lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
-# #./aws/aws_set_dns.sh $dbname $BATCH_DNS.$CRMS_DNS_ZONE_NAME $lb_dns
+ lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+ 	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
+ lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
+ ./aws/aws_set_dns.sh $dbname $BATCH_DNS.$CRMS_DNS_ZONE_NAME $lb_dns
 
 # ##Added below code as CAST requirement to verify the resource is up and running
-# while [[   $(aws ec2 describe-instances --instance-id  \
-#                 $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
-#                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
-#                         |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
-#                 |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
-#         | jq -r '.Reservations[].Instances[].State.Name') != 'running' ]]
-# do
-# 	echo "Wait for ec2 instance ready......"
-# 	sleep 60
-# done
+ while [[   $(aws ec2 describe-instances --instance-id  \
+                 $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
+                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+                         |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
+                 |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
+         | jq -r '.Reservations[].Instances[].State.Name') != 'running' ]]
+ do
+ 	echo "Wait for ec2 instance ready......"
+ 	sleep 60
+ done
