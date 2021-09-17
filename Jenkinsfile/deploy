@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Deploy Gemini Archive Web EC2 image') {
       steps {
-        sh "deploy_batch_server.sh ${params.envgroup}"
+        sh "/data/jenkins_home/workspace/Gemini/cloudformation-deploy/deploy_batch_server.sh ${params.envgroup}"
       }
     }
   }
