@@ -26,8 +26,20 @@
         var caseIdVal;
         var caseTypeVal;
         $(document).ready(function () {
+            var loginResult = '@ViewBag.loginStatusResult';
+            if (loginResult=="") {
+                window.location.href = "/Home/Login";
+            }
+            
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('name')=="") {
+                window.location.href = "/Home/Login";
+            }
+            if (urlParams.has('name') == false) {
+                window.location.href = "/Home/Login";
+            }
 
-             $.fn.resetForm = function () {
+                $.fn.resetForm = function () {
                 $("input").change(function () {
                     if ($.fn.ifEmpty() == false) {
                         location.reload();
