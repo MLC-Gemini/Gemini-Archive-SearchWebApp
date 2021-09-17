@@ -94,9 +94,52 @@ namespace GeminiSearchWebApp.Controllers
         //    return View();
         //}
 
-       
-        public IActionResult SearchCases()
+
+
+         public string LoginStatusToJson(bool status)
         {
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(status);
+            return JSONString;
+        }
+         //public string LoginCheck(bool loginStatus)
+         //{​​​​​
+         //   string result = string.Empty;
+         //   if (loginStatus == true)
+         //   {​​​​​
+         //       result = LoginStatusToJson(loginStatus);
+         //       SearchCases(result);
+         //       return result;
+         //   }​
+         //    else
+         //   {​​​​​
+         //      result = null;
+         //   }​​​​​ 
+         //   return result;
+
+         //}​​​​​
+
+        public string LoginCheck(bool loginStatus)
+        {
+            string result = string.Empty;
+            if(loginStatus==true)
+            {
+                result = LoginStatusToJson(loginStatus);
+                SearchCases(result);
+            }
+            else
+            {
+                result = null;
+            }
+            return result;
+        }
+
+
+
+
+        public IActionResult SearchCases(string loginStatus)
+        {
+            ViewData["loginStatusResult"] = loginStatus;
             ViewData["Message"] = "Your Search Page";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
