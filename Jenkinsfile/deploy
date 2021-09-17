@@ -18,8 +18,7 @@ pipeline {
   stages {
     stage('Print current path') {
       steps {
-        path=`pwd`
-        echo $path
+        echo ${env.WORKSPACE}
         }
     }
     stage('Deploy Gemini Archive Web EC2 image') {
