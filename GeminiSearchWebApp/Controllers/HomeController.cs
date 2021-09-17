@@ -19,7 +19,6 @@ using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using GeminiSearchWebApp.UtilityFolder;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -29,15 +28,13 @@ namespace GeminiSearchWebApp.Controllers
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
-        public TowerApiClass towerApiClass;
         public string loggedInUserName { get; set; }
-        public HomeController(IConfiguration _configuration)
+        public HomeController(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
         {
            
             configuration = _configuration;
-            connectionClass = new ConnectionClass(configuration);
-            ldapConnect = new LdapConnect(configuration);
-            towerApiClass = new TowerApiClass();
+            connectionClass = new ConnectionClass(configuration, httpContextAccessor);
+            ldapConnect = new LdapConnect();
         }
         public IActionResult Index()
         {
@@ -71,12 +68,7 @@ namespace GeminiSearchWebApp.Controllers
         public string ValidateLogin(string userName, string password)
         {
             loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
-            if (!string.IsNullOrEmpty(loggedInUserName))
-            {
-                return loginUserNameToJson(loggedInUserName);
-            }
-            return null;
-           
+            return loginUserNameToJson(loggedInUserName);
         }
 
         public string loginUserNameToJson(string name)
@@ -86,17 +78,19 @@ namespace GeminiSearchWebApp.Controllers
             return JSONString;
         }
 
-        public IActionResult SearchLayout()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        //[Authorize(Policy = "ADRoleOnly")]
+        //public IActionResult Login()
+        //{
+        //    ViewData["Message"] = "Your login page.";
+
+        //    return View();
+        //}
+
+        [Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
@@ -113,9 +107,6 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
             ViewBag.rightClick = config["Appsettings:rightClick"];
-            ViewBag.accountIdLength = config["Appsettings:accountIdLength"];
-            ViewBag.advisorIdLength = config["Appsettings:advisorIdLength"];
-            ViewBag.customerIdLength = config["Appsettings:customerIdLength"];
             return View();
         }
 
@@ -258,11 +249,6 @@ namespace GeminiSearchWebApp.Controllers
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
-        }
-
-        public void TowerCheck()
-        {
-            towerApiClass.ConsumeService();
         }
 
         // code for PI tower service call
