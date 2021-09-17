@@ -16,6 +16,11 @@ pipeline {
   }
 
   stages {
+    stage('Print current path') {
+      steps {
+        pwd
+        }
+    }
     stage('Deploy Gemini Archive Web EC2 image') {
       steps {
         sh "deploy_batch_server.sh ${params.envgroup}"
