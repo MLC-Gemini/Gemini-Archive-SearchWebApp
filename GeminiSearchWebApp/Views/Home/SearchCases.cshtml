@@ -122,7 +122,7 @@
                     alert('@ViewBag.customerIdLength');
                     location.reload();
                 }
-                else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
+                @*else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
                     alert('@ViewBag.accountIdLength');
                     location.reload();
                 }
@@ -133,7 +133,7 @@
                  else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
                     alert('@ViewBag.customerIdLength');
                     location.reload();
-                }
+                }*@
                 else {
                     $("#output1").show();
                     $("#output2").show();
