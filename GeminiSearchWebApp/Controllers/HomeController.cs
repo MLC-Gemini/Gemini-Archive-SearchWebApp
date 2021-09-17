@@ -29,12 +29,12 @@ namespace GeminiSearchWebApp.Controllers
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
         public string loggedInUserName { get; set; }
-        public HomeController(IConfiguration _configuration, IHttpContextAccessor httpContextAccessor)
+        public HomeController(IConfiguration _configuration)
         {
            
             configuration = _configuration;
-            connectionClass = new ConnectionClass(configuration, httpContextAccessor);
-            ldapConnect = new LdapConnect();
+            connectionClass = new ConnectionClass(configuration);
+            ldapConnect = new LdapConnect(_configuration);
         }
         public IActionResult Index()
         {
@@ -68,7 +68,11 @@ namespace GeminiSearchWebApp.Controllers
         public string ValidateLogin(string userName, string password)
         {
             loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
-            return loginUserNameToJson(loggedInUserName);
+            if (!string.IsNullOrEmpty(loggedInUserName))
+            {
+                return loginUserNameToJson(loggedInUserName);
+            }
+            return null;
         }
 
         public string loginUserNameToJson(string name)
@@ -90,7 +94,7 @@ namespace GeminiSearchWebApp.Controllers
         //    return View();
         //}
 
-        [Authorize(Policy = "ADRoleOnly")]
+       
         public IActionResult SearchCases()
         {
             ViewData["Message"] = "Your Search Page";
