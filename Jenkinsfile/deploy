@@ -18,7 +18,7 @@ pipeline {
   stages {
     stage('Deploy Gemini Archive Web EC2 image') {
       steps {
-        sh "/data/jenkins_home/workspace/Gemini/packer-bake/deploy_batch_server.sh ${params.envgroup}"
+        sh "deploy_batch_server.sh ${params.envgroup}"
       }
     }
   }
