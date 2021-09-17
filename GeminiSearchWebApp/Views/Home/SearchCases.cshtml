@@ -27,9 +27,9 @@
         var caseTypeVal;
         $(document).ready(function () {
             var loginResult = '@ViewBag.loginStatusResult';
-            if (loginResult=="") {
-                window.location.href = "/Home/Login";
-            }
+            //if (loginResult=="") {
+            //    window.location.href = "/Home/Login";
+            //}
             
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('name')=="") {
