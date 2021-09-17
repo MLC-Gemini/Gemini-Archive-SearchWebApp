@@ -27,10 +27,10 @@
         var caseTypeVal;
         $(document).ready(function () {
             var loginResult = '@ViewBag.loginStatusResult';
-            if (loginResult=="") {
-                window.location.href = "/Home/Login";
-            }
-
+            //if (loginResult=="") {
+            //    window.location.href = "/Home/Login";
+            //}
+            
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('name')=="") {
                 window.location.href = "/Home/Login";
@@ -38,7 +38,8 @@
             if (urlParams.has('name') == false) {
                 window.location.href = "/Home/Login";
             }
-             $.fn.resetForm = function () {
+
+                $.fn.resetForm = function () {
                 $("input").change(function () {
                     if ($.fn.ifEmpty() == false) {
                         location.reload();
@@ -71,18 +72,6 @@
                 })
                 return false;
             };
-            $.fn.SetMaxLength = function () {
-                //alert($('#filter_level').val());
-                if ($('#filter_level').val() == "Account Level") {
-                    $("#Pid").prop('maxLength', '20');
-                }
-                else if ($('#filter_level').val() == "Adviser Level") {
-                    $("#Pid").prop('maxLength', '5');
-                }
-                else if ($('#filter_level').val() == "Customer Level") {
-                    $("#Pid").prop('maxLength', '9');
-                }
-            }
 
            // console.log($.fn.ifEmpty());
             var tableDoc;
@@ -129,11 +118,11 @@
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
                 }
-                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
-                    alert('@ViewBag.customerIdLength');
+                else if ($('input[name="date_case"]:checked').length == 0) {
+                    alert('@ViewBag.emptyCaseTypeDate');
                     location.reload();
                 }
-                @*else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
+                else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
                     alert('@ViewBag.accountIdLength');
                     location.reload();
                 }
@@ -144,7 +133,7 @@
                  else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
                     alert('@ViewBag.customerIdLength');
                     location.reload();
-                }*@
+                }
                 else {
                     $("#output1").show();
                     $("#output2").show();
@@ -688,7 +677,7 @@
                         <tr>
                             <td style="padding-right:50px; padding-left:20px; padding-top:10px;">
                                 <label for="filter_level" class="labelStyle">Search By: </label>
-                                <select name="filter_level" id="filter_level" onchange="$.fn.SetMaxLength()" style="width:150px; height:30px;">
+                                <select name="filter_level" id="filter_level" style="width:150px; height:30px;">
                                     <option value="" style="display:none; text-align:center;">--Select--</option>
                                     <option value="Account Level">Account Level</option>
                                     <option value="Adviser Level">Adviser Level</option>
@@ -696,8 +685,7 @@
                                 </select>
                             </td>
                             <td style="padding-right: 40px; padding-top: 10px;">
-                                <input id="Pid" name="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
-                                <span id='errorMsg'></span>
+                                <input id="Pid" type="text" class="textBoxInput" size="10" placeholder="Enter ID" style="text-align:center;" />
                             </td>
                             <td style="padding-right: 40px; padding-top: 10px;">
                                 <label for="dateRange" class="labelStyle">From Date:</label>
@@ -755,7 +743,7 @@
 
     <div id="output1" style="display: none;">
         <label for="caseText" class="labelStyle" style="margin-top: 0px; margin-bottom: 0px;">Cases:</label>
-        <div style=" border: 3px ridge black; overflow:auto;" title="Double Click to see the Case Activities.">
+        <div style=" border: 3px ridge black; overflow:auto;">
             <table id="myTable" class="table table-condensed rowHighlighter compact nowrap" style="width:contain;  border: 1px ridge lightgray; margin: 0px 10px 0px 10px; background-color:lightskyblue;">
                 <thead>
                     <tr style="vertical-align:top;font-size:small;">

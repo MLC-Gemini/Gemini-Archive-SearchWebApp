@@ -19,6 +19,7 @@ using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using GeminiSearchWebApp.UtilityFolder;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -28,13 +29,15 @@ namespace GeminiSearchWebApp.Controllers
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
+        public TowerApiClass towerApiClass;
         public string loggedInUserName { get; set; }
         public HomeController(IConfiguration _configuration)
         {
            
             configuration = _configuration;
             connectionClass = new ConnectionClass(configuration);
-            ldapConnect = new LdapConnect(_configuration);
+            ldapConnect = new LdapConnect(configuration);
+            towerApiClass = new TowerApiClass();
         }
         public IActionResult Index()
         {
@@ -82,61 +85,39 @@ namespace GeminiSearchWebApp.Controllers
             return JSONString;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult SearchLayout()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
-        //public IActionResult Login()
-        //{
-        //    ViewData["Message"] = "Your login page.";
 
-        //    return View();
-        //}
+        public string LoginCheck(bool loginStatus)
+        {
+            string result=string.Empty;
+            if (loginStatus==true)
+            {
+                result = LoginStatusToJson(loginStatus);
+                SearchCases(result);
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-
-
-         public string LoginStatusToJson(bool status)
+        public string LoginStatusToJson(bool status)
         {
             string JSONString = string.Empty;
             JSONString = JsonConvert.SerializeObject(status);
             return JSONString;
         }
-         //public string LoginCheck(bool loginStatus)
-         //{​​​​​
-         //   string result = string.Empty;
-         //   if (loginStatus == true)
-         //   {​​​​​
-         //       result = LoginStatusToJson(loginStatus);
-         //       SearchCases(result);
-         //       return result;
-         //   }​
-         //    else
-         //   {​​​​​
-         //      result = null;
-         //   }​​​​​ 
-         //   return result;
 
-         //}​​​​​
-
-        public string LoginCheck(bool loginStatus)
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            string result = string.Empty;
-            if(loginStatus==true)
-            {
-                result = LoginStatusToJson(loginStatus);
-                SearchCases(result);
-            }
-            else
-            {
-                result = null;
-            }
-            return result;
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
-
-
+        //[Authorize(Policy = "ADRoleOnly")]
         public IActionResult SearchCases(string loginStatus)
         {
             ViewData["loginStatusResult"] = loginStatus;
@@ -154,6 +135,9 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
             ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.accountIdLength = config["Appsettings:accountIdLength"];
+            ViewBag.advisorIdLength = config["Appsettings:advisorIdLength"];
+            ViewBag.customerIdLength = config["Appsettings:customerIdLength"];
             return View();
         }
 
@@ -296,6 +280,11 @@ namespace GeminiSearchWebApp.Controllers
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
+        }
+
+        public void TowerCheck()
+        {
+            towerApiClass.ConsumeService();
         }
 
         // code for PI tower service call
