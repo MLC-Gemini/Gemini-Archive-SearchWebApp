@@ -82,7 +82,7 @@ namespace GeminiSearchWebApp.DAL
                 {
                     resultDta = false;
                 }
-                connectionClass.CreateLog(loggedInUserName);
+                connectionClass.CreateLog(username);
             }
             catch (Exception)
             {

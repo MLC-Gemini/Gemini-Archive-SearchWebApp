@@ -241,12 +241,9 @@ namespace GeminiSearchWebApp.DAL
             loginDateTime = DateTime.Now;
             if (userName == string.Empty)
             {
-                userName = "Catherine Sherrin";
+                userName = "LDCYS12";
             }
-            if (userName.ToLower()=="Roshini Mohan X033021d".ToLower())
-            {
-                userName = "Catherine Sherrin";
-            }
+            
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {

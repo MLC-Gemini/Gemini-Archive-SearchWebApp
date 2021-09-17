@@ -26,10 +26,10 @@
         var caseIdVal;
         var caseTypeVal;
         $(document).ready(function () {
-            var loginResult = '@ViewBag.loginStatusResult';
+            @*var loginResult = '@ViewBag.loginStatusResult';
             if (loginResult=="") {
                 window.location.href = "/Home/Login";
-            }
+            }*@
 
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('name')=="") {
@@ -73,6 +73,7 @@
             };
             $.fn.SetMaxLength = function () {
                 //alert($('#filter_level').val());
+                $("#Pid").val('');
                 if ($('#filter_level').val() == "Account Level") {
                     $("#Pid").prop('maxLength', '20');
                 }
