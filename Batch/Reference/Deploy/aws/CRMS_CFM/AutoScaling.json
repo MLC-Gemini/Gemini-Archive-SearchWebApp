@@ -1,0 +1,66 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description": "CRMS ASG deployment script",
+  "Parameters": {
+    "ComputerName": { "Description": "Domain computer name", "Type": "String" },
+    "AMIID": { "Description": "AMI ID of the Robot host", "Type": "String" },
+    "NetworkStackName": { "Description": "CRMS Network stack", "Type": "String", "Default": "CRMS-NETWORK" },
+    "InstanceType": { "Description": "Windows Instance Type", "Type": "String", "Default": "t3.medium" },
+    "IAMProfile": { "Description": "CRMSAppServerInstanceProfile", "Type": "String" },
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Default":"CRMS Provision Key",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "BootPSScript":{"Description": "Robot Server Configuration script", "Type":"String","Default":"Test"},
+    "DesiredCapacity": {"Description": "Number of instances required", "Type":"String", "Default": "1"}
+  },
+  "Resources": {
+    "AppServerLaunchConfig" : {
+      "Type" : "AWS::AutoScaling::LaunchConfiguration",
+      "Properties" : {
+        "AssociatePublicIpAddress": "false",
+        "IamInstanceProfile": { "Ref": "IAMProfile" },
+        "ImageId": { "Ref": "AMIID" },
+        "InstanceType": { "Ref": "InstanceType" },
+        "SecurityGroups": [ { "Fn::ImportValue": { "Fn::Sub": "${NetworkStackName}-AppServerSecurityGroupID" } } ],
+        "KeyName" : { "Ref": "KeyName"},
+        "PlacementTenancy": "default",
+        "UserData":{"Ref":"BootPSScript"}
+      }
+    },  
+    "AppServerASG" : {
+      "Type" : "AWS::AutoScaling::AutoScalingGroup",
+      "Properties" : {
+        "AvailabilityZones"       : { "Fn::GetAZs" : "" },
+        "LaunchConfigurationName" : { "Ref" : "AppServerLaunchConfig" },
+        "VPCZoneIdentifier": [
+          { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-Subnet1ID" } }, 
+          { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-Subnet2ID" } },
+          { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-Subnet3ID" } }
+        ],
+        "MinSize" : "1",
+        "MaxSize" : {"Ref": "DesiredCapacity"},
+        "DesiredCapacity": {"Ref": "DesiredCapacity"},
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value" : { "Ref": "ComputerName" },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Owner",
+            "Value": { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-Owner" } },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "CostCentre",
+            "Value": { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-CostCentre" } },
+            "PropagateAtLaunch": "true"
+          }
+        ]    
+      }
+    }
+  }
+}

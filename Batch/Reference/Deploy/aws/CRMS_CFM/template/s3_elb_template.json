@@ -1,0 +1,165 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "S3 Bucket deployment template",
+    "Resources": {
+        "S3LogBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": "${s3_bucket_name}",
+                "VersioningConfiguration": {
+                   "Status": "Enabled"
+                },
+                "PublicAccessBlockConfiguration": {
+                  "BlockPublicAcls": true,
+                  "IgnorePublicAcls": true,
+                  "BlockPublicPolicy": true,
+                  "RestrictPublicBuckets": true
+                },
+                "BucketEncryption": {
+                    "ServerSideEncryptionConfiguration": [
+                        {
+                            "ServerSideEncryptionByDefault": {
+                                "SSEAlgorithm": "aws:kms",
+                                "KMSMasterKeyID": "${kms_ec2_keyid}"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "BucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                                "Sid": "Deny access if not CRMS Provision/AppServer/Devops role",
+                                "Effect": "Deny",
+                                "Principal": "*",
+                                "Condition": {
+                                        "StringNotLike": {
+                                                "aws:userId": [
+                                                "${S3_allow_devops}:*",
+                                                "${Iam_profile_inst}:*",
+                                                "${Iam_profile_prov}:*"
+                                                ]
+                                        }
+                                },
+                                "Action": [
+                                        "s3:GetBucketAcl",
+                                        "s3:GetBucketLocation",
+                                        "s3:GetObject",
+                                        "s3:ListBucket",
+                                        "s3:PutObject"
+                                ],
+                                "Resource": [
+                                        "arn:aws:s3:::${s3_bucket_name}",
+                                        "arn:aws:s3:::${s3_bucket_name}/*"
+                                ]
+                        },
+                        {
+                            "Sid": "DenyIncorrectEncryptionHeader",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:PutObject",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "StringNotEquals": {
+                                    "s3:x-amz-server-side-encryption": "aws:kms"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "DenyUnEncryptedObjectUploads",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:PutObject",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "Null": {
+                                    "s3:x-amz-server-side-encryption": "true"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "DenyHTTPAccess",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:PutObject",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "Bool": {
+                                    "aws:SecureTransport": "false"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "DenynonSSL",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "*",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "Bool": {
+                                    "aws:SecureTransport": "false"
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "AllowGetObject",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "StringNotEquals": {
+                                    "aws:PrincipalOrgID": [
+                                        "${NAB_ROOT_ORG_ID}"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "Sid": "Deny access from VPCE",
+                            "Effect": "Deny",
+                            "Principal": "*",
+                            "Action": "s3:*",
+                            "Resource": "arn:aws:s3:::${s3_bucket_name}/*",
+                            "Condition": {
+                                "StringEquals": {
+                                    "aws:sourceVpce": [
+                                        "${VPC_APPLICATION}",
+                                        "${VPC_PROVISION}"
+                                    ]
+                                }
+                            }
+                        },
+			{
+            			"Sid": "Allow CRMS principal access via other VPC",
+            			"Effect": "Allow",
+            			"Principal": {
+                			"AWS": [
+						"arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_PROV}",
+                                    		"arn:aws:iam::${OWNER_ACCOUNT}:role/${IAM_PROFILE_INST}",
+                                    		"arn:aws:iam::${OWNER_ACCOUNT}:role/${S3_ALLOW_DEVOPS}"
+                			]
+            			},
+            			"Action": [
+                			"s3:GetObject",
+                			"s3:ListBucket",
+                			"s3:PutObject"
+            			],
+            			"Resource": [
+					"arn:aws:s3:::${s3_bucket_name}",
+					"arn:aws:s3:::${s3_bucket_name}/*"
+            			]
+        		}
+                ]
+                },
+                "Bucket": "${s3_bucket_name}"
+            },
+            "DependsOn" : "S3LogBucket"
+        }
+    }
+}

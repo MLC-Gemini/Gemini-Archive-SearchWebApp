@@ -1,0 +1,88 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Oracle RDS deployment script",
+
+    "Parameters": {
+        "MajorEngineVersion": {"Type": "String", "Default": "12.2"},
+        "AllocatedStorage": { "Default": "500", "Description": "The allocated storage size, specified in gigabytes (GB).", "Type": "String" },
+        "BackupRetentionPeriod":{"Default":"7", "Type":"Number"},
+        "CRMSDBParameter":{ "Description": "CRMS Specific Database Parameter defined here", "Type": "String", "Default" : "CRMS-DB-Parameter-Group-opt" },
+        "NetworkStackName": {
+                "Description": "Name of an active CloudFormation stack that contains the networking resources, such as VPC, subnet and security group, that will be used in this stack.", "Type": "String", "Default" : "CRMS-NETWORK"
+        },
+        "DBInstanceClass": { "Default": "db.t3.large", "Description": "Database size selection, choose an exising class", "Type": "String" },
+        "DBInstanceIdentifier": { "Default": "CRMSD01", "Description": "The Oracle database ID", "Type": "String" },
+        "DBName": { "Default": "CRMSD01", "Description": "The Oracle database name", "Type": "String" },
+        "EnablePerformanceInsights": { "Default":"False", "Type":"String"},
+        "Engine": { "Default": "oracle-ee", "Type":"String"},
+        "EngineVersion": { "Default":"12.1.0.2.v14", "Type":"String"},
+        "Iops": { "Default":"1000","Type":"Number"},
+        "KmsKeyId": {"Type":"String"},
+        "MasterDBPassword": { "Default":"wm4ever?", "NoEcho": "true", "Description": "The Oracle database admin account password", "Type": "String" },
+        "MonitoringInterval": { "Default":"0", "Type":"Number"},
+        "MultiZone":{ "Default":"False", "Description": "Multi-A to provide data redundancy", "Type":"String" },
+        "DBPort": { "Default": "1588", "Description": "The port on which db service runs", "Type": "String" },
+        "PreferredBackupWindow": { "Default":"01:00-03:00", "Type":"String"},
+        "PreferredMaintenanceWindow": { "Default":"Sun:05:00-Sun:06:00", "Type":"String"},
+        "PubliclyAccessible": { "Default":"False", "Type":"String"},
+        "StorageType": { "Default": "iO1", "Type": "String" },
+        "DBSnapshotARN": {"Default": "", "Type": "String"},
+        "CRMSDBOptionGRP": {"Type": "String"}
+    },
+
+    "Conditions" : {"Storege-IOPS" : {"Fn::Equals" : [{"Ref" : "StorageType"}, "io1"]}},
+    "Resources": {
+        "CRMSDBInstance": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "AllocatedStorage": { "Ref": "AllocatedStorage" },
+                "AllowMajorVersionUpgrade":"False",
+                "AutoMinorVersionUpgrade" :"True",
+                "BackupRetentionPeriod":{"Ref":"BackupRetentionPeriod"},
+                "DBInstanceIdentifier": {"Ref": "DBInstanceIdentifier"},
+                "CharacterSetName":"US7ASCII",
+                "CopyTagsToSnapshot" :"True",
+                "DBInstanceClass": { "Ref": "DBInstanceClass" },
+                "DBName":{"Ref":"DBName"},
+                "DBParameterGroupName": { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-CRMSDBParameterGRP" } },
+                "DBSubnetGroupName": { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-CRMSDBSubnetGroup" } },
+                "DBSnapshotIdentifier": {"Ref": "DBSnapshotARN"},
+                "EnableCloudwatchLogsExports": ["trace","audit","alert","listener"],
+                "EnablePerformanceInsights": {"Ref":"EnablePerformanceInsights"},
+                "Engine": {"Ref":"Engine"},
+                "EngineVersion": {"Ref":"EngineVersion"},
+                "Iops": {
+                    "Fn::If" : ["Storege-IOPS", {"Ref":"Iops"},{"Ref":"AWS::NoValue"}]
+                },
+                "LicenseModel": "bring-your-own-license",
+                "KmsKeyId": { "Ref":"KmsKeyId"},
+                "MasterUsername":"CRMS_ADMIN",
+                "MasterUserPassword": {"Ref": "MasterDBPassword"},
+                "MonitoringInterval": { "Ref":"MonitoringInterval"},
+                "MultiAZ": { "Ref":"MultiZone" },
+                "OptionGroupName":{ "Ref": "CRMSDBOptionGRP" },
+                "Port": {"Ref": "DBPort"},
+                "PreferredBackupWindow": { "Ref":"PreferredBackupWindow"},
+                "PreferredMaintenanceWindow": { "Ref":"PreferredMaintenanceWindow"},
+                "PubliclyAccessible": { "Ref":"PubliclyAccessible"},
+                "StorageEncrypted": "True",
+                "StorageType": { "Ref" : "StorageType" },
+                "Tags": [ { "Key": "CostCentre", "Value": { "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-CostCentre" } } } ],
+                "VPCSecurityGroups": [{ "Fn::ImportValue" : {"Fn::Sub": "${NetworkStackName}-RDSDBSecurityGroupID" } }]
+            }
+        }
+    },
+
+    "Outputs" : {
+       "RDSEndPointAddr" : {
+            "Description" : "RDS Instance IP Address/DNS Name",
+            "Value" : {"Fn::GetAtt":["CRMSDBInstance","Endpoint.Address"]},
+            "Export" : {"Name" : {"Fn::Sub": "${AWS::StackName}-RDSEndPointAddr" } }
+        },
+        "RDSEndPointPort" : {
+            "Description" : "RDS Port No",
+            "Value" : {"Fn::GetAtt":["CRMSDBInstance","Endpoint.Port"]},
+            "Export" : {"Name" : {"Fn::Sub": "${AWS::StackName}-RDSEndPointPort" } }
+        }
+    }
+}
