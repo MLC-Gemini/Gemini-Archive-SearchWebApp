@@ -9,13 +9,13 @@ cleanup() {
 	rm -f kms_policy_ami_$$.json
 	rm -f encrypted_device_mapping_$$.json
 	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
-	rm -rf $Git_Working_Folder
+	#rm -rf $Git_Working_Folder
 	echo "Baking Done ."
 }
 trap cleanup EXIT
 
-env_id="nonprod"
-#env_id=$1
+#env_id="nonprod"
+env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 
 echo "1. Download from artifactory"

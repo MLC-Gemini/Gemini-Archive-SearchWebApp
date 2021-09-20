@@ -1,16 +1,16 @@
 #!/usr/bin/bash
 
-# cleanup() {
-# 	#rm -f tmp_batch_userdata_$$
-# 	rm -f tmp_launch_asg_$$.sh
-# 	rm -f encrypted_device_mapping_$$.json
-# 	aws ec2 terminate-instances --instance-ids $instance_id
-# 	#rm -rf $Git_Working_Folder        
-# }
-# trap cleanup EXIT
+cleanup() {
+	rm -f tmp_batch_userdata_$$
+	rm -f tmp_launch_asg_$$.sh
+	rm -f encrypted_device_mapping_$$.json
+	aws ec2 terminate-instances --instance-ids $instance_id
+	#rm -rf $Git_Working_Folder        
+}
+trap cleanup EXIT
 
-env_id="nonprod"
-#env_id=$1
+#env_id="nonprod"
+env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 
 ######################################
