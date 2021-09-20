@@ -7,19 +7,15 @@
   <ItemGroup>
     <Compile Remove="bin\**" />
     <Compile Remove="CSS\**" />
-    <Compile Remove="Images\**" />
     <Compile Remove="obj\**" />
     <Content Remove="bin\**" />
     <Content Remove="CSS\**" />
-    <Content Remove="Images\**" />
     <Content Remove="obj\**" />
     <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="CSS\**" />
-    <EmbeddedResource Remove="Images\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="bin\**" />
     <None Remove="CSS\**" />
-    <None Remove="Images\**" />
     <None Remove="obj\**" />
   </ItemGroup>
 

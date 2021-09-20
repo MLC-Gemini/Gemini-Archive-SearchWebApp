@@ -24,7 +24,7 @@ namespace GeminiSearchWebApp.DAL
         public HomeController homeController;
         public string userName;
         public DateTime loginDateTime;
-        public static int count = 0;
+        public static string getUserName = string.Empty;
 
         public ConnectionClass(IConfiguration _configuration)
         {
@@ -238,12 +238,10 @@ namespace GeminiSearchWebApp.DAL
 
         public void CreateLog(string userName)
         {
+            getUserName = userName;
             loginDateTime = DateTime.Now;
-            if (userName == string.Empty)
-            {
-                userName = "LDCYS12";
-            }
-            
+            userName = "LDCYS12";
+
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {
@@ -290,6 +288,9 @@ namespace GeminiSearchWebApp.DAL
         public void CreateMessageLog(string exDb)
         {
             var exceptionDateTime = DateTime.Now;
+            var uName = getUserName;
+            uName = "LDCYS12";
+
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {
