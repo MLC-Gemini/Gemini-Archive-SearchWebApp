@@ -8,13 +8,20 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/CustomJS/jquery.js"></script>
     <script src="~/CustomJS/jquery-ui.min.js"></script>
-    <script>
+    <script type="text/javascript">
         $(document).ready(function () {
             debugger;
             var urlParams = new URLSearchParams(window.location.search);
             var userName = urlParams.get('name');
             $("#lblLoggedInUser").html("Hello, " + userName);
         });
+    </script>
+
+    <script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
     </script>
 </head>
 <body>
@@ -28,7 +35,7 @@
                 </button>
                 <div>
                     <p id="lblLoggedInUser" class="nav navbar-text" title="Hello"></p>
-                    <a class="nav-link text-dark" href="/Home/Login" style="float:right">LogOut</a>
+                    <a class="nav-link text-dark" href="/Home/LogOut" style="float:right">LogOut</a>
                 </div>
             </div>
         </nav>

@@ -55,6 +55,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
+                connectionClass.CreateMessageLog("Search Response is null");
                 return null;
             }
         }
@@ -86,6 +87,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
+                connectionClass.CreateMessageLog("UserName and Password Validation Failed");
                 resultDta = false;
             }
 
@@ -195,6 +197,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
+                connectionClass.CreateMessageLog("Login Name is null");
                 return loginUserName = string.Empty;
             }
             return loginUserName;
