@@ -74,12 +74,26 @@ namespace GeminiSearchWebApp.Controllers
 
         public string ValidateLogin(string userName, string password)
         {
-            loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
-            if (!string.IsNullOrEmpty(loggedInUserName))
+            string result = string.Empty;
+            if (userName != null && password != null)
             {
-                return loginUserNameToJson(loggedInUserName);
+                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                if (!string.IsNullOrEmpty(loggedInUserName))
+                {
+                    result = loginUserNameToJson(loggedInUserName);
+                    return result;
+                }
+                else
+                {
+                    result = null;
+                    connectionClass.CreateMessageLog("Login Username is null");
+                }
             }
-            return null;
+            else
+            {
+                connectionClass.CreateMessageLog("Login Username or Password is null");
+            }
+            return result;
         }
 
         public string loginUserNameToJson(string name)
