@@ -1,1 +1,3 @@
-.dll
+*.dll
+*.pdb
+*.cache
