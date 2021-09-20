@@ -19,7 +19,7 @@ sudo mv /tmp/kestrel-geminiweb.service .
 # Starting and checking the kestral service status.
 sudo systemctl start kestrel-geminiweb.service
 sudo systemctl status kestrel-geminiweb.service
-curl localhost:5000
+#curl localhost:5000
 
 # Enabling service so it will run automatically af¬ter start of the operating system.
 sudo systemctl enable kestrel-geminiweb.service
@@ -63,6 +63,7 @@ sudo chmod -R 600 ssl-cert
 cd /web/nginx/ssl-cert
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem .
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.key .
+#sudo mv /tmp/ssl_key.key .
 
 #sudo vi /web/nginx/conf/nginx.conf
 cd /web/nginx/conf/
