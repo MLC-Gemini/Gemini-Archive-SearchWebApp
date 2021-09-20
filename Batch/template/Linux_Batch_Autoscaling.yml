@@ -137,7 +137,14 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
-        - Type: forward
+        - RedirectConfig:
+            Host: "#{host}"
+            Path: "/#{path}"
+            Port: 443
+            Protocol: "HTTPS"
+            Query: "#{query}"
+            StatusCode: HTTP_301
+          Type: redirect
           TargetGroupArn: !Ref GeminiWebhttpTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
