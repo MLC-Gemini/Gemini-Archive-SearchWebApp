@@ -11,21 +11,11 @@ pipeline {
   }
 
   parameters {
-    choice(name: 'stack', choices: 'notSet\nbatch\nbatch_efs\nfileserver\ncw\nkms\ns3\nbuildbox\njenkins', description: 'Choose the stack to delete')
     choice(name: 'envgroup', choices: 'nonprod\nprod', description: 'Choose the environment group prod or nonprod')
-    choice(name: 'environment', choices: 'dev\nprod\nsit', description: 'Choose the environment within the environment group')
   }
 
   stages {
-    stage('Checkout framework') {
-      steps {
-        sh "make include ; make pull"
-      }
+    stage('Delete Gemini Environment')
+        { steps { sh "_pipeline/destroy_gemini_web_server.sh ${params.envgroup}" } }
     }
-    stage('Create stack') {
-      steps {
-        sh "STACK=${params.stack} ENVGROUP=${params.envgroup} ENVIRONMENT=${params.environment} bash delete_stack.sh --force"
-      }
-    }
-  }
 }
