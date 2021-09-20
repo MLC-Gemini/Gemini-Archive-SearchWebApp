@@ -31,13 +31,18 @@
                                         url: "/Home/LoginCheck",
                                         dataType: "JSON",
                                         data: { loginStatus: statusResult },
-                                        success: function (result) {
+                                        success: function (response) {
+                                            if (response == true) {
+                                                window.location.href = "/Home/SearchCases/?name=" + result;
+                                            }
+                                            else {
+                                                window.location.href = "/Home/Login";
+                                            }
                                         },
                                         error: function () {
                                             writeLogFileFromView("Error from LoginStatus");
                                         }
                                     });
-                                window.location.href = "/Home/SearchCases/?name="+result;
                             }
                             else {
                                 document.getElementById("loading").innerHTML = " ";
