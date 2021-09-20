@@ -1,9 +1,8 @@
 #!/usr/bin/bash
 
+# set environment variable based on $env_id.
 env_id=$1
 echo $env_id
-
-# set environment variable based on $env_id.
 
 #artifactory variable
 gemini_arti_uid="Srv-gemi-build-np"
