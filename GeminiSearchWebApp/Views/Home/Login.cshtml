@@ -12,6 +12,7 @@
         var aPwd;
         $(document).ready(function () {
             $("#btnLogin").click(function () {
+                document.getElementById("loading").innerHTML = "Loading...";
                 aLoginId = $("#login_id").val();
                 aPwd = $("#pwd").val();
                 var statusResult = false;
@@ -39,6 +40,7 @@
                                 window.location.href = "/Home/SearchCases/?name="+result;
                             }
                             else {
+                                document.getElementById("loading").innerHTML = " ";
                                 $("#errorMsg").html("You are not authorized to view this page");
                             } 
                         },
@@ -106,6 +108,12 @@
             width: 300px;
             outline: thick;
         }
+        #loading {
+            font-family: 'Times New Roman';
+            font-style: normal;
+            font-weight: bolder;
+            text-align: center;
+        }
 
         #btnLogin {
             padding: 0px 20px 0px 20px;
@@ -125,7 +133,7 @@
     <div style="vertical-align:middle;">
         <table style="align-content: center; border: 1px solid black; border-width: thick;">
             <tr>
-                <td align="left" style="padding-right:20px;">User Name:</td>
+                <td align="left" style="padding-right:20px;">Username:</td>
                 <td><input id="login_id" type="text" class="textBoxInput" placeholder="Enter Login ID" /></td>
             </tr>
             <tr>
@@ -135,14 +143,16 @@
             </tr>
             <tr>
                 <td colspan="2" align="center" style="padding-top:0px;">
-                    <button id="btnLogin" name="btnLogin" type="submit">Log On</button>
+                    <button id="btnLogin" name="btnLogin" type="submit">Sign IN</button>
                 </td>
             </tr>
             <tr style="line-height:0px">
                 <td colspan="2" style="padding-top:0px;">
+                    <span id="loading"></span>
                     <label id="errorMsg" />
                 </td>
             </tr>
         </table>
+        <span id="loading"></span>
     </div>
 </body>

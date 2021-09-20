@@ -350,3 +350,4 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.Views.pdb
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.csproj.CopyComplete
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
+C:\Temp\VisualStudio Source\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\SearchLayout.cshtml.g.cs
