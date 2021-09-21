@@ -69,11 +69,11 @@
                             error: function () {
                                 writeLogFileFromView("Error from Login");
                             }
-                       
+
                         });
                 }
 
-            }); 
+            });
 
             function writeLogFileFromView(exFromView) {
                 $.ajax(
@@ -97,6 +97,13 @@
             }
         });
     </script>
+    <script type="text/javascript">
+        window.history.forward();
+        function noBack() {
+            window.history.forward();
+        }
+    </script>
+
     <style>
         html, body {
             width: 100%;
@@ -145,16 +152,17 @@
             #btnLogin:hover {
                 background-color: lightskyblue;
             }
+
             #btnLogin:disabled {
                 background-color: lightskyblue;
             }
+
         #loading {
             font-family: 'Times New Roman';
             font-style: normal;
             font-weight: bolder;
             text-align: center;
         }
-
     </style>
 </head>
 <body>

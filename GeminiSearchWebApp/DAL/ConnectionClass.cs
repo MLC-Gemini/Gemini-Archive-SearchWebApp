@@ -201,7 +201,15 @@ namespace GeminiSearchWebApp.DAL
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
             DataTable dtAction = new DataTable();
-            if (connString != null && userInput!=null)
+            if (selectedCaseId.ToString() != null)
+            {
+                Convert.ToInt32(selectedCaseId);
+            }
+            else
+            {
+                CreateMessageLog("CaseId is empty");
+            }
+            if (connString != null)
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
@@ -231,9 +239,56 @@ namespace GeminiSearchWebApp.DAL
             }
             else
             {
-                CreateMessageLog("Connection String variable or User Input is null");
+                CreateMessageLog("Connection String variable is null");
             }
             return dtAction;
+        }
+
+        public DataTable GetDocumentId(int selectedCaseId)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+            DataTable dtDocId = new DataTable();
+            if (selectedCaseId.ToString() != null)
+            {
+                Convert.ToInt32(selectedCaseId);
+            }
+            else
+            {
+                CreateMessageLog("CaseId is empty");
+            }
+            if (connString != null)
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    SqlCommand dbCommand = new SqlCommand();
+                    dbCommand.Connection = conn;
+                    dbCommand.CommandType = CommandType.StoredProcedure;
+                    dbCommand.CommandText = "[dbo].[usp_GetDocID]";
+                    conn.Open();
+                    try
+                    {
+                        dbCommand.Parameters.Add("@SelectedCaseID", SqlDbType.Int, 20).Value = selectedCaseId;
+
+                        SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                        da.Fill(dtDocId);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CreateMessageLog(ex.Message);
+                        Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+            else
+            {
+                CreateMessageLog("Connection String variable is null");
+            }
+            return dtDocId;
         }
 
         public void CreateLog(string userName)
