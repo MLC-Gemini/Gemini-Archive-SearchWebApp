@@ -63,8 +63,7 @@ Resources:
       Cooldown: 300
       DesiredCapacity: 1
       TargetGroupARNs:
-        - !Ref GeminiWebhttpTargetGroup
-      #  - !Ref GeminiWebhttpsTargetGroup
+        - !Ref GeminiWebTargetGroup
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -89,7 +88,7 @@ Resources:
         - !Ref SecurityGroup
       UserData:
         !Ref UserData1
-
+        
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
@@ -109,7 +108,7 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-  GeminiWebhttpTargetGroup:
+  GeminiWebTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
@@ -133,56 +132,15 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-    GeminiWebhttpListener:
+  GeminiWebListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
-        - RedirectConfig:
-            Host: "#{host}"
-            Path: "/#{path}"
-            Port: 443
-            Protocol: "HTTPS"
-            Query: "#{query}"
-            StatusCode: HTTP_301
-          Type: redirect
-          TargetGroupArn: !Ref GeminiWebhttpTargetGroup
+        - Type: forward
+          TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: TCP
-
-  # GeminiWebhttpsTargetGroup:
-  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
-  #   Properties:
-  #     HealthCheckIntervalSeconds: 30
-  #     HealthCheckPort: traffic-port
-  #     HealthCheckProtocol: TCP
-  #     HealthCheckTimeoutSeconds: 10
-  #     HealthyThresholdCount: 2
-  #     Port: 443
-  #     Protocol: TCP
-  #     TargetGroupAttributes:
-  #       - Key: deregistration_delay.timeout_seconds
-  #         Value: 30
-  #     TargetType: instance
-  #     UnhealthyThresholdCount: 2
-  #     VpcId: !Ref VpcId
-  #     Tags:
-  #       - Key: Owner
-  #         Value: !Ref Owner
-  #       - Key: CostCentre
-  #         Value: !Ref CostCentre
-  #       - Key: ApplicationID
-  #         Value: !Ref ApplicationID          
-
-  # GeminiWebhttpsListener:
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties:
-  #     DefaultActions:
-  #       - Type: forward
-  #         TargetGroupArn: !Ref GeminiWebhttpsTargetGroup
-  #     LoadBalancerArn: !Ref LoadBalancer
-  #     Port: 443
-  #     Protocol: TCP
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -235,13 +193,8 @@ Outputs:
     Value: !Ref LoadBalancer
     Export:
       Name: !Sub "${AWS::StackName}-LoadBalancer"
-  GeminiWebhttpTargetGroup:
+  GeminiWebTargetGroup:
     Description: CTM Target Group
-    Value: !Ref GeminiWebhttpTargetGroup
+    Value: !Ref GeminiWebTargetGroup
     Export:
-      Name: !Sub "${AWS::StackName}-GeminiWebhttpTargetGroup"
-  # GeminiWebhttpsTargetGroup:
-  #   Description: CTM Target Group
-  #   Value: !Ref GeminiWebhttpsTargetGroup
-  #   Export:
-  #     Name: !Sub "${AWS::StackName}-GeminiWebhttpsTargetGroup"
+      Name: !Sub "${AWS::StackName}-GeminiWebTargetGroup"
