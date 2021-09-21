@@ -12,41 +12,18 @@
         var aPwd;
         $(document).ready(function () {
             $("#btnLogin").click(function () {
-                //document.getElementById("loading").innerHTML = "Loading...";
-                //aLoginId = $("#login_id").val();
-                //aPwd = $("#pwd").val();
-                //var statusResult = false;
-                //$.ajax(
-                //    {
-                //        type: "POST",
-                //        url: "/Home/ValidateLogin",
-                //        dataType: "JSON",
-                //        data: { userName: aLoginId, password: aPwd },
-                //        success: function (result) {
-                //            if (result != null) {
-                //                statusResult = true;
-                //                $.ajax(
-                //                    {
-                //                        type: "POST",
-                //                        url: "/Home/LoginCheck",
-                //                        dataType: "JSON",
-                //                        data: { loginStatus: statusResult },
-                //                        success: function (result) {
-                //                        },
-                //                        error: function () {
-                //                            writeLogFileFromView("Error from LoginStatus");
-                //                        }
-                //                    });
-                //                window.location.href = "/Home/SearchCases/?name="+result;
 
-                             if (document.getElementById("login_id").value.length == 0 && document.getElementById("pwd").value.length == 0) {
+                if (document.getElementById("login_id").value.length == 0 && document.getElementById("pwd").value.length == 0) {
                     alert('@ViewBag.emptyCredentials');
+                    location.reload();
                 }
                 else if (document.getElementById("login_id").value.length == 0) {
                     alert('@ViewBag.emptyLogin');
+                    location.reload();
                 }
                 else if (document.getElementById("pwd").value.length == 0) {
                     alert('@ViewBag.emptyPwd');
+                    location.reload();
                 }
                 else {
                     $("#errorMsg").html("");
@@ -70,13 +47,18 @@
                                             url: "/Home/LoginCheck",
                                             dataType: "JSON",
                                             data: { loginStatus: statusResult },
-                                            success: function (result) {
+                                            success: function (response) {
+                                                if (response == true) {
+                                                    window.location.href = "/Home/SearchCases/?name=" + result;
+                                                }
+                                                else {
+                                                    window.location.href = "/Home/Login";
+                                                }
                                             },
                                             error: function () {
                                                 writeLogFileFromView("Error from LoginStatus");
                                             }
                                         });
-                                    window.location.href = "/Home/SearchCases/?name=" + result;
                                 }
                                 else {
                                     document.getElementById("loading").innerHTML = " ";
