@@ -4,7 +4,7 @@
 @{
 
     ViewBag.title = "SearchCases";
-    Layout="SearchLayout.cshtml";
+    Layout = "SearchLayout.cshtml";
 }
 <head>
     <title>Gemini Case Search</title>
@@ -26,10 +26,10 @@
         var caseIdVal;
         var caseTypeVal;
         $(document).ready(function () {
-            @*var loginResult = '@ViewBag.loginStatusResult';
-            if (loginResult=="") {
+            var loginResult = '@ViewBag.loginFinalStatus';
+            if (loginResult.toLowerCase() == "False".toLowerCase()) {
                 window.location.href = "/Home/Login";
-            }*@
+            }
 
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('name')=="") {
@@ -38,6 +38,7 @@
             if (urlParams.has('name') == false) {
                 window.location.href = "/Home/Login";
             }
+
              $.fn.resetForm = function () {
                 $("input").change(function () {
                     if ($.fn.ifEmpty() == false) {
@@ -49,16 +50,6 @@
                         location.reload();
                     }
                 })
-                //$("#dateRange").change(function () {
-                //    if ($.fn.ifEmpty() == false) {
-                //        location.reload();
-                //    }
-                //})
-                //$("#toRange").change(function () {
-                //    if ($.fn.ifEmpty() == false) {
-                //        location.reload();
-                //    }
-                //})
             };
             var empty = false;
             $.fn.ifEmpty = function () {
@@ -72,8 +63,9 @@
                 return false;
             };
             $.fn.SetMaxLength = function () {
-                //alert($('#filter_level').val());
                 $("#Pid").val('');
+                $("input[id='dateRange']").val('');
+                $("input[id='toRange']").val('');
                 if ($('#filter_level').val() == "Account Level") {
                     $("#Pid").prop('maxLength', '20');
                 }
@@ -85,7 +77,6 @@
                 }
             }
 
-           // console.log($.fn.ifEmpty());
             var tableDoc;
             var tableAction;
             $("#btnSearch").click(function () {
@@ -129,23 +120,12 @@
                 }
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
-                }
-                 else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
-                    alert('@ViewBag.customerIdLength');
-                    location.reload();
-                }
-                @*else if ($('#filter_level').val() == "Account Level" && document.getElementById("Pid").value.length > 20) {
-                    alert('@ViewBag.accountIdLength');
-                    location.reload();
-                }
-                else if ($('#filter_level').val() == "Adviser Level" && document.getElementById("Pid").value.length > 5) {
-                    alert('@ViewBag.advisorIdLength');
                     location.reload();
                 }
                  else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
                     alert('@ViewBag.customerIdLength');
                     location.reload();
-                }*@
+                }
                 else {
                     $("#output1").show();
                     $("#output2").show();

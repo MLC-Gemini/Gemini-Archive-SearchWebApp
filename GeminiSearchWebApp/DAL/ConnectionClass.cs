@@ -24,7 +24,7 @@ namespace GeminiSearchWebApp.DAL
         public HomeController homeController;
         public string userName;
         public DateTime loginDateTime;
-        public static int count = 0;
+        public static string getUserName = string.Empty;
 
         public ConnectionClass(IConfiguration _configuration)
         {
@@ -238,12 +238,10 @@ namespace GeminiSearchWebApp.DAL
 
         public void CreateLog(string userName)
         {
+            getUserName = userName;
             loginDateTime = DateTime.Now;
-            if (userName == string.Empty)
-            {
-                userName = "LDCYS12";
-            }
-            
+            userName = "LDCYS12";
+
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {
@@ -290,6 +288,9 @@ namespace GeminiSearchWebApp.DAL
         public void CreateMessageLog(string exDb)
         {
             var exceptionDateTime = DateTime.Now;
+            var uName = getUserName;
+            uName = "LDCYS12";
+
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
             {
@@ -302,15 +303,15 @@ namespace GeminiSearchWebApp.DAL
                     conn.Open();
                     try
                     {
-                        if (userName!=null && exceptionDateTime!=DateTime.MinValue && exDb!=null)
+                        if (uName != null && exceptionDateTime!=DateTime.MinValue && exDb!=null)
                         {
-                            dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = userName;
+                            dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = uName;
                             dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = exceptionDateTime;
                             dbCommand.Parameters.Add("@MessageText", SqlDbType.Text).Value = exDb;
                         }
                         else
                         {
-                            CreateMessageLog("Message Log variables are null");
+                            Console.WriteLine("Message Log variables are null");
                         }
 
                         dbCommand.ExecuteNonQuery();
@@ -329,7 +330,7 @@ namespace GeminiSearchWebApp.DAL
             }
             else
             {
-                CreateMessageLog("Connection String variable is null");
+                Console.WriteLine("Connection String variable is null");
             }
         }
 

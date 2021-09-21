@@ -88,7 +88,7 @@ Resources:
         - !Ref SecurityGroup
       UserData:
         !Ref UserData1
-
+        
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:

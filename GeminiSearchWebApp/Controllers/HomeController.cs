@@ -29,6 +29,7 @@ namespace GeminiSearchWebApp.Controllers
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
         public string loggedInUserName { get; set; }
+        public static bool loginResult = false;
         public HomeController(IConfiguration _configuration)
         {
            
@@ -59,27 +60,47 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
         public IActionResult Login()
         {
             ViewData["Message"] = "Your login page.";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
-            
+
             ViewBag.emptyLogin = config["Appsettings:emptyLogin"];
             ViewBag.emptyPwd = config["Appsettings:emptyPwd"];
             ViewBag.emptyCredentials = config["Appsettings:emptyCredentials"];
-
             return View();
         }
 
         public string ValidateLogin(string userName, string password)
         {
-            loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
-            if (!string.IsNullOrEmpty(loggedInUserName))
+            string result = string.Empty;
+            connectionClass.CreateLog(userName);
+            if (userName != null && password != null)
             {
-                return loginUserNameToJson(loggedInUserName);
+                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                if (!string.IsNullOrEmpty(loggedInUserName))
+                {
+                    result = loginUserNameToJson(loggedInUserName);
+                    return result;
+                }
+                else
+                {
+                    result = null;
+                    connectionClass.CreateMessageLog("Login Username is null");
+                }
             }
-            return null;
+            else
+            {
+                connectionClass.CreateMessageLog("Login Username or Password is null");
+            }
+            return result;
         }
 
         public string loginUserNameToJson(string name)
@@ -89,64 +110,37 @@ namespace GeminiSearchWebApp.Controllers
             return JSONString;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult SearchLayout()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
-        //public IActionResult Login()
-        //{
-        //    ViewData["Message"] = "Your login page.";
 
-        //    return View();
-        //}
-
-
-
-         public string LoginStatusToJson(bool status)
+        public bool LoginCheck(bool loginStatus)
         {
-            string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(status);
-            return JSONString;
-        }
-         //public string LoginCheck(bool loginStatus)
-         //{​​​​​
-         //   string result = string.Empty;
-         //   if (loginStatus == true)
-         //   {​​​​​
-         //       result = LoginStatusToJson(loginStatus);
-         //       SearchCases(result);
-         //       return result;
-         //   }​
-         //    else
-         //   {​​​​​
-         //      result = null;
-         //   }​​​​​ 
-         //   return result;
-
-         //}​​​​​
-
-        public string LoginCheck(bool loginStatus)
-        {
-            string result = string.Empty;
-            if(loginStatus==true)
+            loginResult = loginStatus;
+            bool result = false;
+            if (loginStatus == true)
             {
-                result = LoginStatusToJson(loginStatus);
-                SearchCases(result);
+                loginResult = loginStatus;
+                return loginResult;
             }
             else
             {
-                result = null;
+                result = false;
+                loginResult = result;
             }
             return result;
         }
 
-
-
-
-        public IActionResult SearchCases(string loginStatus)
+        public IActionResult LogOut()
         {
-            ViewData["loginStatusResult"] = loginStatus;
+            loginResult = false;
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult SearchCases()
+        {
+            bool loginValue = loginResult;
             ViewData["Message"] = "Your Search Page";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
@@ -161,6 +155,7 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
             ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.loginFinalStatus = loginValue;
             return View();
         }
 

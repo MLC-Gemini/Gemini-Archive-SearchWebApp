@@ -36,8 +36,14 @@ namespace GeminiSearchWebApp
         {
             try
             {
-                //services.AddHttpContextAccessor();
                 services.AddControllersWithViews();
+                services.AddDistributedMemoryCache();
+                services.AddMvc().AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AddPageRoute("/Home/Login", "");
+                });
+
+                //services.AddHttpContextAccessor();
                 //services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
                 //services.AddAuthorization(options =>
                 //{
@@ -53,7 +59,6 @@ namespace GeminiSearchWebApp
 
                 //    config.Filters.Add(new AuthorizeFilter(policy));
                 //});
-                services.AddDistributedMemoryCache();
 
                 //services.AddSession(options =>
                 //{
@@ -96,7 +101,7 @@ namespace GeminiSearchWebApp
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                        pattern: "{controller=Home}/{action=Login}/{id?}");
                 });
 
             }

@@ -12,14 +12,18 @@
         var aPwd;
         $(document).ready(function () {
             $("#btnLogin").click(function () {
+
                 if (document.getElementById("login_id").value.length == 0 && document.getElementById("pwd").value.length == 0) {
                     alert('@ViewBag.emptyCredentials');
+                    location.reload();
                 }
                 else if (document.getElementById("login_id").value.length == 0) {
                     alert('@ViewBag.emptyLogin');
+                    location.reload();
                 }
                 else if (document.getElementById("pwd").value.length == 0) {
                     alert('@ViewBag.emptyPwd');
+                    location.reload();
                 }
                 else {
                     $("#errorMsg").html("");
@@ -43,13 +47,18 @@
                                             url: "/Home/LoginCheck",
                                             dataType: "JSON",
                                             data: { loginStatus: statusResult },
-                                            success: function (result) {
+                                            success: function (response) {
+                                                if (response == true) {
+                                                    window.location.href = "/Home/SearchCases/?name=" + result;
+                                                }
+                                                else {
+                                                    window.location.href = "/Home/Login";
+                                                }
                                             },
                                             error: function () {
                                                 writeLogFileFromView("Error from LoginStatus");
                                             }
                                         });
-                                    window.location.href = "/Home/SearchCases/?name=" + result;
                                 }
                                 else {
                                     document.getElementById("loading").innerHTML = " ";
@@ -60,10 +69,12 @@
                             error: function () {
                                 writeLogFileFromView("Error from Login");
                             }
+                       
                         });
                 }
 
-            });
+            }); 
+
             function writeLogFileFromView(exFromView) {
                 $.ajax(
                     {
@@ -122,12 +133,6 @@
             width: 300px;
             outline: thick;
         }
-        #loading {
-            font-family: 'Times New Roman';
-            font-style: normal;
-            font-weight: bolder;
-            text-align: center;
-        }
 
         #btnLogin {
             padding: 0px 20px 0px 20px;
@@ -143,6 +148,12 @@
             #btnLogin:disabled {
                 background-color: lightskyblue;
             }
+        #loading {
+            font-family: 'Times New Roman';
+            font-style: normal;
+            font-weight: bolder;
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -170,6 +181,5 @@
                 </td>
             </tr>
         </table>
-        <span id="loading"></span>
     </div>
 </body>
