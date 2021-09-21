@@ -12,44 +12,58 @@
         var aPwd;
         $(document).ready(function () {
             $("#btnLogin").click(function () {
-                document.getElementById("loading").innerHTML = "Loading...";
-                aLoginId = $("#login_id").val();
-                aPwd = $("#pwd").val();
-                var statusResult = false;
-                $.ajax(
-                    {
-                        type: "POST",
-                        url: "/Home/ValidateLogin",
-                        dataType: "JSON",
-                        data: { userName: aLoginId, password: aPwd },
-                        success: function (result) {
-                            if (result != null) {
-                                statusResult = true;
-                                $.ajax(
-                                    {
-                                        type: "POST",
-                                        url: "/Home/LoginCheck",
-                                        dataType: "JSON",
-                                        data: { loginStatus: statusResult },
-                                        success: function (result) {
-                                        },
-                                        error: function () {
-                                            writeLogFileFromView("Error from LoginStatus");
-                                        }
-                                    });
-                                window.location.href = "/Home/SearchCases/?name="+result;
+                if (document.getElementById("login_id").value.length == 0 && document.getElementById("pwd").value.length == 0) {
+                    alert('@ViewBag.emptyCredentials');
+                }
+                else if (document.getElementById("login_id").value.length == 0) {
+                    alert('@ViewBag.emptyLogin');
+                }
+                else if (document.getElementById("pwd").value.length == 0) {
+                    alert('@ViewBag.emptyPwd');
+                }
+                else {
+                    $("#errorMsg").html("");
+                    document.getElementById("loading").innerHTML = "Loading...";
+                    $("#btnLogin").attr("disabled", true);
+                    aLoginId = $("#login_id").val();
+                    aPwd = $("#pwd").val();
+                    var statusResult = false;
+                    $.ajax(
+                        {
+                            type: "POST",
+                            url: "/Home/ValidateLogin",
+                            dataType: "JSON",
+                            data: { userName: aLoginId, password: aPwd },
+                            success: function (result) {
+                                if (result != null) {
+                                    statusResult = true;
+                                    $.ajax(
+                                        {
+                                            type: "POST",
+                                            url: "/Home/LoginCheck",
+                                            dataType: "JSON",
+                                            data: { loginStatus: statusResult },
+                                            success: function (result) {
+                                            },
+                                            error: function () {
+                                                writeLogFileFromView("Error from LoginStatus");
+                                            }
+                                        });
+                                    window.location.href = "/Home/SearchCases/?name=" + result;
+                                }
+                                else {
+                                    document.getElementById("loading").innerHTML = " ";
+                                    $("#btnLogin").attr("disabled", false);
+                                    $("#errorMsg").html("You are not authorized to view this page");
+                                }
+                            },
+                            error: function () {
+                                writeLogFileFromView("Error from Login");
                             }
-                            else {
-                                document.getElementById("loading").innerHTML = " ";
-                                $("#errorMsg").html("You are not authorized to view this page");
-                            } 
-                        },
-                        error: function () {
-                            writeLogFileFromView("Error from Login");
-                        }
-                    });
-            });
+                        });
+                }
 
+            });
             function writeLogFileFromView(exFromView) {
                 $.ajax(
                     {
@@ -126,6 +140,9 @@
             #btnLogin:hover {
                 background-color: lightskyblue;
             }
+            #btnLogin:disabled {
+                background-color: lightskyblue;
+            }
 
     </style>
 </head>
@@ -139,11 +156,11 @@
             <tr>
                 <td align="left" style="padding-right: 20px; padding-top: 0px;">Password:</td>
                 <td style="padding-top:0px;">
-                    <input id="pwd" type="password" class="textBoxInput" /></td>
+                    <input id="pwd" type="password" class="textBoxInput" placeholder="Enter Password" /></td>
             </tr>
             <tr>
                 <td colspan="2" align="center" style="padding-top:0px;">
-                    <button id="btnLogin" name="btnLogin" type="submit">Sign IN</button>
+                    <button id="btnLogin" name="btnLogin" type="submit">Sign In</button>
                 </td>
             </tr>
             <tr style="line-height:0px">
