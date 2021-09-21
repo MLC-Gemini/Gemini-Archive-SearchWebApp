@@ -100,7 +100,7 @@ Resources:
       Scheme: internal
       Name: !Sub "${AWS::StackName}-LoadBalancer"
       Subnets: !Ref Subnets
-      Type: network
+      Type: application
       Tags:
         - Key: Owner
           Value: !Ref Owner
