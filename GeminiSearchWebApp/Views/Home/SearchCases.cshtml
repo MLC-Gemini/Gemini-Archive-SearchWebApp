@@ -50,16 +50,6 @@
                         location.reload();
                     }
                 })
-                //$("#dateRange").change(function () {
-                //    if ($.fn.ifEmpty() == false) {
-                //        location.reload();
-                //    }
-                //})
-                //$("#toRange").change(function () {
-                //    if ($.fn.ifEmpty() == false) {
-                //        location.reload();
-                //    }
-                //})
             };
             var empty = false;
             $.fn.ifEmpty = function () {
@@ -74,6 +64,8 @@
             };
             $.fn.SetMaxLength = function () {
                 $("#Pid").val('');
+                $("input[id='dateRange']").val('');
+                $("input[id='toRange']").val('');
                 if ($('#filter_level').val() == "Account Level") {
                     $("#Pid").prop('maxLength', '20');
                 }
@@ -128,6 +120,7 @@
                 }
                 else if ((Date.parse(startDate)) >= (Date.parse(endDate))) {
                     alert('@ViewBag.fromDateGreaterThanToDate');
+                    location.reload();
                 }
                  else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
                     alert('@ViewBag.customerIdLength');

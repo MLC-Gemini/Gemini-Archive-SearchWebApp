@@ -81,6 +81,7 @@ namespace GeminiSearchWebApp.Controllers
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
+            connectionClass.CreateLog(userName);
             if (userName != null && password != null)
             {
                 loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");

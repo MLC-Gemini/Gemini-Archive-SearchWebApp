@@ -55,7 +55,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
-                connectionClass.CreateMessageLog("Search Response is null");
+                connectionClass.CreateMessageLog("The supplied credentials are invalid");
                 return null;
             }
         }
@@ -83,7 +83,6 @@ namespace GeminiSearchWebApp.DAL
                 {
                     resultDta = false;
                 }
-                connectionClass.CreateLog(username);
             }
             catch (Exception)
             {
