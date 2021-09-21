@@ -103,6 +103,8 @@ namespace GeminiSearchWebApp.Controllers
             return result;
         }
 
+        
+
         public IActionResult SearchLayout()
         {
             return View();
@@ -190,10 +192,13 @@ namespace GeminiSearchWebApp.Controllers
                 connectionClass.CreateMessageLog(ex.Message);
                 Console.WriteLine("error");
             }
-
-           return TableToJson(dt);
+                     
+            return TableToJson(dt);
 
         }
+
+       
+
 
         public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
         {
@@ -238,6 +243,8 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
+
+       
 
         public string GetActionRecord(int selectedCaseId)
         {
