@@ -87,10 +87,8 @@ Resources:
       SecurityGroups:
         - !Ref SecurityGroup
       UserData:
-        #!Join ["", [!Ref UserData1]]
-        - !Ref UserData1
-        #!Join ["", [!Ref UserData1, !Ref UserData2]]
-
+        !Ref UserData1
+        
   LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
