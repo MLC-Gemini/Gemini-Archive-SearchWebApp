@@ -382,7 +382,17 @@
                                                                     writeLogFileFromView(e);
                                                                     console.log(e);
                                                                 }
-
+                                                                $.ajax(
+                                                                    {
+                                                                        type: "POST",
+                                                                        url: "/Home/GetDocId",
+                                                                        dataType: "JSON",
+                                                                        data: { caseId: selectedCaseId },
+                                                                        success: function (comeback) { },
+                                                                        error: function () {
+                                                                            writeLogFileFromView("Error will fetching Document Id");
+                                                                        }
+                                                                    });
                                                                 clicks = 0;
 
                                                             }, DELAY);

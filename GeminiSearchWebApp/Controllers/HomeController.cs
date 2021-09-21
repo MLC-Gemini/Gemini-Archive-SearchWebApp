@@ -87,7 +87,7 @@ namespace GeminiSearchWebApp.Controllers
                 loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
                 if (!string.IsNullOrEmpty(loggedInUserName))
                 {
-                    result = loginUserNameToJson(loggedInUserName);
+                    result = JsonConvert.SerializeObject(loggedInUserName);
                     return result;
                 }
                 else
@@ -103,12 +103,7 @@ namespace GeminiSearchWebApp.Controllers
             return result;
         }
 
-        public string loginUserNameToJson(string name)
-        {
-            string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(name);
-            return JSONString;
-        }
+        
 
         public IActionResult SearchLayout()
         {
@@ -197,18 +192,12 @@ namespace GeminiSearchWebApp.Controllers
                 connectionClass.CreateMessageLog(ex.Message);
                 Console.WriteLine("error");
             }
-
-           return DataTableToJSONWithJSONNet(dt);
+                     
+            return TableToJson(dt);
 
         }
 
-        public string DataTableToJSONWithJSONNet(DataTable table)
-        {
-            string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(table);
-            return JSONString;
-        }
-
+       
 
 
         public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
@@ -251,17 +240,11 @@ namespace GeminiSearchWebApp.Controllers
                 Console.WriteLine("error");
             }
 
-            return CasesToJson(dt);
+            return TableToJson(dt);
 
         }
 
-        public string CasesToJson(DataTable table)
-        {
-            string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(table);
-            return JSONString;
-        }
-
+       
 
         public string GetActionRecord(int selectedCaseId)
         {
@@ -284,11 +267,11 @@ namespace GeminiSearchWebApp.Controllers
                 connectionClass.CreateMessageLog("CaseId passed to GetActionRecord method in HomeController is null");
             }
 
-            return ActionToJson(dt);
+            return TableToJson(dt);
 
         }
 
-        public string ActionToJson(DataTable table)
+        public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
             JSONString = JsonConvert.SerializeObject(table);
@@ -298,6 +281,13 @@ namespace GeminiSearchWebApp.Controllers
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
+        }
+
+        public string GetDocId(int caseId)
+        {
+            string docId = string.Empty;
+            docId = JsonConvert.SerializeObject(connectionClass.GetDocumentId(caseId));
+            return docId;
         }
 
         // code for PI tower service call
