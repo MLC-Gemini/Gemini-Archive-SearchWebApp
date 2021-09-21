@@ -69,6 +69,12 @@ namespace GeminiSearchWebApp.Controllers
         public IActionResult Login()
         {
             ViewData["Message"] = "Your login page.";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+
+            ViewBag.emptyLogin = config["Appsettings:emptyLogin"];
+            ViewBag.emptyPwd = config["Appsettings:emptyPwd"];
+            ViewBag.emptyCredentials = config["Appsettings:emptyCredentials"];
             return View();
         }
 
