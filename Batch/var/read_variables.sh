@@ -12,8 +12,8 @@ INSTANCE_TYPE_BATCH="t3.medium"
 AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
 
 #artifactory variable
-gemini_arti_uid="Srv-gemi-build-np"
-gemini_arti_ssm="/gemini_archive_web/artifactory"
+gemini_arti_ssm_uid="/gemini_archive_web/artifactory_uid"
+gemini_arti_ssm_pass="/gemini_archive_web/artifactory_pass"
 
 # SSL Cert SSM parameter store variable
 SSL_KEY="/gemini_archive_web/ssl_key"

@@ -10,7 +10,8 @@ export no_proxy=localhost,169.254.169.254,hip.ext.national.com.au,github.aus.the
 #export no_proxy=$NO_PROXY
 
 # Getting Gemini artifactory service account password form AWS SSM parameter.
-gemini_login_pwd=`aws ssm get-parameter --name $gemini_arti_ssm --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
+gemini_arti_uid=`aws ssm get-parameter --name $gemini_arti_ssm_uid --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
+gemini_login_pwd=`aws ssm get-parameter --name $gemini_arti_ssm_pass --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
 
 if [ ! -d $stage_folder ]; then
     mkdir $stage_folder
