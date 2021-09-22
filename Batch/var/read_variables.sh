@@ -64,6 +64,7 @@ if [[ $env_id == 'nonprod' ]]; then
 
    # Route53 DNS Variable
     GEMINI_DNS_ZONE_NAME="gemini.awsnp.national.com.au"
+    GEMINI_DNS_ZONE_ID="Z06453042CMJI49LOR7NB"
     GEMINIWEB_DNS="geminiarchive-app-tst"
 
 elif [[ $env_id == 'prod' ]]; then
