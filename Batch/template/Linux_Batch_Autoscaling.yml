@@ -59,7 +59,7 @@ Resources:
       AutoScalingGroupName: !Sub "${AWS::StackName}-ASG"
       VPCZoneIdentifier: !Ref Subnets
       MinSize: 1
-      MaxSize: 1
+      MaxSize: 2
       Cooldown: 300
       DesiredCapacity: 1
       TargetGroupARNs:
