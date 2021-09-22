@@ -37,7 +37,7 @@ if [[ $env_id == 'nonprod' ]]; then
     SSHACCESSCIDR="10.0.0.0/8"
     GEM_KMS="/gemini_archive_web/ec2_key"
     BATCH_SERVER_SIZE=50
-    INSTANCE_TYPE_BATCH="t3.small"
+    INSTANCE_TYPE_BATCH="t3.medium"
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
 
     # Aws Tags
