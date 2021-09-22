@@ -9,7 +9,10 @@ gemini_arti_uid="Srv-gemi-build-np"
 gemini_arti_ssm="/gemini_archive_web/artifactory"
 
 # SSL Cert SSM parameter store variable
-SSL_Key="/gemini_archive_web/ssl_key"
+SSL_KEY="/gemini_archive_web/ssl_key"
+SSL_CERT="/gemini_archive_web/ssl_cert"
+SSL_CHAIN1="/gemini_archive_web/ssl_chain1"
+SSL_CHAIN2="/gemini_archive_web/ssl_chain2"
 
 #NO_PROXY=localhost,169.254.169.254,hip.ext.national.com.au,github.aus.thenational.com,artifactory.ext.national.com.au
 
