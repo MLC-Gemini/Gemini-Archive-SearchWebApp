@@ -61,6 +61,10 @@ if [[ $env_id == 'nonprod' ]]; then
     IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxNonProd"
 
+   # Route53 DNS Variable
+    GEMINI_DNS_ZONE_NAME="gemini.awsnp.national.com.au"
+    GEMINIWEB_DNS="geminiarchive-app-tst"
+
 elif [[ $env_id == 'prod' ]]; then
   echo "The variable for prod env"
 
