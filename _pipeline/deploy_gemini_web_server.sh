@@ -109,7 +109,7 @@ bash tmp_launch_asg_$$.sh
  echo $GEMINI_DNS_ZONE_NAME
  echo $lb_dns
 
- ./aws/aws_set_dns.sh $env_id $GEMINIWEB_DNS.$GEMINI_DNS_ZONE_NAME $lb_dns
+ ./Batch/aws_set_dns.sh $env_id $GEMINIWEB_DNS.$GEMINI_DNS_ZONE_NAME $lb_dns
 
 # ##Added below code as CAST requirement to verify the resource is up and running
  while [[   $(aws ec2 describe-instances --instance-id  \

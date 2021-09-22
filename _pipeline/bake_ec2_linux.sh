@@ -98,7 +98,10 @@ do
 done
 
 # Getting the SSL certificate (key and cert) file from AWS SSM parameter store and outputting to local file
-aws --region "ap-southeast-2" ssm get-parameter --name SSL_Key --with-decryption --output text --query Parameter.Value > ssl_key.key
+aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.key
+aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
+aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
+aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 
 echo "- Copy source code to image"
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/gemini_web_staging/* ec2-user@$endpoint:/tmp
@@ -108,7 +111,8 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published 
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ssl/* ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem ssl_key.key ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.key ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.pem ec2-user@$endpoint:/tmp
 
 echo "3. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
