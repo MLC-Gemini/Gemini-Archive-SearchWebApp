@@ -152,36 +152,12 @@ Resources:
       Port: 80
       Protocol: "HTTP"
 
-  GeminiWeb1TargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      HealthCheckIntervalSeconds: 30
-      HealthCheckPort: traffic-port
-      HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: 10
-      HealthyThresholdCount: 2
-      Port: 443
-      Protocol: HTTPS
-      TargetGroupAttributes:
-        - Key: deregistration_delay.timeout_seconds
-          Value: 30
-      TargetType: instance
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref VpcId
-      Tags:
-        - Key: Owner
-          Value: !Ref Owner
-        - Key: CostCentre
-          Value: !Ref CostCentre
-        - Key: ApplicationID
-          Value: !Ref ApplicationID
-
   GeminiWeb1Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref GeminiWeb1TargetGroup
+          TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
       Protocol: "HTTPS"
