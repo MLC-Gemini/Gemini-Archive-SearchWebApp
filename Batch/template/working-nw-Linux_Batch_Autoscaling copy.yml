@@ -96,9 +96,7 @@ Resources:
       LoadBalancerAttributes:
         - Key: load_balancing.cross_zone.enabled
           Value: true
-      Scheme: internal
-      SecurityGroups: 
-        - !Ref SecurityGroup 
+      Scheme: internal 
       Name: !Sub "${AWS::StackName}-LoadBalancer"
       Subnets: !Ref Subnets                                          
       Type: network
