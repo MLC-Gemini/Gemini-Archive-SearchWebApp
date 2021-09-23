@@ -99,6 +99,8 @@ Resources:
       Scheme: internal
       Name: !Sub "${AWS::StackName}-LoadBalancer"
       Subnets: !Ref Subnets
+      SecurityGroups:
+        - !Ref SecurityGroup
       Type: network
       Tags:
         - Key: Owner
