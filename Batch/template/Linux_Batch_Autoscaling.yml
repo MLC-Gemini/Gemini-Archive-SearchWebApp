@@ -94,9 +94,9 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      LoadBalancerAttributes:
-        # - Key: load_balancing.cross_zone.enabled
-        #   Value: true
+      # LoadBalancerAttributes:
+      #   - Key: load_balancing.cross_zone.enabled
+      #     Value: true
       Scheme: internal
       Name: !Sub "${AWS::StackName}-LoadBalancer"
       Subnets: !Ref Subnets
@@ -139,18 +139,25 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
-        - Type: forward
+        - Type: "redirect"
+          RedirectConfig:
+            Host: "#{host}"
+            Path: "/#{path}"
+            Port: 443
+            Protocol: "HTTPS"
+            Query: "#{query}"
+            StatusCode: "HTTP_301"
           TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
-      Protocol: HTTP
+      Protocol: "HTTP"
 
   GeminiWeb1TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
       HealthCheckPort: traffic-port
-      HealthCheckProtocol: HTTPS
+      HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 2
       Port: 443
@@ -177,7 +184,8 @@ Resources:
           TargetGroupArn: !Ref GeminiWeb1TargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
-      Protocol: HTTPS  
+      Protocol: "HTTPS"
+      SSLCertificateId: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
