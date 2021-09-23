@@ -178,12 +178,14 @@ Resources:
   GeminiWebhttpsListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
+      Certificates: 
+        - jenkins.nonprod.gemini.extnp.national.com.au
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref GeminiWebhttpsTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
-      Protocol: HTTPS
+      Protocol: HTTP
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
