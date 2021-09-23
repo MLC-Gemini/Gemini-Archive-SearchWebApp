@@ -179,7 +179,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       Certificates: 
-        - jenkins.nonprod.gemini.extnp.national.com.au
+        - arn:aws:iam::998622627571:server-certificate/jenkins.nonprod.gemini.extnp.national.com.au
       DefaultActions:
         - Type: forward
           TargetGroupArn: !Ref GeminiWebhttpsTargetGroup
