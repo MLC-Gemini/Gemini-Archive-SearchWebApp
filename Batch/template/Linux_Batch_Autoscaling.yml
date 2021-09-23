@@ -93,15 +93,15 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      LoadBalancerAttributes:
-        - Key: load_balancing.cross_zone.enabled
-          Value: true
+      # LoadBalancerAttributes:
+      #   - Key: load_balancing.cross_zone.enabled
+      #     Value: true
       Scheme: internal
+      SecurityGroups: 
+        - !Ref SecurityGroup 
       Name: !Sub "${AWS::StackName}-LoadBalancer"
-      Subnets: !Ref Subnets
-      SecurityGroups:
-        - !Ref SecurityGroup
-      Type: network
+      Subnets: !Ref Subnets                                          
+      Type: application
       Tags:
         - Key: Owner
           Value: !Ref Owner
