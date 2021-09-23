@@ -64,6 +64,7 @@ Resources:
       DesiredCapacity: 1
       TargetGroupARNs:
         - !Ref GeminiWebTargetGroup
+        - !Ref GeminiWeb1TargetGroup
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -93,15 +94,15 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      # LoadBalancerAttributes:
-      #   - Key: load_balancing.cross_zone.enabled
-      #     Value: true
+      LoadBalancerAttributes:
+        - Key: load_balancing.cross_zone.enabled
+          Value: true
       Scheme: internal
-      SecurityGroups: 
-        - !Ref SecurityGroup 
       Name: !Sub "${AWS::StackName}-LoadBalancer"
-      Subnets: !Ref Subnets                                          
-      Type: application
+      Subnets: !Ref Subnets
+      SecurityGroups:
+        - !Ref SecurityGroup
+      Type: network
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -110,7 +111,7 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-  GeminiWebhttpTargetGroup:
+  GeminiWebTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
@@ -134,24 +135,17 @@ Resources:
         - Key: ApplicationID
           Value: !Ref ApplicationID
 
-  GeminiWebhttpListener:
+  GeminiWebListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       DefaultActions:
-        - RedirectConfig:
-            Host: "#{host}"
-            Path: "/#{path}"
-            Port: 443
-            Protocol: "HTTPS"
-            Query: "#{query}"
-            StatusCode: HTTP_301
-          Type: redirect
-          TargetGroupArn: !Ref GeminiWebhttpTargetGroup
+        - Type: forward
+          TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
       Protocol: HTTP
 
-  GeminiWebhttpsTargetGroup:
+  GeminiWeb1TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 30
@@ -173,19 +167,17 @@ Resources:
         - Key: CostCentre
           Value: !Ref CostCentre
         - Key: ApplicationID
-          Value: !Ref ApplicationID          
+          Value: !Ref ApplicationID
 
-  GeminiWebhttpsListener:
+  GeminiWeb1Listener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
-      Certificates: 
-        - arn:aws:iam::998622627571:server-certificate/jenkins.nonprod.gemini.extnp.national.com.au
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref GeminiWebhttpsTargetGroup
+          TargetGroupArn: !Ref GeminiWeb1TargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
-      Protocol: HTTP
+      Protocol: HTTPS  
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
