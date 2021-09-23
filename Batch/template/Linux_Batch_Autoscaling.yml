@@ -150,11 +150,11 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 30
       HealthCheckPort: traffic-port
-      HealthCheckProtocol: HTTPS
+      HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 2
       Port: 443
-      Protocol: HTTPS
+      Protocol: HTTP
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 30
@@ -177,7 +177,7 @@ Resources:
           TargetGroupArn: !Ref GeminiWeb1TargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
-      Protocol: HTTPS  
+      Protocol: HTTP
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
