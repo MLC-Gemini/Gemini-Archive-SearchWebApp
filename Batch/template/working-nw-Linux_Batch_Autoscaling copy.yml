@@ -93,15 +93,15 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      # LoadBalancerAttributes:
-      #   - Key: load_balancing.cross_zone.enabled
-      #     Value: true
+      LoadBalancerAttributes:
+        - Key: load_balancing.cross_zone.enabled
+          Value: true
       Scheme: internal
       SecurityGroups: 
         - !Ref SecurityGroup 
       Name: !Sub "${AWS::StackName}-LoadBalancer"
       Subnets: !Ref Subnets                                          
-      Type: application
+      Type: network
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -115,11 +115,11 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 30
       HealthCheckPort: traffic-port
-      HealthCheckProtocol: HTTP
+      HealthCheckProtocol: TCP
       HealthCheckTimeoutSeconds: 10
       HealthyThresholdCount: 2
       Port: 80
-      Protocol: HTTP
+      Protocol: TCP
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 30
@@ -142,7 +142,7 @@ Resources:
           TargetGroupArn: !Ref GeminiWebTargetGroup
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
-      Protocol: HTTP
+      Protocol: TCP
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
