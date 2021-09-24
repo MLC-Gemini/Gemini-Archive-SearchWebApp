@@ -122,8 +122,6 @@ Resources:
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: 30
-      Matcher: 
-        - HttpCode: "200"
       TargetType: "instance"
       UnhealthyThresholdCount: 2
       VpcId: !Ref VpcId
