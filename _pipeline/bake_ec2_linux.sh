@@ -8,6 +8,8 @@ cleanup() {
 
 	rm -f kms_policy_ami_$$.json
 	rm -f encrypted_device_mapping_$$.json
+  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.key
+  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 	#$Git_Working_Folder value is returned by aws/checkout_stable_release.sh
 	#rm -rf $Git_Working_Folder
 	echo "Baking Done ."
