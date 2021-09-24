@@ -64,6 +64,7 @@ aws ec2 run-instances \
     --key-name "tmpkey-GEMINI-WEB-$env_id$$" \
     --iam-instance-profile Name=$IAM_PROFILE_PROV \
     | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
+echo $instance_id    
 aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
 
 echo "- Wait for instance status OK"
