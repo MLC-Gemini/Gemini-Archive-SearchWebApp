@@ -95,6 +95,8 @@ echo "2. Start Autoscling group using 100% backed ami"
   export AppCategory="${T_AppCategory}"
   export SupportGroup="${T_SupportGroup}"
   export PowerMgt="${T_EC2_PowerMgt}"
+  export OWNER_ACCOUNT="${OWNER_ACCOUNT}"
+  export ALB_SSL_CERT_NAME="${ALB_SSL_CERT_NAME}"
 
 envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
 bash tmp_launch_asg_$$.sh

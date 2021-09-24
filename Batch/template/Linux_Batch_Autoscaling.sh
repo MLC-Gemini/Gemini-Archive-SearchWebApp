@@ -18,6 +18,8 @@ aws cloudformation deploy \
                   "ApplicationID=$ApplicationID" \
                   "Owner=$Owner" \
                   "UserData1=$(cat tmp_batch_userdata_$$|openssl base64 -A)" \
+                  "OwnerAccount=${OWNER_ACCOUNT}"
+                  "AlbSSLCertName=${ALB_SSL_CERT_NAME}"
         --tags \
                   "CostCentre=$CostCentre" \
                   "Name=GeminiWeb-$Name" \
