@@ -125,7 +125,7 @@ Resources:
       TargetType: "instance"
       UnhealthyThresholdCount: 2
       VpcId: !Ref VpcId
-      Name: "${AWS::StackName}-TargetGroup"
+      Name: "GeminiWebTargetGroup"
       Tags:
         - Key: Owner
           Value: !Ref Owner
@@ -159,7 +159,7 @@ Resources:
       LoadBalancerArn: !Ref LoadBalancer
       Port: 443
       Protocol: "HTTP"
-      SslPolicy: "ELBSecurityPolicy-2016-08"
+      SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
       Certificates: 
         - CertificateArn: arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au
       #SSLCertificateId: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
