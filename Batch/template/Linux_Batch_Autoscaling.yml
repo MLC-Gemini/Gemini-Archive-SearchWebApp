@@ -49,6 +49,14 @@ Parameters:
   UserData1:
     Type: String
     Default: ''
+  OwnerAccount:
+    Description: AWS Owner Account nunmber
+    Type: String
+    Default: ''
+  AlbSSLCertName:
+    Description: Mandatory ALB SSL Cert Name
+    Type: String
+    Default: ''
   
 Resources:
   
@@ -161,8 +169,8 @@ Resources:
       Protocol: "HTTPS"
       SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
       Certificates: 
-        - CertificateArn: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
-      #SSLCertificateId: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
+        - CertificateArn: "arn:aws:iam::${OWNER_ACCOUNT}:server-certificate/${ALB_SSL_CERT_NAME}"
+       # - CertificateArn: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup

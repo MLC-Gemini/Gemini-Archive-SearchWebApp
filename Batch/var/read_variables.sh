@@ -67,6 +67,9 @@ if [[ $env_id == 'nonprod' ]]; then
     GEMINI_DNS_ZONE_ID="Z06453042CMJI49LOR7NB"
     GEMINIWEB_DNS="geminiarchive-app-tst"
 
+   # ALB Listner SSL certificate name
+    ALB_SSL_CERT_NAME="geminiarchive-app-tst.gemini.awsnp.national.com.au" 
+
 elif [[ $env_id == 'prod' ]]; then
   echo "The variable for prod env"
 
