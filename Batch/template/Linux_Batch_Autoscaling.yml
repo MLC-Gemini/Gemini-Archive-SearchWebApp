@@ -148,7 +148,7 @@ Resources:
           Type: "redirect"
       LoadBalancerArn: !Ref LoadBalancer
       Port: 80
-      Protocol: "HTTP"     
+      Protocol: "HTTP"
 
   GeminiWebHTTPSListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -161,7 +161,7 @@ Resources:
       Protocol: "HTTPS"
       SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
       Certificates: 
-        - CertificateArn: arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au
+        - CertificateArn: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
       #SSLCertificateId: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
 
   SecurityGroup:
