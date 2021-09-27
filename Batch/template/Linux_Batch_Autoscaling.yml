@@ -57,6 +57,8 @@ Parameters:
     Description: Mandatory ALB SSL Cert Name
     Type: String
     Default: ''
+  vars_files:
+    - ../vars/read_variables.sh
   
 Resources:
   
@@ -228,3 +230,10 @@ Outputs:
     Value: !Ref GeminiWebTargetGroup
     Export:
       Name: !Sub "${AWS::StackName}-GeminiWebTargetGroup"
+  SSLCertvariableTest:
+    Description: Test varibale owner name
+    Value: !Ref OwnerAccount
+  SSLCertvariableTest1:
+    Description: Test varibale cert name 
+    Value: !Ref AlbSSLCertName
+    
