@@ -50,7 +50,7 @@ Parameters:
     Type: String
     Default: ''
   OwnerAccount:
-    Description: AWS Owner Account nunmber
+    Description: Mandatory AWS Owner Account nunmber
     Type: String
     AllowedPattern: .+
   AlbSSLCertName:
@@ -170,8 +170,6 @@ Resources:
       SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
       Certificates: 
         - CertificateArn: !Sub "arn:aws:iam::${OwnerAccount}:server-certificate/${AlbSSLCertName}"
-       # - CertificateArn: !Join ["arn:aws:iam::", [!Ref OwnerAccount, ":server-certificate",!Ref AlbSSLCertName]]
-       # - CertificateArn: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
 
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
