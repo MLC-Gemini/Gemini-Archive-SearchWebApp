@@ -169,7 +169,7 @@ Resources:
       Protocol: "HTTPS"
       SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
       Certificates: 
-        - CertificateArn: "arn:aws:iam::${OWNER_ACCOUNT}:server-certificate/${ALB_SSL_CERT_NAME}"
+        - CertificateArn: !Sub "arn:aws:iam::${OwnerAccount}:server-certificate/${AlbSSLCertName}"
        # - CertificateArn: "arn:aws:iam::998622627571:server-certificate/geminiarchive-app-tst.gemini.awsnp.national.com.au"
 
   SecurityGroup:
