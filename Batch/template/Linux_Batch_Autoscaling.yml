@@ -231,14 +231,14 @@ Outputs:
     Description: Gemini Web HTTP Listener
     Value: !Ref GeminiWebHTTPListener
     Export:
-      Name: !Sub "${AWS::StackName}-GeminiWebHTTPListener
+      Name: !Sub "${AWS::StackName}-GeminiWebHTTPListener"
   GeminiWebHTTPSListener:
     Description: Gemini Web HTTPS Listener
     Value: !Ref GeminiWebHTTPSListener
     Export:
-      Name: !Sub "${AWS::StackName}-GeminiWebHTTPSListener
+      Name: !Sub "${AWS::StackName}-GeminiWebHTTPSListener"
   SecurityGroup:
     Description: Gemini Web Security Group
     Value: !Ref SecurityGroup
     Export:
-      Name: !Sub "${AWS::StackName}-SecurityGroup
+      Name: !Sub "${AWS::StackName}-SecurityGroup"
