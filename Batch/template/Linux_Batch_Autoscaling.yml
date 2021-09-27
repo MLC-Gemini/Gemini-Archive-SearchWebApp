@@ -174,7 +174,7 @@ Resources:
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Enables access
+      GroupDescription: Gemini Web Enables access
       GroupName: !Sub "${AWS::StackName}-SG"
       VpcId: !Ref VpcId
       SecurityGroupEgress:
