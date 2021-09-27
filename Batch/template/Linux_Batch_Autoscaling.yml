@@ -52,11 +52,11 @@ Parameters:
   OwnerAccount:
     Description: AWS Owner Account nunmber
     Type: String
-    AllowedPattern: .+
+    Default: ''
   AlbSSLCertName:
     Description: Mandatory ALB SSL Cert Name
     Type: String
-    AllowedPattern: .+
+    Default: ''
   
 Resources:
   
