@@ -24,7 +24,7 @@ pipeline {
 
           jobDsl scriptText:
           """
-              folder('Gemini-Web') {
+              folder('Gemini-Archive') {
                   description 'Gemini-Web Pipelines'
               }
           """
