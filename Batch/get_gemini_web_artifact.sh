@@ -22,6 +22,5 @@ fi
 
 cd $stage_folder
 curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://artifactory.ext.national.com.au/artifactory/GEMINI-build/nginx-1.20.1.tar.gz"
-#curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://artifactory.ext.national.com.au/artifactory/GEMINI-build/aspnetcore-runtime-5.0.9-linux-x64.tar.gz"
 
 
