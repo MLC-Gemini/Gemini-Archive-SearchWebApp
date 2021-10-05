@@ -1,19 +1,19 @@
-cleanup() {
-	echo "8. Drop this instance"
-	aws ec2 terminate-instances --instance-ids $instance_id
-	rm tmp_gemini_web_bake_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
-	aws ec2 wait instance-terminated --instance-ids $instance_id
-	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
-	rm -f kms_policy_ami_$$.json
-	rm -f encrypted_device_mapping_$$.json
-  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.key
-  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
-  rm -f privatekey.pem
-  rm -f certificate.pem
-  rm -f certificatechain.pem
-	echo "Baking Done ."
-}
+# cleanup() {
+# 	echo "8. Drop this instance"
+# 	aws ec2 terminate-instances --instance-ids $instance_id
+# 	rm tmp_gemini_web_bake_$env_id.pem
+# 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
+# 	aws ec2 wait instance-terminated --instance-ids $instance_id
+# 	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
+# 	rm -f kms_policy_ami_$$.json
+# 	rm -f encrypted_device_mapping_$$.json
+#   rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.key
+#   rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
+#   rm -f privatekey.pem
+#   rm -f certificate.pem
+#   rm -f certificatechain.pem
+# 	echo "Baking Done ."
+# }
 trap cleanup EXIT
 
 #env_id="nonprod"
@@ -131,7 +131,6 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ngin
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ssl/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.key ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.pem ec2-user@$endpoint:/tmp
 
