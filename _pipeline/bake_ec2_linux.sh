@@ -121,7 +121,7 @@ aws iam upload-server-certificate --server-certificate-name $ALB_SSL_CERT_NAME \
 # Downloading the SSL certificate for Ec2 backend server (key and cert) file from AWS SSM parameter store and outputting to local file
 aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.key
 aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
-aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
+aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 
 echo "4. Copy source code to image"
