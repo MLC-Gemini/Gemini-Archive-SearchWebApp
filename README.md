@@ -10,7 +10,8 @@ This repo contains the Gemini archive web application and  automation source cod
     * [bake.sh](#bake-sh)
     * [deploy_stack.sh](#deploy-stack-sh)
     * [delete_stack.sh](#delete-stack-sh)
-3. [Testing](#testing)
+3. [ASP.NET Code Overview](#Asp.NET code Overview)
+4. [Testing](#testing)
 
 ## Overview
 
@@ -49,6 +50,10 @@ $ bash delete_stack.sh -h
 Usage: STACK={monitor|process|sleeper|fileserver|cw|kms|s3} ENVGROUP={nonprod} [ENVIRONMENT={dev}] delete_stack.sh [-h] [--force, -f]
 Deletes a Cloudformation stack
 ```
+
+## Asp.NET code Overview
+
+Gemini Archive web application ASP.NET code overview.
 
 ## Testing
 
@@ -92,6 +97,3 @@ $ curl \
 For more information about the shunit2 testing methodology, see [this](https://alexharv074.github.io/2018/09/07/testing-aws-cli-scripts-in-shunit2.html) blog post.
 
 
-## Asp.NET code
-
-Gemini Archive web application ASP.NET code overview.
