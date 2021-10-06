@@ -67,12 +67,12 @@ Gemini Archive web application ASP.NET code overview.
 The tests can be run on Linux or Mac OS X.
 
 We can test the application on any browser. For example- chrome, IE, edge.
--	Step-1: Click on the link - https://geminiarchive-app-tst.gemini.awsnp.national.com.au/ to open the gemini archival web application. It will redirect you to the login page.
--	Step-2: Enter the correct credentials and click on sign in.
--	Step-3: If the credentials are correct, it will redirect you to the gemini search page. You can begin your search by entering the mandatory fields i.e. select any of the account level or advisor level or customer level. Enter the corresponding account id or advisor id or customer id. Choose either case creation date or case close date(by default case creation date is selected) and click on search to fetch the data.
--	Step-4: Along with the mandatory fields, you can also select from date and to date which are optional fields and click on search to fetch the data.
--	Step-5: The two tables will be displayed cases and documents respectively. By default, documents of the first case id will be displayed in the documents table. To see documents of any other case id , single click on that row of the cases table. To see the case activities of a particular case id, double click on that row of the cases table.
--	Step-6 To see the documents of a particular document id, single click on that row of the documents table.
+-	Step:1- Click on the link - https://geminiarchive-app-tst.gemini.awsnp.national.com.au/ to open the gemini archival web application. It will redirect you to the login page.
+-	Step:2- Enter the correct credentials and click on sign in.
+-	Step:3- If the credentials are correct, it will redirect you to the gemini search page. You can begin your search by entering the mandatory fields i.e. select any of the account level or advisor level or customer level. Enter the corresponding account id or advisor id or customer id. Choose either case creation date or case close date(by default case creation date is selected) and click on search to fetch the data.
+-	Step:4- Along with the mandatory fields, you can also select from date and to date which are optional fields and click on search to fetch the data.
+-	Step:5- The two tables will be displayed cases and documents respectively. By default, documents of the first case id will be displayed in the documents table. To see documents of any other case id , single click on that row of the cases table. To see the case activities of a particular case id, double click on that row of the cases table.
+-	Step:6- To see the documents of a particular document id, single click on that row of the documents table.
 
 
 To run the tests, use make. To see the help message:
