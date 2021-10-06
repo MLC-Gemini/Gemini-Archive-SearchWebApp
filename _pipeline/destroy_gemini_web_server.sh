@@ -1,6 +1,5 @@
 # destroy_batch_server.sh $env_id
 
-#env_id="nonprod"
 env_id=$1
 
 #Must resume ASG first, otherwise, delete will fail 

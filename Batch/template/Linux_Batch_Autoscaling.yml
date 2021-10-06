@@ -1,0 +1,244 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Gemini-Archive Web-App Stack
+Parameters:
+  IAMInstanceProfile:
+    Description: Instance profile
+    Type: String
+    AllowedPattern: .+
+  ImageId:
+    Type: AWS::EC2::Image::Id
+  InstanceType:
+    Description: EC2 Type
+    Type: String
+  KeyPairName:
+    Description: >-
+      Mandatory. Enter a Public/private key pair. If you do not have one in this region,
+      please create it before continuing
+    Type: AWS::EC2::KeyPair::KeyName
+  RemoteAccessCIDR:
+    Description: Allowed CIDR block for external SSH access
+    Type: String
+    AllowedPattern: \d+\.\d+\.\d+\.\d+/\d+
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/x
+  Subnets:
+    Description: Subnets for the Auto Scaling Group
+    Type: List<AWS::EC2::Subnet::Id>
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  Owner:
+    Description: Mandatory Owner tag
+    Type: String
+    Default: 'GEMINI'
+  CostCentre:
+    Description: Mandatory Cost Centre tag
+    Type: String
+    Default: 'V_GeminiWeb'
+  ApplicationID:
+    Description: Mandatory ApplicationID tag
+    Type: String
+    Default: 'ML0095'
+  Environment:
+    Description: Mandatory Environment tag
+    Type: String
+    Default: 'Nonprod'
+  AppCategory:
+    Description: Mandatory AppCategory tag
+    Type: String
+    Default: 'B'
+  UserData1:
+    Type: String
+    Default: ''
+  OwnerAccount:
+    Description: Mandatory AWS Owner Account nunmber
+    Type: String
+    AllowedPattern: .+
+  AlbSSLCertName:
+    Description: Mandatory ALB SSL Cert Name
+    Type: String
+    AllowedPattern: .+
+  
+Resources:
+  
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      LaunchConfigurationName: !Ref LaunchConfiguration
+      AutoScalingGroupName: !Sub "${AWS::StackName}-ASG"
+      VPCZoneIdentifier: !Ref Subnets
+      MinSize: 1
+      MaxSize: 2
+      Cooldown: 300
+      DesiredCapacity: 1
+      TargetGroupARNs:
+        - !Ref GeminiWebTargetGroup
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+          PropagateAtLaunch: true
+        - Key: CostCentre
+          Value: !Ref CostCentre
+          PropagateAtLaunch: true
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+          PropagateAtLaunch: true
+
+  LaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      AssociatePublicIpAddress: false
+      IamInstanceProfile: !Ref IAMInstanceProfile
+      ImageId: !Ref ImageId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyPairName
+      PlacementTenancy: default
+      SecurityGroups:
+        - !Ref SecurityGroup
+      UserData:
+        !Ref UserData1
+        
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internal
+      IpAddressType: ipv4
+      Name: !Sub "${AWS::StackName}-LoadBalancer"
+      Subnets: !Ref Subnets
+      SecurityGroups:
+        - !Ref SecurityGroup
+      Type: application
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID         
+
+  GeminiWebTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: "/"
+      Port: 80
+      Protocol: "HTTP"
+      HealthCheckPort: "traffic-port"
+      HealthCheckProtocol: "HTTP"
+      HealthCheckTimeoutSeconds: 10
+      HealthyThresholdCount: 2
+      HealthCheckEnabled: true
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 30
+      TargetType: "instance"
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref VpcId
+      Name: "GeminiWebTargetGroup"
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+  GeminiWebHTTPListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - RedirectConfig:
+            Protocol: "HTTPS"
+            Port: 443
+            Host: "#{host}"
+            Path: "/#{path}"
+            Query: "#{query}"
+            StatusCode: "HTTP_301"
+          Type: "redirect"
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: "HTTP"
+
+  GeminiWebHTTPSListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref GeminiWebTargetGroup
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: "HTTPS"
+      SslPolicy: "ELBSecurityPolicy-TLS-1-2-2017-01"
+      Certificates: 
+        - CertificateArn: !Sub "arn:aws:iam::${OwnerAccount}:server-certificate/${AlbSSLCertName}"
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Gemini Web Enables access
+      GroupName: !Sub "${AWS::StackName}-SG"
+      VpcId: !Ref VpcId
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: !Ref RemoteAccessCIDR
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref RemoteAccessCIDR
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref RemoteAccessCIDR
+      Tags:
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: CostCentre
+          Value: !Ref CostCentre
+        - Key: ApplicationID
+          Value: !Ref ApplicationID
+
+Outputs:
+  DNSEndpoint:
+    Description: The DNS Name of the Load Balancer
+    Value: !GetAtt LoadBalancer.DNSName
+    Export:
+      Name: !Sub "${AWS::StackName}-DNSEndpoint"
+  AutoScalingGroup:
+    Description: The ASG for debugging
+    Value: !Ref AutoScalingGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-AutoScalingGroup"
+  LaunchConfiguration:
+    Description: The LaunchConfig for debugging
+    Value: !Ref LaunchConfiguration
+    Export:
+      Name: !Sub "${AWS::StackName}-LaunchConfiguration"
+  LoadBalancer:
+    Description: Gemini Web LoadBalancer
+    Value: !Ref LoadBalancer
+    Export:
+      Name: !Sub "${AWS::StackName}-LoadBalancer"
+  GeminiWebTargetGroup:
+    Description: Gemini Web Target Group
+    Value: !Ref GeminiWebTargetGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-GeminiWebTargetGroup"
+  GeminiWebHTTPListener:
+    Description: Gemini Web HTTP Listener
+    Value: !Ref GeminiWebHTTPListener
+    Export:
+      Name: !Sub "${AWS::StackName}-GeminiWebHTTPListener"
+  GeminiWebHTTPSListener:
+    Description: Gemini Web HTTPS Listener
+    Value: !Ref GeminiWebHTTPSListener
+    Export:
+      Name: !Sub "${AWS::StackName}-GeminiWebHTTPSListener"
+  SecurityGroup:
+    Description: Gemini Web Security Group
+    Value: !Ref SecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-SecurityGroup"

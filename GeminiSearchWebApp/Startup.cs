@@ -81,7 +81,7 @@ namespace GeminiSearchWebApp
             });
             try
             {
-                if (env.IsDevelopment())
+                if (env.IsProduction())
                 {
                     app.UseDeveloperExceptionPage();
                 }

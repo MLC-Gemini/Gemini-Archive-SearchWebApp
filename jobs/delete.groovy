@@ -2,7 +2,7 @@
 
 jobDsl scriptText:
 """
-    pipelineJob("Gemini-Web/cloudformation-delete") {
+    pipelineJob("Gemini-Archive/cloudformation-delete") {
         concurrentBuild(false)
 
         displayName("Delete a Cloudformation Stack")
@@ -19,7 +19,7 @@ jobDsl scriptText:
                             url("git@github.aus.thenational.com:Gemini/Gemini-Archive-SearchWebApp.git")
                             credentials('svc-account')
                         }
-                        branches("Gemini_Dev")
+                        branches("master")
                     }
                 }
                 scriptPath("Jenkinsfile/delete")
