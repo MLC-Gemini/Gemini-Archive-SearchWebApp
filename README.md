@@ -59,13 +59,5 @@ Gemini Archive web application ASP.NET code overview.
 
 The tests can be run on Linux or Mac OS X.
 
-Before running the tests, it is necessary to install these dependencies:
-
-- Git (to clone this repo)
-- AWS CLI (optional, for the validate-template command)
-- Shellcheck
-- jq
-- yamllint (only for whitespace tests)
-
 
 
