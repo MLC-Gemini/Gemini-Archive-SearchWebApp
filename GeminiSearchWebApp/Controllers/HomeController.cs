@@ -323,9 +323,10 @@ namespace GeminiSearchWebApp.Controllers
         public IActionResult DocTransport()
         {
             string contentType = string.Empty;
-            string path = @"Docs\Asp.net-core.pdf";
+            string path = @"Docs/Asp.net-core.pdf";
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
+            Console.WriteLine("Path of the document is " + finaldocPath);
             byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
             FileInfo fileInfo = new FileInfo(finaldocPath);
             string extn = fileInfo.Extension;
