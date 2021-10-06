@@ -15,7 +15,7 @@ This repo contains the Gemini archive web application and  automation source cod
 
 ## Overview
 
-The solution contains a set of Cloudformation templates, Packer templates and Jenkinsfiles. The code is written in the Bash shell using the AWS CLI. There is also one small Python script, and a few lines of Ruby used in generating the docs.
+The solution contains a set of Cloudformation templates, Shell scrpirts, ASP.NET published code and Jenkinsfiles. The code is written in the ASP.NET, Bash shell using the AWS CLI.
 
 ## Usage
 
