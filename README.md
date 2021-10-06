@@ -1,11 +1,7 @@
-# Gemini-Archive-SearchWebApp
-Implementing Gemini Search web application
-
-
 !-- vim: set ft=markdown: -->
 <!-- DO NOT EDIT. Update using make docs -->
 # Gemini
-This repo contains the Gemini automation source code.
+This repo contains the Gemini archive web application and  automation source code.
 
 #### Table of contents
 
