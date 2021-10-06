@@ -63,7 +63,6 @@ sudo chmod -R 600 ssl-cert
 cd /web/nginx/ssl-cert
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.pem .
 sudo mv /tmp/geminiarchive-app-tst.gemini.awsnp.national.com.au.key .
-#sudo mv /tmp/ssl_key.key .
 
 #sudo vi /web/nginx/conf/nginx.conf
 cd /web/nginx/conf/
