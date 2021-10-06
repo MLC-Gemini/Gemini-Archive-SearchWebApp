@@ -1,6 +1,6 @@
-!-- vim: set ft=markdown: -->
+<!-- vim: set ft=markdown: -->
 <!-- DO NOT EDIT. Update using make docs -->
-# Gemini
+# Gemini Archive Web Application
 This repo contains the Gemini archive web application and  automation source code.
 
 #### Table of contents
