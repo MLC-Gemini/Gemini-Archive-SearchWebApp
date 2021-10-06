@@ -19,6 +19,8 @@ using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Hosting;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -30,12 +32,14 @@ namespace GeminiSearchWebApp.Controllers
         public LdapConnect ldapConnect;
         public string loggedInUserName { get; set; }
         public static bool loginResult = false;
-        public HomeController(IConfiguration _configuration)
+        private readonly IWebHostEnvironment _env;
+        public HomeController(IConfiguration _configuration , IWebHostEnvironment env)
         {
            
             configuration = _configuration;
             connectionClass = new ConnectionClass(configuration);
             ldapConnect = new LdapConnect(_configuration);
+            _env = env;
         }
         public IActionResult Index()
         {
@@ -316,9 +320,20 @@ namespace GeminiSearchWebApp.Controllers
             return View(documents);
         }
 
-
-
-
+        public IActionResult DocTransport()
+        {
+            string contentType = string.Empty;
+            string path = @"Docs/Asp.net-core.pdf";
+            string webRootPath = _env.WebRootPath;
+            string finaldocPath = Path.Combine(webRootPath, path);
+            Console.WriteLine("Path of the document is " + finaldocPath);
+            byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
+            FileInfo fileInfo = new FileInfo(finaldocPath);
+            string extn = fileInfo.Extension;
+            System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
+            new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
+            return File(FileBytes, contentType);
+        }
 
     }
 }
