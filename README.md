@@ -10,7 +10,7 @@ This repo contains the Gemini archive web application and  automation source cod
     * [bake.sh](#bake-sh)
     * [deploy_stack.sh](#deploy-stack-sh)
     * [delete_stack.sh](#delete-stack-sh)
-3. [ASP.NET Code Overview](#Asp.NET code Overview)
+3. [DOTNETCode-OvervieW](#Asp.NET-Code-Overview)
 4. [Testing](#testing)
 
 ## Overview
@@ -51,7 +51,7 @@ Usage: STACK={monitor|process|sleeper|fileserver|cw|kms|s3} ENVGROUP={nonprod} [
 Deletes a Cloudformation stack
 ```
 
-## Asp.NET code Overview
+## Asp.NET-Code-Overview
 
 Gemini Archive web application ASP.NET code overview.
 
