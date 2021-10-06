@@ -54,13 +54,13 @@ Deletes a Cloudformation stack
 ## Asp.NET-Code-Overview
 
 Gemini Archive web application ASP.NET code overview.
--AppSettings.json(file name-appsettings.json): This file stores custom application configuration information that includes RDS database connection strings, validation messages, logging information and security settings.
--LaunchSettings.json(file name-launchsettings.json): The launchSettings.json file is used to store the configuration information, which describes how to start the ASP.NET Core application, using visual studio. The file is used only during the development of the application using visual studio. It contains only those settings that are required to run the application.
--Tower API (file name-TowerAPIClass.cs): Tower API class is used to consume the service i.e. to get the data from the server requested by the client on the application. The service request is first authenticated and then a response is returned which contains the data to be displayed.
--LDAP (file name-LdapConnect.cs): This file is used for authorization and authentication. When the user enters credential to log into the WebApp, it is first validated for its authentication that whether it is valid or invalid.
--Controllers(file name-HomeController.cs): This file is used to direct the flow of data between the backend (i.e. database) and the front end.
--Scripts: This folder contains all the necessary plugins to run the application.
--Views: This folder contains all the .cshtml pages, i.e. webpages, that are viewed by the user on the WebApp. For example- Login page, Home page etc.
+- AppSettings.json(file name-appsettings.json): This file stores custom application configuration information that includes RDS database connection strings, validation messages, logging information and security settings.
+- LaunchSettings.json(file name-launchsettings.json): The launchSettings.json file is used to store the configuration information, which describes how to start the ASP.NET Core application, using visual studio. The file is used only during the development of the application using visual studio. It contains only those settings that are required to run the application.
+- Tower API (file name-TowerAPIClass.cs): Tower API class is used to consume the service i.e. to get the data from the server requested by the client on the application. The service request is first authenticated and then a response is returned which contains the data to be displayed.
+- LDAP (file name-LdapConnect.cs): This file is used for authorization and authentication. When the user enters credential to log into the WebApp, it is first validated for its authentication that whether it is valid or invalid.
+- Controllers(file name-HomeController.cs): This file is used to direct the flow of data between the backend (i.e. database) and the front end.
+- Scripts: This folder contains all the necessary plugins to run the application.
+- Views: This folder contains all the .cshtml pages, i.e. webpages, that are viewed by the user on the WebApp. For example- Login page, Home page etc.
 
 ## Testing
 
