@@ -10,7 +10,7 @@ This repo contains the Gemini archive web application and  automation source cod
     * [bake.sh](#bake-sh)
     * [deploy_stack.sh](#deploy-stack-sh)
     * [delete_stack.sh](#delete-stack-sh)
-3. [DOTNETCode-OvervieW](#Asp.NET-Code-Overview)
+3. [DOTNET Code Overview](#Asp.NET-Code-Overview)
 4. [Testing](#testing)
 
 ## Overview
