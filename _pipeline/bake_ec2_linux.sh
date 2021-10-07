@@ -141,8 +141,8 @@ if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null'
   envsubst < Published/appsettings.json > tmp-appsettings.json
 
 # Delete origin appsettings.json and replace with secrets form AWS SSM Parameter Store
-  sudo rm Published/appsettings.json
-  sudo mv tmp-appsettings.json Published/appsettings.json
+  sudo rm Published/appsettings.json;
+  sudo mv tmp-appsettings.json Published/appsettings.json;
 fi
 
 echo "5. Copy source code to image"
