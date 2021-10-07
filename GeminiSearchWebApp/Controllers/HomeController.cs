@@ -154,6 +154,8 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
             ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
             ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.emptyFromDate = config["Appsettings:emptyFromDate"];
+            ViewBag.emptyToDate = config["Appsettings:emptyToDate"];
             ViewBag.loginFinalStatus = loginValue;
             return View();
         }

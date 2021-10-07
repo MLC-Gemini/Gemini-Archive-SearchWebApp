@@ -127,6 +127,12 @@
                     alert('@ViewBag.customerIdLength');
                     location.reload();
                 }
+                else if ($("#dateRange").val() && !$("#toRange").val()) {
+                    alert('@ViewBag.emptyToDate');
+                }
+                else if (!$("#dateRange").val() && $("#toRange").val()) {
+                    alert('@ViewBag.emptyFromDate');
+                }
                 else {
                     $("#output1").show();
                     $("#output2").show();
