@@ -61,7 +61,7 @@ if [[ $env_id == 'nonprod' ]]; then
     T_SupportGroup="WorkManagementProductionSupport"
     T_Name="Gemini_web"
     #T_EC2_PowerMgt="EXTSW,0,1"
-    T_EC2_PowerMgt="EXTSW"
+    T_EC2_PowerMgt="WKED"
     T_BackupOptOut="No"
 
    # Lunch template variable 
