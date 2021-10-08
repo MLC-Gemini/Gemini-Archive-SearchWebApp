@@ -25,6 +25,7 @@
     <script type="text/javascript">
         var caseIdVal;
         var caseTypeVal;
+        var docWindow = null;
         $(document).ready(function () {
             var loginResult = '@ViewBag.loginFinalStatus';
             if (loginResult.toLowerCase() == "False".toLowerCase()) {
@@ -125,6 +126,12 @@
                  else if ($('#filter_level').val() == "Customer Level" && document.getElementById("Pid").value.length >9) {
                     alert('@ViewBag.customerIdLength');
                     location.reload();
+                }
+                else if ($("#dateRange").val() && !$("#toRange").val()) {
+                    alert('@ViewBag.emptyToDate');
+                }
+                else if (!$("#dateRange").val() && $("#toRange").val()) {
+                    alert('@ViewBag.emptyFromDate');
                 }
                 else {
                     $("#output1").show();
@@ -484,6 +491,24 @@
                 $.fn.resetForm();
 
             });
+            $('#docTable').on('click', 'tr', function (e) {
+                debugger;
+                if (docWindow == null || docWindow.closed) {
+                    docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
+                }
+                else {
+                    docWindow.focus();
+                }
+                document.onmousedown = focusPopup;
+                document.onkeyup = focusPopup;
+                document.onmousemove = focusPopup;
+            });
+
+            function focusPopup() {
+                if (docWindow && !docWindow.closed) {
+                    docWindow.focus();
+                }
+            }
 
             var modal = document.getElementById("caseModal")
             var span = document.getElementsByClassName("close")[0];

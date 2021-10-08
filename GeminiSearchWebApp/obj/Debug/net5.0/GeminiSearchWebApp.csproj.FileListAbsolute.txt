@@ -364,7 +364,6 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\D
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\linux\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\osx\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
-C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.csproj.AssemblyReference.cache
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.GeneratedMSBuildEditorConfig.editorconfig
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfoInputs.cache
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfo.cs
