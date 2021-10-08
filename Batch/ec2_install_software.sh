@@ -36,7 +36,8 @@ sudo mkdir /web/nginx/run
 cd /web/nginx/
 
 sudo mv /tmp/nginx-1.20.1.tar.gz .
-sudo tar -xzvf nginx-1.20.1.tar.gz
+sudo tar -xzvf nginx-1.20.1.tar.gz > /dev/null
+-cvpzf
 #ls -lrt
 
 sudo mkdir binaries 
@@ -49,8 +50,8 @@ cd binaries/
 # pwd > /web/nginx/binaries
 # ls  -lrt
 
-sudo ./configure --prefix=/web/nginx --modules-path=/web/nginx/modules --with-http_ssl_module  --without-http_fastcgi_module --without-http_uwsgi_module --without-http_grpc_module --without-http_scgi_module --without-mail_imap_module --without-mail_pop3_module >/dev/null
-sudo make > /dev/null || make
+sudo ./configure --prefix=/web/nginx --modules-path=/web/nginx/modules --with-http_ssl_module  --without-http_fastcgi_module --without-http_uwsgi_module --without-http_grpc_module --without-http_scgi_module --without-mail_imap_module --without-mail_pop3_module > /dev/null
+sudo make > /dev/null
 sudo make install > /dev/null
 
 # pwd > /web/nginx
