@@ -26,7 +26,6 @@ sudo systemctl enable kestrel-geminiweb.service
 
 # Install require packages for NGINX server using "openssl-devel gcc"
 sudo yum -y install openssl-devel gcc -q -y
-#sudo yum -y install openssl-devel > /dev/null
 #sudo yum -y install openssl-devel gcc
 #rpm -qa|egrep 'openssl-devel|pcre|zlib'
 
