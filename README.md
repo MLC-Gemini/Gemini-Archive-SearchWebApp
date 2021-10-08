@@ -64,7 +64,7 @@ Gemini Archive web application ASP.NET code overview.
 
 ## Testing
 
-The tests can be run on any web browserFor example- chrome, IE, edge.
+The test can be done on any web browser for example- chrome, IE, edge.
 
 -	Step:1-To open the gemini archival web application in web browser,click on the application url link as per enviorment - 
 NonProd - https://geminiarchive-app-tst.gemini.awsnp.national.com.au
