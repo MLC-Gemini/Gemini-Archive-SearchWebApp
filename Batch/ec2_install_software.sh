@@ -36,7 +36,8 @@ sudo mkdir /web/nginx/run
 cd /web/nginx/
 
 sudo mv /tmp/nginx-1.20.1.tar.gz .
-sudo tar -xzvf nginx-1.20.1.tar.gz > /dev/null
+#sudo tar -xzvf nginx-1.20.1.tar.gz
+sudo tar -zxf nginx-1.20.1.tar.gz -C ~/tmp1
 -cvpzf
 #ls -lrt
 
