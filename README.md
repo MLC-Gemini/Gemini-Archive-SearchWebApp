@@ -70,7 +70,7 @@ The test can be done on any web browser for example- chrome, IE, edge.
   NonProd - https://geminiarchive-app-tst.gemini.awsnp.national.com.au
   Prod - https://geminiarchive-app-prod.gemini.awsnp.national.com.au 
 It will redirect you to the login page.
-- Enter the correct credentials (AURDEV for Nnonprod and AUR for prod) and click on sign in.
+- Enter the correct credentials (AURDEV for Nonprod and AUR for Prod) and click on sign in.
 - If the credentials are correct, it will redirect you to the gemini search page. You can begin your search by entering the mandatory fields i.e. select any of the account level or advisor level or customer level. Enter the corresponding account id or advisor id or customer id. Choose either case creation date or case close date(by default case creation date is selected) and click on search to fetch the data.
 - Along with the mandatory fields, you can also select from date and to date which are optional fields and click on search to fetch the data.
 - The two tables will be displayed cases and documents respectively. By default, documents of the first case id will be displayed in the documents table. To see documents of any other case id , single click on that row of the cases table. To see the case activities of a particular case id, double click on that row of the cases table.
