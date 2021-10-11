@@ -66,15 +66,20 @@ Gemini Archive web application ASP.NET code overview.
 
 The test can be done on any web browser for example- chrome, IE, edge.
 
--	Step:1-To open the gemini archival web application in web browser,click on the application url link as per enviorment - 
-NonProd - https://geminiarchive-app-tst.gemini.awsnp.national.com.au
-NonProd - https://geminiarchive-app-prod.gemini.awsnp.national.com.au 
+-	The test can be done on any web browser for example- chrome, IE, edge.
+
+- To open the gemini archival web application in web browser, click on the application url link as per environment -
+NonProd - https://geminiarchive-app-tst.gemini.awsnp.national.com.au
+
+Prod - https://geminiarchive-app-prod.gemini.awsnp.national.com.au 
+
 It will redirect you to the login page.
--	Step:2- Enter the correct credentials (AURDEV for Nnonprod and AUR for prod) and click on sign in.
--	Step:3- If the credentials are correct, it will redirect you to the gemini search page. You can begin your search by entering the mandatory fields i.e. select any of the account level or advisor level or customer level. Enter the corresponding account id or advisor id or customer id. Choose either case creation date or case close date(by default case creation date is selected) and click on search to fetch the data.
--	Step:4- Along with the mandatory fields, you can also select from date and to date which are optional fields and click on search to fetch the data.
--	Step:5- The two tables will be displayed cases and documents respectively. By default, documents of the first case id will be displayed in the documents table. To see documents of any other case id , single click on that row of the cases table. To see the case activities of a particular case id, double click on that row of the cases table.
--	Step:6- To see the documents of a particular document id, single click on that row of the documents table.
+
+- Enter the correct credentials (AURDEV for Nnonprod and AUR for prod) and click on sign in.
+- If the credentials are correct, it will redirect you to the gemini search page. You can begin your search by entering the mandatory fields i.e. select any of the account level or advisor level or customer level. Enter the corresponding account id or advisor id or customer id. Choose either case creation date or case close date(by default case creation date is selected) and click on search to fetch the data.
+- Along with the mandatory fields, you can also select from date and to date which are optional fields and click on search to fetch the data.
+- The two tables will be displayed cases and documents respectively. By default, documents of the first case id will be displayed in the documents table. To see documents of any other case id , single click on that row of the cases table. To see the case activities of a particular case id, double click on that row of the cases table.
+- To see the documents of a particular document id, single click on that row of the documents table.
 
 For more information visit knowledge document confluence page - https://confluence.mlc.lz182.aws.national.com.au/display/WWF/BAU+Support+Handover
 
