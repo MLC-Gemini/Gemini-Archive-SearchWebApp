@@ -26,8 +26,10 @@ namespace GeminiSearchWebApp.DAL
         }
         public SearchResponse GetLdapConnection(string username, string password, string domain)
         {
-            var ldapServer = "ldap.aurdev.national.com.au";
-            var baseDn = "OU=Staff Accounts,OU=Restricted Accounts,DC=aurdev,DC=national,DC=com,DC=au";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            var ldapServer = config["Appsettings:ldapServer"];
+            var baseDn = config["Appsettings:baseDn"];
 
             try
             {
