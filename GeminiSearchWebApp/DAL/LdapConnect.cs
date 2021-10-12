@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using GeminiSearchWebApp.UtilityFolder;
 
 namespace GeminiSearchWebApp.DAL
 {

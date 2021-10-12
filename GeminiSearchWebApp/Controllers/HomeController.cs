@@ -1,30 +1,25 @@
-﻿using GeminiSearchWebApp.DAL;
+﻿using Gemini.Models;
+using GeminiSearchWebApp.DAL;
 using GeminiSearchWebApp.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using Gemini.Models;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Text;
-using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
 
 namespace GeminiSearchWebApp.Controllers
 {
-   
+
     public class HomeController : Controller
     {
         private IConfiguration configuration;
