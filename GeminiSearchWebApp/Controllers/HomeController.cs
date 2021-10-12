@@ -29,8 +29,7 @@ namespace GeminiSearchWebApp.Controllers
         public static bool loginResult = false;
         private readonly IWebHostEnvironment _env;
         public HomeController(IConfiguration _configuration , IWebHostEnvironment env)
-        {
-           
+        {           
             configuration = _configuration;
             connectionClass = new ConnectionClass(configuration);
             ldapConnect = new LdapConnect(_configuration);
@@ -84,26 +83,7 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-        public IActionResult SearchCases()
-        {
-            bool loginValue = loginResult;
-            ViewData["Message"] = "Your Search Page";
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var config = builder.Build();
-
-            ViewBag.emptySearch = config["Appsettings:emptySearch"];
-            ViewBag.emptySearchLevel = config["Appsettings:emptySearchLevel"];
-            ViewBag.emptySearchPid = config["Appsettings:emptySearchPid"];
-            ViewBag.emptyAccountID = config["Appsettings:emptyAccountId"];
-            ViewBag.emptyAdviserID = config["Appsettings:emptyAdviserId"];
-            ViewBag.emptyCustomerId = config["Appsettings:emptyCustomerId"];
-            ViewBag.emptyDateRange = config["Appsettings:emptyDateRange"];
-            ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
-            ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
-            ViewBag.rightClick = config["Appsettings:rightClick"];
-            ViewBag.loginFinalStatus = loginValue;
-            return View();
-        }
+       
 
         public IActionResult LogOut()
         {
@@ -117,33 +97,31 @@ namespace GeminiSearchWebApp.Controllers
             connectionClass.CreateLog(userName);
             try
             {
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+                var config = builder.Build();
+                var domain = config["Appsettings:domain"];
+
                 if (userName != null && password != null)
-
-            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            var domain = config["Appsettings:domain"];
-
-            if (userName != null && password != null)
-            {
-                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
-                if (!string.IsNullOrEmpty(loggedInUserName))
-
                 {
-                    loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                    loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
                     if (!string.IsNullOrEmpty(loggedInUserName))
                     {
-                        result = JsonConvert.SerializeObject(loggedInUserName);
-                        return result;
+                        loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                        if (!string.IsNullOrEmpty(loggedInUserName))
+                        {
+                            result = JsonConvert.SerializeObject(loggedInUserName);
+                            return result;
+                        }
+                        else
+                        {
+                            result = null;
+                            connectionClass.CreateMessageLog("Login Username is null");
+                        }
                     }
                     else
                     {
-                        result = null;
-                        connectionClass.CreateMessageLog("Login Username is null");
+                        connectionClass.CreateMessageLog("Login Username or Password is null");
                     }
-                }
-                else
-                {
-                    connectionClass.CreateMessageLog("Login Username or Password is null");
                 }
             }
             catch (Exception ex)
@@ -174,14 +152,6 @@ namespace GeminiSearchWebApp.Controllers
                 connectionClass.CreateMessageLog(ex.Message);
             }
             return result;
-        }
-
-
-
-        public IActionResult LogOut()
-        {
-            loginResult = false;
-            return RedirectToAction("Login");
         }
 
         public IActionResult SearchCases()
@@ -393,16 +363,14 @@ namespace GeminiSearchWebApp.Controllers
                 string extn = fileInfo.Extension;
                 System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
                 new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
+                return File(FileBytes, contentType);
             }
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
+                return null;
             }
 
-            byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
-            System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
-            new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
-            return File(FileBytes, contentType);
         }
 
     }
