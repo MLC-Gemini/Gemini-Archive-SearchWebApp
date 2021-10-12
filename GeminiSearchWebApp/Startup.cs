@@ -1,22 +1,11 @@
-
-using Microsoft.AspNetCore.Authorization;
+using GeminiSearchWebApp.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GeminiSearchWebApp.DAL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using GeminiSearchWebApp.UtilityFolder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.HttpOverrides;
 
 namespace GeminiSearchWebApp
 {
@@ -41,29 +30,7 @@ namespace GeminiSearchWebApp
                 services.AddMvc().AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/Home/Login", "");
-                });
-
-                //services.AddHttpContextAccessor();
-                //services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-                //services.AddAuthorization(options =>
-                //{
-                //    options.AddPolicy("ADRoleOnly", policy => policy.RequireRole(Configuration["SecuritySettings:ADGroup"]));
-                //});
-                //services.AddMvc(config =>
-                //{
-                //    var policy = new AuthorizationPolicyBuilder()
-                //        .RequireAuthenticatedUser()
-                //        .Build();
-
-
-
-                //    config.Filters.Add(new AuthorizeFilter(policy));
-                //});
-
-                //services.AddSession(options =>
-                //{
-                //    options.IdleTimeout = TimeSpan.FromMinutes(10);
-                //});
+                });                
             }
             catch (Exception ex)
             {
@@ -87,16 +54,11 @@ namespace GeminiSearchWebApp
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Home/Error");
-                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseExceptionHandler("/Home/Error");                    
                     app.UseHsts();
-                }
-                //app.UseHttpsRedirection();
-                app.UseStaticFiles();
-                //app.UseSession();
-                app.UseRouting();
-                //app.UseAuthentication();
-                //app.UseAuthorization();
+                }               
+                app.UseStaticFiles();               
+                app.UseRouting();               
                 app.UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllerRoute(
@@ -109,8 +71,6 @@ namespace GeminiSearchWebApp
             {
                 connectionClass.CreateMessageLog(ex.Message);
             }
-            
-
            
         }
     }

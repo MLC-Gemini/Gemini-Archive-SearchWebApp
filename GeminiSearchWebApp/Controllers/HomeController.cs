@@ -1,30 +1,25 @@
-﻿using GeminiSearchWebApp.DAL;
+﻿using Gemini.Models;
+using GeminiSearchWebApp.DAL;
 using GeminiSearchWebApp.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using Gemini.Models;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using System.Text;
-using System.Globalization;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.Hosting;
+using System.Threading.Tasks;
 
 namespace GeminiSearchWebApp.Controllers
 {
-   
+
     public class HomeController : Controller
     {
         private IConfiguration configuration;
@@ -123,6 +118,16 @@ namespace GeminiSearchWebApp.Controllers
             try
             {
                 if (userName != null && password != null)
+
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            var domain = config["Appsettings:domain"];
+
+            if (userName != null && password != null)
+            {
+                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
+                if (!string.IsNullOrEmpty(loggedInUserName))
+
                 {
                     loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
                     if (!string.IsNullOrEmpty(loggedInUserName))
@@ -170,6 +175,39 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
+
+
+
+        public IActionResult LogOut()
+        {
+            loginResult = false;
+            return RedirectToAction("Login");
+        }
+
+        public IActionResult SearchCases()
+        {
+            bool loginValue = loginResult;
+            ViewData["Message"] = "Your Search Page";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+
+            ViewBag.emptySearch = config["Appsettings:emptySearch"];
+            ViewBag.emptySearchLevel = config["Appsettings:emptySearchLevel"];
+            ViewBag.emptySearchPid = config["Appsettings:emptySearchPid"];
+            ViewBag.emptyAccountID = config["Appsettings:emptyAccountId"];
+            ViewBag.emptyAdviserID = config["Appsettings:emptyAdviserId"];
+            ViewBag.emptyCustomerId = config["Appsettings:emptyCustomerId"];
+            ViewBag.emptyDateRange = config["Appsettings:emptyDateRange"];
+            ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
+            ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
+            ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.emptyFromDate = config["Appsettings:emptyFromDate"];
+            ViewBag.emptyToDate = config["Appsettings:emptyToDate"];
+            ViewBag.loginFinalStatus = loginValue;
+            return View();
+        }
+
+
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
             DataTable dt = new DataTable();
@@ -206,7 +244,6 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
-                Console.WriteLine("error");
             }
                      
             return TableToJson(dt);
@@ -249,7 +286,6 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
-                Console.WriteLine("error");
             }
 
             return TableToJson(dt);
@@ -271,7 +307,6 @@ namespace GeminiSearchWebApp.Controllers
                 catch (Exception ex)
                 {
                     connectionClass.CreateMessageLog(ex.Message);
-                    Console.WriteLine("error");
                 }
             }
             else
@@ -350,6 +385,7 @@ namespace GeminiSearchWebApp.Controllers
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
+
             try
             {
                 FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
@@ -362,6 +398,10 @@ namespace GeminiSearchWebApp.Controllers
             {
                 connectionClass.CreateMessageLog(ex.Message);
             }
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
+            System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
+            new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
             return File(FileBytes, contentType);
         }
 

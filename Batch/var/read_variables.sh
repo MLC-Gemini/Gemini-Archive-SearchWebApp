@@ -21,6 +21,12 @@ SSL_CERT="/gemini_archive_web/ssl_cert"
 SSL_CHAIN1="/gemini_archive_web/ssl_chain1"
 SSL_CHAIN2="/gemini_archive_web/ssl_chain2"
 
+# ASP.NET AWS SSM parameter store variable
+SSM_RDS_CONSTR="/gemini_archive_web/ConnectionStrings/rdsArcConn"
+SSM_ADGROUP="/gemini_archive_web/ad_group"
+SSM_TIBCO_IMAGEEBF_SRV_UID="/gemini_archive_web/ticbo_srv_uid"
+SSM_TIBCO_IMAGEEBF_SRV_PASS="/gemini_archive_web/ticbo_srv_pass"
+
 #Deploy Bake 
 TechnicalService="GeminiWeb"
 Owner="GeminiWeb"
@@ -55,7 +61,7 @@ if [[ $env_id == 'nonprod' ]]; then
     T_SupportGroup="WorkManagementProductionSupport"
     T_Name="Gemini_web"
     #T_EC2_PowerMgt="EXTSW,0,1"
-    T_EC2_PowerMgt="EXTSW"
+    T_EC2_PowerMgt="WKED"
     T_BackupOptOut="No"
 
    # Lunch template variable 

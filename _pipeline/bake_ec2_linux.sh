@@ -1,5 +1,7 @@
+#!/usr/bin/bash
+
 cleanup() {
-	echo "8. Drop this instance"
+	echo "9. Drop this instance"
 	aws ec2 terminate-instances --instance-ids $instance_id
 	rm tmp_gemini_web_bake_$env_id.pem
 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
@@ -124,7 +126,28 @@ aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-
 aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
 
-echo "4. Copy source code to image"
+echo "4. Configurting ASP.NET secret form AWS SSM parameter store value"
+
+Rdsconstr=`aws ssm get-parameters --name $SSM_RDS_CONSTR --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Adgroup=`aws ssm get-parameters --name $SSM_ADGROUP --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+TibcoImageEBF_uid=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_UID --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+TibcoImageEBF_pass=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+
+if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null' && $TibcoImageEBF_pass != 'null' ]]; then
+# exporting the varibale needed for kms json template files.
+  export RDSCONSTR="${Rdsconstr}"
+  export ADGROUP="${Adgroup}"
+  export TIBCOIMAGEEBF_UID="${TibcoImageEBF_uid}"
+  export TIBCOIMAGEEBF_PASS="${TibcoImageEBF_pass}"
+
+  envsubst < Published/appsettings.json > tmp-appsettings.json
+
+# Delete origin appsettings.json and replace with secrets form AWS SSM Parameter Store
+  rm -r Published/appsettings.json
+  mv tmp-appsettings.json Published/appsettings.json 
+fi
+
+echo "5. Copy source code to image"
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/gemini_web_staging/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.service ec2-user@$endpoint:/tmp
@@ -134,10 +157,10 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ngin
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.key ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.pem ec2-user@$endpoint:/tmp
 
-echo "5. Run SSH(ec2_install_software.sh) to install software"
+echo "6. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 
-echo "6. Create image form this instance"
+echo "7. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
 image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $image_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id
@@ -150,6 +173,6 @@ do
 	sleep 30
 done
 
-echo "7. Add encrypted image to aws parameter store"
+echo "8. Add encrypted image to aws parameter store"
 #./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
