@@ -36,10 +36,12 @@ namespace GeminiSearchWebApp.Controllers
             ldapConnect = new LdapConnect(_configuration);
             _env = env;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -55,6 +57,11 @@ namespace GeminiSearchWebApp.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult SearchLayout()
         {
             return View();
         }
@@ -77,10 +84,41 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
+        public IActionResult SearchCases()
+        {
+            bool loginValue = loginResult;
+            ViewData["Message"] = "Your Search Page";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+
+            ViewBag.emptySearch = config["Appsettings:emptySearch"];
+            ViewBag.emptySearchLevel = config["Appsettings:emptySearchLevel"];
+            ViewBag.emptySearchPid = config["Appsettings:emptySearchPid"];
+            ViewBag.emptyAccountID = config["Appsettings:emptyAccountId"];
+            ViewBag.emptyAdviserID = config["Appsettings:emptyAdviserId"];
+            ViewBag.emptyCustomerId = config["Appsettings:emptyCustomerId"];
+            ViewBag.emptyDateRange = config["Appsettings:emptyDateRange"];
+            ViewBag.fromDateGreaterThanToDate = config["Appsettings:fromDateGreaterThanToDate"];
+            ViewBag.emptyCaseTypeDate = config["Appsettings:emptyCaseTypeDate"];
+            ViewBag.rightClick = config["Appsettings:rightClick"];
+            ViewBag.loginFinalStatus = loginValue;
+            return View();
+        }
+
+        public IActionResult LogOut()
+        {
+            loginResult = false;
+            return RedirectToAction("Login");
+        }
+
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
             connectionClass.CreateLog(userName);
+            try
+            {
+                if (userName != null && password != null)
+
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
             var domain = config["Appsettings:domain"];
@@ -89,46 +127,56 @@ namespace GeminiSearchWebApp.Controllers
             {
                 loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
                 if (!string.IsNullOrEmpty(loggedInUserName))
+
                 {
-                    result = JsonConvert.SerializeObject(loggedInUserName);
-                    return result;
+                    loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                    if (!string.IsNullOrEmpty(loggedInUserName))
+                    {
+                        result = JsonConvert.SerializeObject(loggedInUserName);
+                        return result;
+                    }
+                    else
+                    {
+                        result = null;
+                        connectionClass.CreateMessageLog("Login Username is null");
+                    }
                 }
                 else
                 {
-                    result = null;
-                    connectionClass.CreateMessageLog("Login Username is null");
+                    connectionClass.CreateMessageLog("Login Username or Password is null");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                connectionClass.CreateMessageLog("Login Username or Password is null");
+                connectionClass.CreateMessageLog(ex.Message);
             }
             return result;
         }
-
-        
-
-        public IActionResult SearchLayout()
-        {
-            return View();
-        }
-
         public bool LoginCheck(bool loginStatus)
         {
             loginResult = loginStatus;
             bool result = false;
-            if (loginStatus == true)
+            try
             {
-                loginResult = loginStatus;
-                return loginResult;
+                if (loginStatus == true)
+                {
+                    loginResult = loginStatus;
+                    return loginResult;
+                }
+                else
+                {
+                    result = false;
+                    loginResult = result;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                result = false;
-                loginResult = result;
+                connectionClass.CreateMessageLog(ex.Message);
             }
             return result;
         }
+
+
 
         public IActionResult LogOut()
         {
@@ -158,6 +206,7 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.loginFinalStatus = loginValue;
             return View();
         }
+
 
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
@@ -200,10 +249,6 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-
-       
-
-
         public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
         {
             DataTable dt = new DataTable();
@@ -276,7 +321,14 @@ namespace GeminiSearchWebApp.Controllers
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(table);
+            try
+            {
+                JSONString = JsonConvert.SerializeObject(table);
+            }
+            catch (Exception ex)
+            {
+                connectionClass.CreateMessageLog(ex.Message);
+            }
             return JSONString;
         }
 
@@ -288,7 +340,14 @@ namespace GeminiSearchWebApp.Controllers
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
-            docId = JsonConvert.SerializeObject(connectionClass.GetDocumentId(caseId));
+            try
+            {
+                docId = JsonConvert.SerializeObject(connectionClass.GetDocumentId(caseId));
+            }
+            catch (Exception ex)
+            {
+                connectionClass.CreateMessageLog(ex.Message);
+            }
             return docId;
         }
 
@@ -321,10 +380,25 @@ namespace GeminiSearchWebApp.Controllers
         public IActionResult DocTransport()
         {
             string contentType = string.Empty;
+            byte[] FileBytes = null;
             string path = @"Docs/Asp.net-core.pdf";
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
+
+            try
+            {
+                FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
+                FileInfo fileInfo = new FileInfo(finaldocPath);
+                string extn = fileInfo.Extension;
+                System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
+                new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
+            }
+            catch (Exception ex)
+            {
+                connectionClass.CreateMessageLog(ex.Message);
+            }
+
             byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
             System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
             new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);

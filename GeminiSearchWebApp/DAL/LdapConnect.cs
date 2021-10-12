@@ -24,7 +24,10 @@ namespace GeminiSearchWebApp.DAL
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
+
+
             int portNum = Convert.ToInt32(config["Appsettings:portNumber"]);
+
             var ldapServer = config["Appsettings:ldapServer"];
             var baseDn = config["Appsettings:baseDn"];
 
