@@ -26,12 +26,15 @@ namespace GeminiSearchWebApp.DAL
         }
         public SearchResponse GetLdapConnection(string username, string password, string domain)
         {
-            var ldapServer = "ldap.aurdev.national.com.au";
-            var baseDn = "OU=Staff Accounts,OU=Restricted Accounts,DC=aurdev,DC=national,DC=com,DC=au";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            int portNum = Convert.ToInt32(config["Appsettings:portNumber"]);
+            var ldapServer = config["Appsettings:ldapServer"];
+            var baseDn = config["Appsettings:baseDn"];
 
             try
             {
-                LdapDirectoryIdentifier ldi = new LdapDirectoryIdentifier(ldapServer, 389);
+                LdapDirectoryIdentifier ldi = new LdapDirectoryIdentifier(ldapServer, portNum);
                 LdapConnection ldapConnection = new LdapConnection(ldi);
                 // Console.WriteLine("LdapConnection is created successfully.");
                 ldapConnection.AuthType = AuthType.Basic;
@@ -149,8 +152,6 @@ namespace GeminiSearchWebApp.DAL
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
             var adGroupVal = config["SecuritySettings:ADGroup"];
-            var trimDev = config["AppSettings:leftToTrimForDev"];
-            var trimProd = config["AppSettings:leftToTrimForProd"];
             try
             {
                 if (searchResponse?.ResultCode == ResultCode.Success)

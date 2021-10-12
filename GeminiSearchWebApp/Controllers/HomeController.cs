@@ -86,9 +86,13 @@ namespace GeminiSearchWebApp.Controllers
         {
             string result = string.Empty;
             connectionClass.CreateLog(userName);
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            var domain = config["Appsettings:domain"];
+
             if (userName != null && password != null)
             {
-                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
+                loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
                 if (!string.IsNullOrEmpty(loggedInUserName))
                 {
                     result = JsonConvert.SerializeObject(loggedInUserName);
@@ -196,7 +200,6 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
-                Console.WriteLine("error");
             }
                      
             return TableToJson(dt);
@@ -243,7 +246,6 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
-                Console.WriteLine("error");
             }
 
             return TableToJson(dt);
@@ -265,7 +267,6 @@ namespace GeminiSearchWebApp.Controllers
                 catch (Exception ex)
                 {
                     connectionClass.CreateMessageLog(ex.Message);
-                    Console.WriteLine("error");
                 }
             }
             else
@@ -330,8 +331,6 @@ namespace GeminiSearchWebApp.Controllers
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
             byte[] FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
-            FileInfo fileInfo = new FileInfo(finaldocPath);
-            string extn = fileInfo.Extension;
             System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
             new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
             return File(FileBytes, contentType);
