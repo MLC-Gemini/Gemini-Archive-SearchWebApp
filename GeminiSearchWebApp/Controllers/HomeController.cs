@@ -100,13 +100,9 @@ namespace GeminiSearchWebApp.Controllers
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
                 var config = builder.Build();
                 var domain = config["Appsettings:domain"];
-
                 if (userName != null && password != null)
                 {
                     loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
-                    if (!string.IsNullOrEmpty(loggedInUserName))
-                    {
-                        loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, "AURDEV");
                         if (!string.IsNullOrEmpty(loggedInUserName))
                         {
                             result = JsonConvert.SerializeObject(loggedInUserName);
@@ -116,12 +112,11 @@ namespace GeminiSearchWebApp.Controllers
                         {
                             result = null;
                             connectionClass.CreateMessageLog("Login Username is null");
-                        }
-                    }
-                    else
-                    {
-                        connectionClass.CreateMessageLog("Login Username or Password is null");
-                    }
+                        }                    
+                }
+                else
+                {
+                    connectionClass.CreateMessageLog("Login Username or Password is null");
                 }
             }
             catch (Exception ex)

@@ -235,8 +235,7 @@
                                     }
                                 }
                                 catch (e) {
-                                    writeLogFileFromView(e);
-                                    console.log(e);
+                                    writeLogFileFromView(e);                                    
                                 }
 
                                 var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
@@ -264,7 +263,7 @@
                                                         $.fn.dataTable.ext.errMode = 'none';
 
                                                         $('#actionTable').on('error.dt', function (e, settings, techNote, message) {
-                                                            console.log('An error has been reported by DataTables: ', message);
+                                                            writeLogFileFromView('An error has been reported by DataTables: ', message);
                                                         });
                                                         tableAction = $('#actionTable').DataTable({
                                                             "paginate": false,
@@ -275,8 +274,7 @@
                                                         tableAction.column(4).visible(false);
                                                     }
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);
-                                                    console.log(e);
+                                                    writeLogFileFromView(e);                                                    
                                                 }
 
                                                 $('#actionTable tbody').on('click', 'tr', function () {
@@ -305,7 +303,7 @@
                                                         $.fn.dataTable.ext.errMode = 'none';
 
                                                         $('#docTable').on('error.dt', function (e, settings, techNote, message) {
-                                                            console.log('An error has been reported by DataTables: ', message);
+                                                            writeLogFileFromView('An error has been reported by DataTables: ', message);
                                                         });
                                                         tableDoc = $('#docTable').DataTable({
                                                             "searching": false,
@@ -318,8 +316,7 @@
                                                         });
                                                     }
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);
-                                                    console.log(e);
+                                                    writeLogFileFromView(e);                                                    
                                                 }
 
                                                 try {
@@ -346,8 +343,7 @@
                                                     }
 
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);
-                                                    console.log(e);
+                                                    writeLogFileFromView(e);                                                    
                                                 }
 
                                                 var DELAY = 700, clicks = 0, timer = null;
@@ -387,8 +383,7 @@
                                                                         writeLogFileFromView("Response or CaseId is null");
                                                                     }
                                                                 } catch (e) {
-                                                                    writeLogFileFromView(e);
-                                                                    console.log(e);
+                                                                    writeLogFileFromView(e);                                                                    
                                                                 }
                                                                 $.ajax(
                                                                     {
@@ -445,8 +440,7 @@
                                                                                     modal.style.display = "block";
                                                                                 }
                                                                             } catch (e) {
-                                                                                writeLogFileFromView(e);
-                                                                                console.log(e);
+                                                                                writeLogFileFromView(e);                                                                                
                                                                             }
 
                                                                             $('#actionTable').on('click', 'tr', function (e) {
@@ -546,22 +540,6 @@
                     });
             }
 
-            $('#docTable').on('click', 'tr', function (e) {
-                $.ajax(
-                    {
-                        type: "POST",
-                        url: "/Home/TowerCheck",
-                        dataType: "JSON",
-                        data: {},
-                        success: function (result) {
-                            console.log("success")
-                        },
-                        error: function () {
-                            console.log("error");
-                        }
-                    });
-            });
-
         });
 
 
@@ -601,7 +579,7 @@
                                         maxDate: new Date,
                                         yearRange: "1980:+nn",
                                         onSelect: function (dateText) {
-                                            console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                           // console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
                                             $(this).change();
                                         }
                                     });
@@ -618,7 +596,7 @@
                                         maxDate: new Date,
                                         yearRange: "1980:+nn",
                                         onSelect: function (dateText) {
-                                            console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                          //  console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
                                             $(this).change();
                                         }
                                     });
