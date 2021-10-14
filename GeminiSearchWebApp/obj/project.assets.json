@@ -7887,7 +7887,8 @@
       "Microsoft.Extensions.Hosting.Systemd >= 5.0.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
       "Newtonsoft.Json >= 13.0.1",
-      "System.Data.SqlClient >= 4.8.3"
+      "System.Data.SqlClient >= 4.8.3",
+      "System.DirectoryServices.Protocols >= 5.0.0"
     ]
   },
   "packageFolders": {
@@ -7960,6 +7961,10 @@
           "System.Data.SqlClient": {
             "target": "Package",
             "version": "[4.8.3, )"
+          },
+          "System.DirectoryServices.Protocols": {
+            "target": "Package",
+            "version": "[5.0.0, )"
           }
         },
         "imports": [
