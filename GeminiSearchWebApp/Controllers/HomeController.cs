@@ -99,7 +99,7 @@ namespace GeminiSearchWebApp.Controllers
             {
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
                 var config = builder.Build();
-                var domain = config["Appsettings:domain"];
+                var domain = config["SecuritySettings:domain"];
                 if (userName != null && password != null)
                 {
                     loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);

@@ -26,10 +26,10 @@ namespace GeminiSearchWebApp.DAL
             var config = builder.Build();
 
 
-            int portNum = Convert.ToInt32(config["Appsettings:portNumber"]);
+            int portNum = Convert.ToInt32(config["SecuritySettings:portNumber"]);
 
-            var ldapServer = config["Appsettings:ldapServer"];
-            var baseDn = config["Appsettings:baseDn"];
+            var ldapServer = config["SecuritySettings:ldapServer"];
+            var baseDn = config["SecuritySettings:baseDn"];
 
             try
             {
