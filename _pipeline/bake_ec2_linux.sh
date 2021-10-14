@@ -133,12 +133,22 @@ Adgroup=`aws ssm get-parameters --name $SSM_ADGROUP --with-decryption --region a
 TibcoImageEBF_uid=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_UID --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 TibcoImageEBF_pass=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 
+LdapServerName=`aws ssm get-parameters --name $SSM_LDAP_SERVER_NAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+LdapServerPort=`aws ssm get-parameters --name $SSM_LDAP_SERVER_PORT --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+LdapBaseDn=`aws ssm get-parameters --name $SSM_LDAP_SERVER_BASEDN --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+LdapDomain=`aws ssm get-parameters --name $SSM_LDAP_SERVER_DOMAIN --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+
 if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null' && $TibcoImageEBF_pass != 'null' ]]; then
 # exporting the varibale needed for kms json template files.
   export RDSCONSTR="${Rdsconstr}"
   export ADGROUP="${Adgroup}"
   export TIBCOIMAGEEBF_UID="${TibcoImageEBF_uid}"
   export TIBCOIMAGEEBF_PASS="${TibcoImageEBF_pass}"
+
+  export LDAPSERVERNAME="${LdapServerName}"
+  export LDAPSERVERPORT="${LdapServerPort}"
+  export LDAPBASEDN="${LdapBaseDn}"
+  export LDADOMAIN="${LdapDomain}"
 
   envsubst < Published/appsettings.json > tmp-appsettings.json
 
