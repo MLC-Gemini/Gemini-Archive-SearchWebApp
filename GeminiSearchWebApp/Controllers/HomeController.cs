@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using System.Xml;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -323,10 +325,60 @@ namespace GeminiSearchWebApp.Controllers
             return View(documents);
         }
 
+        public void Execute()
+        {
+            try
+            {
+                string path = @"Docs/ImageTestSoap.xml";
+                string webRootPath = _env.WebRootPath;
+                string finaldocPath = Path.Combine(webRootPath, path);
+                HttpWebRequest request = CreateWebRequest();
+                XmlDocument soapEnvelopeXml = new XmlDocument();
+                soapEnvelopeXml.Load(finaldocPath);
+                using (Stream stream = request.GetRequestStream())
+                {
+                    soapEnvelopeXml.Save(stream);
+                }
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+                    {
+                        string soapResult = rd.ReadToEnd();
+                        Console.WriteLine(soapResult);
+                        string outputFile = @"Docs/ResponseFile.txt";
+                        string responseFilePath = Path.Combine(webRootPath, outputFile);
+                        StreamWriter streamWriter = new StreamWriter(responseFilePath);
+                        streamWriter.WriteLine(soapResult);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "Error occured in Service Consumed !");
+            }
+
+        }
+        /// <summary>
+        /// Create a soap webrequest to [Url]
+        /// </summary>
+        /// <returns></returns>
+        public static HttpWebRequest CreateWebRequest()
+        {
+            string sWebServiceUrls = "https://alb.integration3.wealthint.awsnp.national.com.au/eProxy/service/ImagingInquiry";
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
+            webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+            // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+            webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+            webRequest.Accept = "text/xml";
+            webRequest.Method = "POST";
+            return webRequest;
+        }
+
         public IActionResult DocTransport()
         {
+            Execute();
             string contentType = string.Empty;
-            string path = @"Docs/Asp.net-core.pdf";
+            string path = @"Docs/ResponseFile.txt";
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
