@@ -13,9 +13,9 @@ AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
 # Aws comman Tags
 T_CostCentre="V_Gemini" 
 T_ApplicationID="ML0095"
-T_AppCategory="B"
+T_AppCategory="D"
 T_SupportGroup="WorkManagementProductionSupport"
-T_Name="Gemini_web"
+T_Name="Gemini_Archive_web"
 T_BackupOptOut="No"
 
 #artifactory SSM parameter store variable
@@ -39,10 +39,10 @@ SSM_LDAP_SERVER_BASEDN="/gemini_archive_web/ldap_base_dn"
 SSM_LDAP_SERVER_DOMAIN="/gemini_archive_web/ldap_domain"
 
 #Deploy Bake 
-TechnicalService="GeminiWeb"
-Owner="GeminiWeb"
-Account="GeminiWeb"
-Name="GeminiWeb-bake-deploy"
+TechnicalService="GeminiArchiveWeb"
+Owner="Gemini"
+Account="Gemini"
+Name="GeminiArchiveWeb-bake-deploy"
 
 #NO_PROXY=localhost,169.254.169.254,hip.ext.national.com.au,github.aus.thenational.com,artifactory.ext.national.com.au
 
