@@ -1,6 +1,7 @@
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\css\site.css
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomCSS\jquery-ui.css
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomCSS\jquery.dataTables.min.css
+C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomCSS\SearchCases.css
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery-ui.min.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.dataTables.min.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.js

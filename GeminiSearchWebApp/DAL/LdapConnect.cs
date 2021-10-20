@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.Protocols;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using GeminiSearchWebApp.UtilityFolder;
 
 namespace GeminiSearchWebApp.DAL
 {
@@ -28,9 +24,12 @@ namespace GeminiSearchWebApp.DAL
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
-            int portNum = Convert.ToInt32(config["Appsettings:portNumber"]);
-            var ldapServer = config["Appsettings:ldapServer"];
-            var baseDn = config["Appsettings:baseDn"];
+
+
+            int portNum = Convert.ToInt32(config["SecuritySettings:portNumber"]);
+
+            var ldapServer = config["SecuritySettings:ldapServer"];
+            var baseDn = config["SecuritySettings:baseDn"];
 
             try
             {

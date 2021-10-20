@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using GeminiSearchWebApp.Controllers;
 using GeminiSearchWebApp.Models;
-using GeminiSearchWebApp.Controllers;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using System.Net;
-using System.DirectoryServices.Protocols;
-using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace GeminiSearchWebApp.DAL
 {
