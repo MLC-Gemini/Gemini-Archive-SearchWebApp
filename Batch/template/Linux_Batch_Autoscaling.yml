@@ -33,7 +33,7 @@ Parameters:
   CostCentre:
     Description: Mandatory Cost Centre tag
     Type: String
-    Default: 'V_GeminiWeb'
+    Default: 'V_Gemini'
   ApplicationID:
     Description: Mandatory ApplicationID tag
     Type: String
@@ -45,7 +45,7 @@ Parameters:
   AppCategory:
     Description: Mandatory AppCategory tag
     Type: String
-    Default: 'B'
+    Default: 'D'
   UserData1:
     Type: String
     Default: ''
