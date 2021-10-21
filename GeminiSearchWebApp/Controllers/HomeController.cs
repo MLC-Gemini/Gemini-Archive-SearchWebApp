@@ -366,14 +366,21 @@ namespace GeminiSearchWebApp.Controllers
                         Console.WriteLine(soapResult);
                         string outputFile = @"Docs/ResponseFile.txt";
                         string responseFilePath = Path.Combine(webRootPath, outputFile);
-                        StreamWriter streamWriter = new StreamWriter(responseFilePath);
+                        if (System.IO.File.Exists(responseFilePath))
+                        {
+                            System.IO.File.Delete(responseFilePath);
+                        }
+                        FileStream fs = new FileStream(responseFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                        StreamWriter streamWriter = new StreamWriter(fs);
                         streamWriter.WriteLine(soapResult);
+                        streamWriter.Flush();
+                        streamWriter.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + "Error occured in Service Consumed !");
+                connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
             }
 
         }
