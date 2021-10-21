@@ -105,8 +105,8 @@ elif [[ $env_id == 'prod' ]]; then
     ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au" 
 
    # Route53 DNS Variable
-    GEMINI_DNS_ZONE_NAME="gemini.awsnp.national.com.au"
-    GEMINI_DNS_ZONE_ID=""
+    GEMINI_DNS_ZONE_NAME="gemini.aws.national.com.au"
+    GEMINI_DNS_ZONE_ID="Z00088892Y517L4T4PLC1"
     GEMINIWEB_DNS="geminiarchive-app-prod"
 
 else
