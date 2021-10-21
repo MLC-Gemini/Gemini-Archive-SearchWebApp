@@ -80,23 +80,23 @@ if [[ $env_id == 'nonprod' ]]; then
 elif [[ $env_id == 'prod' ]]; then
   #echo "The variable for prod env"
   # kMS JSON template variable 
-    OWNER_ACCOUNT=""
-    KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-geminiprod-devops-appstack"
+    OWNER_ACCOUNT="937709052626"
+    KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-geminiprod-2FA-devops-appstack"
     GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
     IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
     
   # Private VPC
-    VPCID=""
+    VPCID="vpc-0c0121a7c332d8b22"
     # private subnets
-    SUBNETID1="" 
-    SUBNETID2=""
-    SUBNETID3=""
+    SUBNETID1="subnet-0507e89e99c22c1f0" 
+    SUBNETID2="subnet-0fd7f4b9c8a849f64"
+    SUBNETID3="subnet-0909479f29bc9f90c"
  
   # EC2 variable
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
     # Aws Tags
     T_Environment="prod"
-    T_EC2_PowerMgt="WKED"
+    T_EC2_PowerMgt="SNAPD"
     # Lunch template variable 
     IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
