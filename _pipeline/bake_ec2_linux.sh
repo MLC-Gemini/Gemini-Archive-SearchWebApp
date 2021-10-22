@@ -128,7 +128,11 @@ aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeas
 
 echo "4. Configurting ASP.NET secret form AWS SSM parameter store value"
 
-Rdsconstr=`aws ssm get-parameters --name $SSM_RDS_CONSTR --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Rds_server=`aws ssm get-parameters --name $SSM_RDS_SNAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Rds_uname=`aws ssm get-parameters --name $SSM_RDS_UNAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Rds_pass=`aws ssm get-parameters --name $SSM_RDS_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Rdsconstr="Server="$Rds_server";Database=image;MultipleActiveResultSets=true;User Id="$Rds_uname";Password="$Rds_pass";"
+
 Adgroup=`aws ssm get-parameters --name $SSM_ADGROUP --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 TibcoImageEBF_uid=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_UID --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 TibcoImageEBF_pass=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
