@@ -311,13 +311,15 @@ namespace GeminiSearchWebApp.Controllers
             return docId;
         }
 
-        public void Execute()
+        public void Execute(string docId)
         {
             try
             {
                 string path = @"Docs/ImageTestSoap.xml";
                 string webRootPath = _env.WebRootPath;
                 string finaldocPath = Path.Combine(webRootPath, path);
+                var text = System.IO.File.ReadAllText(finaldocPath);
+                text = text.Replace("{0}", docId);
                 HttpWebRequest request = CreateWebRequest();
                 XmlDocument soapEnvelopeXml = new XmlDocument();
                 soapEnvelopeXml.Load(finaldocPath);
