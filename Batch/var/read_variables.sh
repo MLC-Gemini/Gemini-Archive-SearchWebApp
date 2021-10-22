@@ -29,13 +29,13 @@ SSL_CHAIN1="/gemini_archive_web/ssl_chain1"
 SSL_CHAIN2="/gemini_archive_web/ssl_chain2"
 
 # ASP.NET AWS SSM parameter store variable
-SSM_RDS_SNAME="/gemini_archive_web/rds_server"
+SSM_RDS_SERVER="/gemini_archive_web/rds_server"
 SSM_RDS_UNAME="/gemini_archive_web/rds_uname"
 SSM_RDS_PASS="/gemini_archive_web/rds_pass"
-
 SSM_ADGROUP="/gemini_archive_web/ad_group"
-SSM_TIBCO_IMAGEEBF_SRV_UID="/gemini_archive_web/ticbo_srv_uid"
-SSM_TIBCO_IMAGEEBF_SRV_PASS="/gemini_archive_web/ticbo_srv_pass"
+SSM_TIBCO_IMAGEEBF_SRV_UID="/gemini_archive_web/tibco_srv_uid"
+SSM_TIBCO_IMAGEEBF_SRV_PASS="/gemini_archive_web/tibco_srv_pass"
+SSM_TIBCO_IMAGEEBF_URL="/gemini_archive_web/tibco_imageEBF_url"
 SSM_LDAP_SERVER_NAME="/gemini_archive_web/ldap_server_name"
 SSM_LDAP_SERVER_PORT="/gemini_archive_web/ldap_port_number"
 SSM_LDAP_SERVER_BASEDN="/gemini_archive_web/ldap_base_dn"

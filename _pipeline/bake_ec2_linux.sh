@@ -128,15 +128,14 @@ aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeas
 
 echo "4. Configurting ASP.NET secret form AWS SSM parameter store value"
 
-Rds_server=`aws ssm get-parameters --name $SSM_RDS_SNAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+Rds_server=`aws ssm get-parameters --name $SSM_RDS_SERVER --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 Rds_uname=`aws ssm get-parameters --name $SSM_RDS_UNAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 Rds_pass=`aws ssm get-parameters --name $SSM_RDS_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 Rdsconstr="Server="$Rds_server";Database=image;MultipleActiveResultSets=true;User Id="$Rds_uname";Password="$Rds_pass";"
-
 Adgroup=`aws ssm get-parameters --name $SSM_ADGROUP --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+TibcoImageEBF_url=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_URL --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 TibcoImageEBF_uid=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_UID --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 TibcoImageEBF_pass=`aws ssm get-parameters --name $SSM_TIBCO_IMAGEEBF_SRV_PASS --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
-
 LdapServerName=`aws ssm get-parameters --name $SSM_LDAP_SERVER_NAME --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 LdapServerPort=`aws ssm get-parameters --name $SSM_LDAP_SERVER_PORT --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 LdapBaseDn=`aws ssm get-parameters --name $SSM_LDAP_SERVER_BASEDN --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
@@ -146,6 +145,7 @@ if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null'
 # exporting the varibale needed for kms json template files.
   export RDSCONSTR="${Rdsconstr}"
   export ADGROUP="${Adgroup}"
+  export TIBCOIMAGEEBF_URL="${TibcoImageEBF_url}"
   export TIBCOIMAGEEBF_UID="${TibcoImageEBF_uid}"
   export TIBCOIMAGEEBF_PASS="${TibcoImageEBF_pass}"
 
