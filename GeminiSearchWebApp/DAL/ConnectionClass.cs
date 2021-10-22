@@ -285,6 +285,7 @@ namespace GeminiSearchWebApp.DAL
         {
             getUserName = userName;
             loginDateTime = DateTime.Now;
+            userName = "LDCYS12";
 
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
@@ -333,6 +334,7 @@ namespace GeminiSearchWebApp.DAL
         {
             var exceptionDateTime = DateTime.Now;
             var uName = getUserName;
+            uName = "LDCYS12";
 
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
