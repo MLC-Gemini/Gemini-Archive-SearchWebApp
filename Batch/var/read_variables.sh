@@ -29,7 +29,10 @@ SSL_CHAIN1="/gemini_archive_web/ssl_chain1"
 SSL_CHAIN2="/gemini_archive_web/ssl_chain2"
 
 # ASP.NET AWS SSM parameter store variable
-SSM_RDS_CONSTR="/gemini_archive_web/rds_con_str"
+SSM_RDS_SNAME="/gemini_archive_web/rds_server"
+SSM_RDS_UNAME="/gemini_archive_web/rds_uname"
+SSM_RDS_PASS="/gemini_archive_web/rds_pass"
+
 SSM_ADGROUP="/gemini_archive_web/ad_group"
 SSM_TIBCO_IMAGEEBF_SRV_UID="/gemini_archive_web/ticbo_srv_uid"
 SSM_TIBCO_IMAGEEBF_SRV_PASS="/gemini_archive_web/ticbo_srv_pass"
