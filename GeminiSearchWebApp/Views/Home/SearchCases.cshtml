@@ -235,7 +235,7 @@
                                     }
                                 }
                                 catch (e) {
-                                    writeLogFileFromView(e);                                    
+                                    writeLogFileFromView(e);
                                 }
 
                                 var caseTable = $("#myTable tr").eq(1).find("td:nth-child(11)");
@@ -274,7 +274,7 @@
                                                         tableAction.column(4).visible(false);
                                                     }
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);                                                    
+                                                    writeLogFileFromView(e);
                                                 }
 
                                                 $('#actionTable tbody').on('click', 'tr', function () {
@@ -316,7 +316,7 @@
                                                         });
                                                     }
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);                                                    
+                                                    writeLogFileFromView(e);
                                                 }
 
                                                 try {
@@ -343,7 +343,7 @@
                                                     }
 
                                                 } catch (e) {
-                                                    writeLogFileFromView(e);                                                    
+                                                    writeLogFileFromView(e);
                                                 }
 
                                                 var DELAY = 700, clicks = 0, timer = null;
@@ -383,7 +383,7 @@
                                                                         writeLogFileFromView("Response or CaseId is null");
                                                                     }
                                                                 } catch (e) {
-                                                                    writeLogFileFromView(e);                                                                    
+                                                                    writeLogFileFromView(e);
                                                                 }
                                                                 $.ajax(
                                                                     {
@@ -391,7 +391,23 @@
                                                                         url: "/Home/GetDocId",
                                                                         dataType: "JSON",
                                                                         data: { caseId: selectedCaseId },
-                                                                        success: function (comeback) { },
+                                                                        success: function (comeback) {
+                                                                            $.each(comeback, function (i, index) {
+                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
+                                                                                    if (data == false) {
+                                                                                        if (docWindow == null || docWindow.closed) {
+                                                                                            docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
+                                                                                        }
+                                                                                        else {
+                                                                                            docWindow.focus();
+                                                                                        }
+                                                                                        document.onmousedown = focusPopup;
+                                                                                        document.onkeyup = focusPopup;
+                                                                                        document.onmousemove = focusPopup;
+                                                                                    }
+                                                                                 });
+                                                                            });
+                                                                        },
                                                                         error: function () {
                                                                             writeLogFileFromView("Error will fetching Document Id");
                                                                         }
@@ -440,7 +456,7 @@
                                                                                     modal.style.display = "block";
                                                                                 }
                                                                             } catch (e) {
-                                                                                writeLogFileFromView(e);                                                                                
+                                                                                writeLogFileFromView(e);
                                                                             }
 
                                                                             $('#actionTable').on('click', 'tr', function (e) {

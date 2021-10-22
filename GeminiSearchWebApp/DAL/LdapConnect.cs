@@ -65,7 +65,7 @@ namespace GeminiSearchWebApp.DAL
         {
             string loggedInUserName = string.Empty;
             SearchResponse searchResponse=null;
-            
+
             try
             {
                 searchResponse = GetLdapConnection(username, password, domain);

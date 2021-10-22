@@ -1,5 +1,4 @@
-﻿using Gemini.Models;
-using GeminiSearchWebApp.DAL;
+﻿using GeminiSearchWebApp.DAL;
 using GeminiSearchWebApp.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,12 +11,9 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Xml;
-using System.Threading.Tasks;
 
 namespace GeminiSearchWebApp.Controllers
 {
@@ -84,8 +80,6 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.emptyCredentials = config["Appsettings:emptyCredentials"];
             return View();
         }
-
-       
 
         public IActionResult LogOut()
         {
@@ -259,8 +253,6 @@ namespace GeminiSearchWebApp.Controllers
 
         }
 
-       
-
         public string GetActionRecord(int selectedCaseId)
         {
             DataTable dt = new DataTable();
@@ -318,32 +310,6 @@ namespace GeminiSearchWebApp.Controllers
             return docId;
         }
 
-        // code for PI tower service call
-
-        [HttpPost]
-        public async Task<IActionResult> GetDoc(int id)
-        {
-            Documents documents = new Documents();
-
-            using (var httpClient = new HttpClient())
-            {
-                // httpClient.DefaultRequestHeaders.Add("Key", "Secret@123");
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", "username:password");
-                StringContent content = new StringContent(JsonConvert.SerializeObject(documents), Encoding.UTF8, "application/json");
-                using (var response = await httpClient.GetAsync("" + id))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        documents = JsonConvert.DeserializeObject<Documents>(apiResponse);
-                    }
-                    else
-                        ViewBag.StatusCode = response.StatusCode;
-                }
-            }
-            return View(documents);
-        }
-
         public void Execute()
         {
             try
@@ -390,7 +356,13 @@ namespace GeminiSearchWebApp.Controllers
         /// <returns></returns>
         public static HttpWebRequest CreateWebRequest()
         {
-            string sWebServiceUrls = "https://alb.integration3.wealthint.awsnp.national.com.au/eProxy/service/ImagingInquiry";
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            string towerAPIurl = config["SecuritySettings:towerAPIurl"];
+            string serviceUrl = config["SecuritySettings:serviceUrl"];
+            
+            string sWebServiceUrls = string.Concat(towerAPIurl, serviceUrl);
+            //string sWebServiceUrls = "https://alb.integration3.wealthint.awsnp.national.com.au/eProxy/service/ImagingInquiry";
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
             webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
             // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
@@ -400,9 +372,22 @@ namespace GeminiSearchWebApp.Controllers
             return webRequest;
         }
 
+        public static void LoadBase64(string base64, string extn, string docId)
+        {
+            bool checkres = IsBase64String(base64);
+            byte[] bytes = Convert.FromBase64String(base64);
+            string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
+            System.IO.File.WriteAllBytes(filePath, bytes);
+        }
+
+        public static bool IsBase64String(string s)
+        {
+            s = s.Trim();
+            return (s.Length % 4 == 0) && Regex.IsMatch(s, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
+        }
+
         public IActionResult DocTransport()
         {
-            Execute();
             string contentType = string.Empty;
             byte[] FileBytes = null;
             string path = @"Docs/ResponseFile.txt";
