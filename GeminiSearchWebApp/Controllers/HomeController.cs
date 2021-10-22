@@ -301,7 +301,8 @@ namespace GeminiSearchWebApp.Controllers
             string docId = string.Empty;
             try
             {
-                docId = JsonConvert.SerializeObject(connectionClass.GetDocumentId(caseId));
+                DataTable documentId = connectionClass.GetDocumentId(caseId);
+                docId=JsonConvert.SerializeObject(documentId);
             }
             catch (Exception ex)
             {
@@ -374,10 +375,17 @@ namespace GeminiSearchWebApp.Controllers
 
         public static void LoadBase64(string base64, string extn, string docId)
         {
-            bool checkres = IsBase64String(base64);
-            byte[] bytes = Convert.FromBase64String(base64);
-            string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
-            System.IO.File.WriteAllBytes(filePath, bytes);
+            try
+            {
+                bool checkres = IsBase64String(base64);
+                byte[] bytes = Convert.FromBase64String(base64);
+                string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
+                System.IO.File.WriteAllBytes(filePath, bytes);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error in LoadBase64 Method");
+            }
         }
 
         public static bool IsBase64String(string s)
