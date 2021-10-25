@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -25,7 +26,8 @@ namespace GeminiSearchWebApp.Controllers
         public LdapConnect ldapConnect;
         public string loggedInUserName { get; set; }
         public static bool loginResult = false;
-        private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _env;        
+        public string createdFile;
         public HomeController(IConfiguration _configuration , IWebHostEnvironment env)
         {           
             configuration = _configuration;
@@ -311,10 +313,16 @@ namespace GeminiSearchWebApp.Controllers
             return docId;
         }
 
-        public void Execute(string docId)
+        public string Execute(string docId)
         {
             try
             {
+                string docName = string.Empty;
+                string docType = string.Empty;
+                string respStatus = string.Empty;
+                string binaryResponse = string.Empty;
+                string responseFilePath = string.Empty;
+                string OpeningDocPath = string.Empty;
                 string path = @"Docs/ImageTestSoap.xml";
                 string webRootPath = _env.WebRootPath;
                 string finaldocPath = Path.Combine(webRootPath, path);
@@ -333,23 +341,36 @@ namespace GeminiSearchWebApp.Controllers
                     {
                         string soapResult = rd.ReadToEnd();
                         Console.WriteLine(soapResult);
-                        string outputFile = @"Docs/ResponseFile.txt";
-                        string responseFilePath = Path.Combine(webRootPath, outputFile);
+                        string outputFile = @"Docs/XML_Response.xml";
+                        responseFilePath = Path.Combine(webRootPath, outputFile);
                         if (System.IO.File.Exists(responseFilePath))
                         {
                             System.IO.File.Delete(responseFilePath);
                         }
-                        FileStream fs = new FileStream(responseFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                        StreamWriter streamWriter = new StreamWriter(fs);
-                        streamWriter.WriteLine(soapResult);
-                        streamWriter.Flush();
-                        streamWriter.Close();
+                        // System.IO.File.SetAttributes(responseFilePath, FileAttributes.Normal);
+                        List<string> lstResponse = GetResponseDetails(responseFilePath);
+                        if (lstResponse != null)
+                        {
+                            docType = lstResponse[0].ToString();
+                            respStatus = lstResponse[1].ToString();
+                            binaryResponse = lstResponse[2].ToString();
+                        }
+                        if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                        {
+                          // docName= "Docs/XML_Response." + docType.ToLower() + ""
+                            createdFile = @"Docs/XML_Response." + docType.ToLower() + "";
+                            OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                            //System.IO.File.SetAttributes(OpeningDocPath, FileAttributes.Normal);
+                            LoadBase64(binaryResponse, OpeningDocPath);
+                        }
                     }
                 }
+                return createdFile;
             }
             catch (Exception ex)
-            {
+            {                
                 connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
+                return string.Empty;
             }
 
         }
@@ -375,32 +396,96 @@ namespace GeminiSearchWebApp.Controllers
             return webRequest;
         }
 
-        public static void LoadBase64(string base64, string extn, string docId)
+        //public static void LoadBase64(string base64, string extn, string docId)
+        //{
+        //    try
+        //    {
+        //        bool checkres = IsBase64String(base64);
+        //        byte[] bytes = Convert.FromBase64String(base64);
+        //        string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
+        //        System.IO.File.WriteAllBytes(filePath, bytes);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        Console.WriteLine("Error in LoadBase64 Method");
+        //    }
+        //}
+
+        public static void LoadBase64(string base64 , string path)
         {
             try
-            {
-                bool checkres = IsBase64String(base64);
+            {               
                 byte[] bytes = Convert.FromBase64String(base64);
-                string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
-                System.IO.File.WriteAllBytes(filePath, bytes);
+                // System.IO.File.SetAttributes(path, FileAttributes.Normal);
+                using (FileStream fs = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                {
+                    fs.Write(bytes, 0, bytes.Length);
+                    fs.Flush();
+                }
+                // System.IO.File.WriteAllBytes(filePath, fs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Error in LoadBase64 Method");
+                Console.WriteLine("Error in LoadBase64 Method" + ex.Message);
             }
         }
 
-        public static bool IsBase64String(string s)
+
+        public List<string> GetResponseDetails(string pathofRespFile)
         {
-            s = s.Trim();
-            return (s.Length % 4 == 0) && Regex.IsMatch(s, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None);
+            List<string> lstResult = new List<string>();
+            var name = " ";
+            IDictionary<string, string> mydict = new Dictionary<string, string>();
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(pathofRespFile))
+                {
+                    while (reader.Read())
+                    {
+                        switch (reader.NodeType)
+                        {
+                            case XmlNodeType.Element:
+                                name = reader.Name;
+                                break;
+                            case XmlNodeType.Text:
+                                mydict.Add(name, reader.Value);
+                                break;
+                        }
+                    }
+                    if (mydict.ContainsKey("ns0:ImageType"))
+                    {
+                        string imageType = mydict["ns0:ImageType"];
+                        lstResult.Add(imageType.Trim());
+                        Console.WriteLine(imageType.Trim());
+                    }
+                    if (mydict.ContainsKey("ns1:StatusDesc"))
+                    {
+                        string statusDesc = mydict["ns1:StatusDesc"];
+                        lstResult.Add(statusDesc.Trim());
+                        Console.WriteLine(statusDesc);
+                    }
+                    if (mydict.ContainsKey("ns1:binaryContent"))
+                    {
+                        string binaryContent = mydict["ns1:binaryContent"];
+                        lstResult.Add(binaryContent.Trim());
+                        Console.WriteLine(binaryContent.Trim());
+                    }
+                }
+                return lstResult;
+            }
+            catch (Exception)
+            {
+                return null;
+            }            
+           
         }
+
 
         public IActionResult DocTransport()
         {
             string contentType = string.Empty;
             byte[] FileBytes = null;
-            string path = @"Docs/ResponseFile.txt";
+            string path = @"Docs/XML_Response.doc";          
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
