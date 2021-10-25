@@ -6,7 +6,7 @@ echo "nohup sudo /usr/bin/bash /tmp/patch-me.sh &" >> tmp_batch_userdata_$$
 
 aws cloudformation deploy \
         --template-file Batch/template/Linux_Batch_Autoscaling.yml \
-        --stack-name GEMINI-WEB-$Name-Stack \
+        --stack-name GEMINI-WEB-$Name \
         --parameter-overrides \
                   "IAMInstanceProfile=$IAMInstanceProfile" \
                   "ImageId=$ImageId" \
