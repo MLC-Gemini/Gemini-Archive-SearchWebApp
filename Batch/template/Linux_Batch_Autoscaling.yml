@@ -102,7 +102,7 @@ Resources:
     Properties:
       Scheme: internal
       IpAddressType: ipv4
-      Name: !Sub "${AWS::StackName}-LoadBalancer"
+      Name: !Sub "${AWS::StackName}-ALB"
       Subnets: !Ref Subnets
       SecurityGroups:
         - !Ref SecurityGroup
@@ -221,7 +221,7 @@ Outputs:
     Description: Gemini Web LoadBalancer
     Value: !Ref LoadBalancer
     Export:
-      Name: !Sub "${AWS::StackName}-LoadBalancer"
+      Name: !Sub "${AWS::StackName}-ALB"
   GeminiWebTargetGroup:
     Description: Gemini Web Target Group
     Value: !Ref GeminiWebTargetGroup
