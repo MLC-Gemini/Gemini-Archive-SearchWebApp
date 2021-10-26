@@ -28,6 +28,7 @@ namespace GeminiSearchWebApp.Controllers
         public static bool loginResult = false;
         private readonly IWebHostEnvironment _env;        
         public string createdFile;
+        public string createdFileName;
         public HomeController(IConfiguration _configuration , IWebHostEnvironment env)
         {           
             configuration = _configuration;
@@ -324,10 +325,13 @@ namespace GeminiSearchWebApp.Controllers
                 string responseFilePath = string.Empty;
                 string OpeningDocPath = string.Empty;
                 string path = @"Docs/ImageTestSoap.xml";
+                string requestpath = @"Docs/SoapInputReq.xml";
                 string webRootPath = _env.WebRootPath;
+                string reqdocPath = Path.Combine(webRootPath, requestpath);
                 string finaldocPath = Path.Combine(webRootPath, path);
-                var text = System.IO.File.ReadAllText(finaldocPath);
-                text = text.Replace("{0}", docId);
+                var text = System.IO.File.ReadAllText(reqdocPath);
+                text = text.Replace("{0}", docId.Trim());
+                System.IO.File.WriteAllText(finaldocPath, text);
                 HttpWebRequest request = CreateWebRequest();
                 XmlDocument soapEnvelopeXml = new XmlDocument();
                 soapEnvelopeXml.Load(finaldocPath);
@@ -348,24 +352,32 @@ namespace GeminiSearchWebApp.Controllers
                             System.IO.File.Delete(responseFilePath);
                         }
                         // System.IO.File.SetAttributes(responseFilePath, FileAttributes.Normal);
-                        List<string> lstResponse = GetResponseDetails(responseFilePath);
-                        if (lstResponse != null)
+                        System.IO.File.WriteAllText(responseFilePath, soapResult);
+                        if (System.IO.File.Exists(responseFilePath))
                         {
-                            docType = lstResponse[0].ToString();
-                            respStatus = lstResponse[1].ToString();
-                            binaryResponse = lstResponse[2].ToString();
+                            List<string> lstResponse = GetResponseDetails(responseFilePath);
+                            if (lstResponse != null)
+                            {
+                                docType = lstResponse[0].ToString();
+                                respStatus = lstResponse[1].ToString();
+                                binaryResponse = lstResponse[2].ToString();
+                            }
+                            if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                            {
+                                // docName= "Docs/XML_Response." + docType.ToLower() + ""
+                                createdFile = @"Docs/XML_Response." + docType.ToLower() + "";
+                                createdFileName = "XML_Response." + docType.ToLower();
+                                Console.WriteLine(createdFileName + " is created");
+                                OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                                //System.IO.File.SetAttributes(OpeningDocPath, FileAttributes.Normal);
+                                LoadBase64(binaryResponse, OpeningDocPath);
+                            }
                         }
-                        if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
-                        {
-                          // docName= "Docs/XML_Response." + docType.ToLower() + ""
-                            createdFile = @"Docs/XML_Response." + docType.ToLower() + "";
-                            OpeningDocPath = Path.Combine(webRootPath, createdFile);
-                            //System.IO.File.SetAttributes(OpeningDocPath, FileAttributes.Normal);
-                            LoadBase64(binaryResponse, OpeningDocPath);
-                        }
+                        
+                       
                     }
                 }
-                return createdFile;
+                return createdFileName;
             }
             catch (Exception ex)
             {                
@@ -394,22 +406,7 @@ namespace GeminiSearchWebApp.Controllers
             webRequest.Accept = "text/xml";
             webRequest.Method = "POST";
             return webRequest;
-        }
-
-        //public static void LoadBase64(string base64, string extn, string docId)
-        //{
-        //    try
-        //    {
-        //        bool checkres = IsBase64String(base64);
-        //        byte[] bytes = Convert.FromBase64String(base64);
-        //        string filePath = @"C:\Temp\VSCode\BaseStringToImage\BaseStringToImage\Images\fetchfile5276.doc";
-        //        System.IO.File.WriteAllBytes(filePath, bytes);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        Console.WriteLine("Error in LoadBase64 Method");
-        //    }
-        //}
+        }       
 
         public static void LoadBase64(string base64 , string path)
         {
@@ -481,11 +478,13 @@ namespace GeminiSearchWebApp.Controllers
         }
 
 
-        public IActionResult DocTransport()
+        public IActionResult DocTransport(string toBeOpendocName)
         {
+            toBeOpendocName = toBeOpendocName.Trim();
             string contentType = string.Empty;
             byte[] FileBytes = null;
-            string path = @"Docs/XML_Response.doc";          
+           // string path = @"Docs/XML_Response.doc";
+            string path = @"Docs/"+toBeOpendocName;
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);

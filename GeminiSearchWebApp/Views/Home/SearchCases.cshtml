@@ -393,9 +393,10 @@
                                                                         data: { caseId: selectedCaseId },
                                                                         success: function (comeback) {
                                                                             $.each(comeback, function (i, index) {                                                                               
-                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {                                                                                   
-                                                                                        if (docWindow == null || docWindow.closed) {
-                                                                                            docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
+                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
+                                                                                    console.log(data);
+                                                                                    if (docWindow == null || docWindow.closed) {
+                                                                                        docWindow = window.open('/Home/DocTransport/?toBeOpendocName='+ data +'', "_blank", "height = 600, width = 800, left = 150, top = 50");
                                                                                         }
                                                                                         else {
                                                                                             docWindow.focus();
