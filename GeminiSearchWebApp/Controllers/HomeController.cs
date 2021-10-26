@@ -339,6 +339,8 @@ namespace GeminiSearchWebApp.Controllers
                 {
                     soapEnvelopeXml.Save(stream);
                 }
+                WebResponse response1 = request.GetResponse();                
+                Console.WriteLine(response1);
                 using (WebResponse response = request.GetResponse())
                 {
                     using (StreamReader rd = new StreamReader(response.GetResponseStream()))
@@ -396,15 +398,17 @@ namespace GeminiSearchWebApp.Controllers
             var config = builder.Build();
             string towerAPIurl = config["SecuritySettings:towerAPIurl"];
             string serviceUrl = config["SecuritySettings:serviceUrl"];
-            
-            string sWebServiceUrls = string.Concat(towerAPIurl, serviceUrl);
-            //string sWebServiceUrls = "https://alb.integration3.wealthint.awsnp.national.com.au/eProxy/service/ImagingInquiry";
+            Console.WriteLine(towerAPIurl);
+            Console.WriteLine(serviceUrl);
+            string sWebServiceUrls = string.Concat(towerAPIurl,serviceUrl);
+            Console.WriteLine(sWebServiceUrls);
             HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
             webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
             // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
             webRequest.ContentType = "text/xml;charset=\"utf-8\"";
             webRequest.Accept = "text/xml";
             webRequest.Method = "POST";
+            Console.WriteLine(webRequest.Headers);
             return webRequest;
         }       
 
