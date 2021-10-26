@@ -103,7 +103,7 @@ bash tmp_launch_asg_$$.sh
 
 # ######################################
 # echo "3. Set DNS entry"
- lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+ lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$env_id-Stack \
  	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
  lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
 #  echo $env_id
@@ -115,7 +115,7 @@ bash tmp_launch_asg_$$.sh
 # ##Added below code as CAST requirement to verify the resource is up and running
  while [[   $(aws ec2 describe-instances --instance-id  \
                  $(aws autoscaling describe-auto-scaling-groups  --auto-scaling-group-names  \
-                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$T_Environment \
+                         $(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$env_id-Stack \
                          |jq -r '.StackResources[]|select (.ResourceType=="AWS::AutoScaling::AutoScalingGroup").PhysicalResourceId')  \
                  |jq -r '.AutoScalingGroups[0].Instances[].InstanceId') \
          | jq -r '.Reservations[].Instances[].State.Name') != 'running' ]]
