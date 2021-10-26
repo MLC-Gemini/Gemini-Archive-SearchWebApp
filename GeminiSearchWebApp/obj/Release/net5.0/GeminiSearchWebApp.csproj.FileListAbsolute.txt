@@ -427,3 +427,4 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\R
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\runtimes\win-arm\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\SearchLayout.cshtml.g.cs
+C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\DocTransport.cshtml.g.cs

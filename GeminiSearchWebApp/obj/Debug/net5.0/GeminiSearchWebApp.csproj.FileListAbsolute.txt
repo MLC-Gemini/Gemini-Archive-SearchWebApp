@@ -397,3 +397,4 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\D
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
+C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\Razor\Views\Home\DocTransport.cshtml.g.cs

@@ -370,7 +370,7 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {                
                 connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
-                return string.Empty;
+                return null;
             }
 
         }
@@ -489,7 +489,6 @@ namespace GeminiSearchWebApp.Controllers
             string webRootPath = _env.WebRootPath;
             string finaldocPath = Path.Combine(webRootPath, path);
             Console.WriteLine("Path of the document is " + finaldocPath);
-
             try
             {
                 FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
@@ -502,8 +501,9 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
-                return null;
+                return View();
             }
+            
 
         }
 
