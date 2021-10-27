@@ -354,7 +354,7 @@
 
                                                         clicks++;
 
-                                                        if (clicks === 1) {
+                                                        if (clicks === 1) {                                                           
                                                             rowId = this.rowIndex;
                                                             var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
                                                             var selectedCaseId = caseText.text();
@@ -391,16 +391,17 @@
                                                                         url: "/Home/GetDocId",
                                                                         dataType: "JSON",
                                                                         data: { caseId: selectedCaseId },
-                                                                        success: function (comeback) {
+                                                                        success: function (comeback) {                                                                            
                                                                             $.each(comeback, function (i, index) {                                                                               
-                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
-                                                                                    console.log(data);
-                                                                                    if (docWindow == null || docWindow.closed) {
-                                                                                        docWindow = window.open('/Home/DocTransport/?toBeOpendocName='+ data +'', "_blank", "height = 600, width = 800, left = 150, top = 50");
-                                                                                        }
-                                                                                        else {
-                                                                                            docWindow.focus();
-                                                                                        }
+                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) { 
+                                                                                   
+                                                                                    //if (docWindow == null || docWindow.closed) {
+                                                                                    //    docWindow = window.open('/Home/DocTransport/?toBeOpendocName='+ data +'', "_blank", "height = 600, width = 800, left = 150, top = 50");
+                                                                                    //    }
+                                                                                    //    else {
+                                                                                    //        docWindow.focus();
+                                                                                    //}
+                                                                                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "_blank", "height = 600, width = 800, left = 150, top = 50");
                                                                                         document.onmousedown = focusPopup;
                                                                                         document.onkeyup = focusPopup;
                                                                                         document.onmousemove = focusPopup;
