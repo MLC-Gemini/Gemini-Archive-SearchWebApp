@@ -218,7 +218,6 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.dll
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.pdb
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\appsettings.Development.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\appsettings.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\GeminiSearchWebApp.exe
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\Scripts\jquery.js

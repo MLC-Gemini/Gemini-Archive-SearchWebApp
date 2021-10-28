@@ -332,60 +332,52 @@ namespace GeminiSearchWebApp.Controllers
                 var text = System.IO.File.ReadAllText(reqdocPath);
                 text = text.Replace("{0}", docId.Trim());
                 System.IO.File.WriteAllText(finaldocPath, text);
+                docName = docId.Replace("/", "-").Trim();
                 HttpWebRequest request = CreateWebRequest();
-                XmlDocument soapEnvelopeXml = new XmlDocument();
-                Console.WriteLine(reqdocPath);
-                Console.WriteLine(finaldocPath);
-                soapEnvelopeXml.Load(finaldocPath);
-                using (Stream stream = request.GetRequestStream())
+                if (request!=null)
                 {
-                    soapEnvelopeXml.Save(stream);
-                }
-                //Console.WriteLine(soapEnvelopeXml.InnerXml);                
-                // WebResponse response = request.GetResponse())
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Console.WriteLine("Response description is  " + response.StatusDescription);
-                Console.WriteLine("Response status  is  " + response.StatusCode);
-                String ver = response.ProtocolVersion.ToString();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string soapResult = reader.ReadToEnd();
-                Console.WriteLine(soapResult);
-                string outputFile = @"Docs/XML_Response.xml";
-                responseFilePath = Path.Combine(webRootPath, outputFile);
-                //if (System.IO.File.Exists(responseFilePath))
-                //{
-                //    System.IO.File.Delete(responseFilePath);
-                //}
-                // System.IO.File.SetAttributes(responseFilePath, FileAttributes.Normal);
-                Console.WriteLine("file writing started");
-                System.IO.File.WriteAllText(responseFilePath, soapResult);
-                Console.WriteLine("file writing finished ");
-                Console.WriteLine(responseFilePath);
-                if (System.IO.File.Exists(responseFilePath))
-                {
-                    List<string> lstResponse = GetResponseDetails(responseFilePath);
+                    XmlDocument soapEnvelopeXml = new XmlDocument();
+                    soapEnvelopeXml.Load(finaldocPath);
+                    using (Stream stream = request.GetRequestStream())
+                    {
+                        soapEnvelopeXml.Save(stream);
+                    }
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Console.WriteLine("Response description is  " + response.StatusDescription);
+                    Console.WriteLine("Response status  is  " + response.StatusCode);
+                    string ver = response.ProtocolVersion.ToString();
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    string soapResult = reader.ReadToEnd();
+                    string outputFile = @"Docs/XML_Response.xml";
+                    responseFilePath = Path.Combine(webRootPath, outputFile);
+                    System.IO.File.WriteAllText(responseFilePath, soapResult);
+                    if (System.IO.File.Exists(responseFilePath))
+                    {
+                        List<string> lstResponse = GetResponseDetails(responseFilePath);
 
-                    if (lstResponse != null)
-                    {
-                        docType = lstResponse[0].ToString();
-                        respStatus = lstResponse[1].ToString();
-                        binaryResponse = lstResponse[2].ToString();
-                    }
-                    if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
-                    {
-                        // docName= "Docs/XML_Response." + docType.ToLower() + ""
-                        createdFile = @"Docs/XML_Response." + docType.ToLower() + "";
-                        createdFileName = "XML_Response." + docType.ToLower();
-                        Console.WriteLine(createdFileName + " is created");
-                        OpeningDocPath = Path.Combine(webRootPath, createdFile);
-                        //System.IO.File.SetAttributes(OpeningDocPath, FileAttributes.Normal);
-                        LoadBase64(binaryResponse, OpeningDocPath);
+                        if (lstResponse != null)
+                        {
+                            docType = lstResponse[0].ToString();
+                            respStatus = lstResponse[1].ToString();
+                            binaryResponse = lstResponse[2].ToString();
+                        }
+                        if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                        {
+                            createdFile = @"Docs/" + docName + "." + docType.ToLower();
+                            createdFileName = docName + "." + docType.ToLower();
+                            OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                            LoadBase64(binaryResponse, OpeningDocPath);
+                        }
                     }
                 }
+                else
+                {
+                    return null;
+                }
+                
             }
             catch (Exception ex)
             {
-                Console.WriteLine("error coming");
                 connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
                 return createdFileName = null;
             }
@@ -402,17 +394,22 @@ namespace GeminiSearchWebApp.Controllers
             var config = builder.Build();
             string towerAPIurl = config["SecuritySettings:towerAPIurl"];
             string serviceUrl = config["SecuritySettings:serviceUrl"];
-            Console.WriteLine(towerAPIurl);
-            Console.WriteLine(serviceUrl);
             string sWebServiceUrls = string.Concat(towerAPIurl, serviceUrl);
-            Console.WriteLine(sWebServiceUrls);
-            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
-            webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
-            // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
-            webRequest.ContentType = "text/xml;charset=\"utf-8\"";
-            webRequest.Accept = "text/xml";
-            webRequest.Method = "POST";
-            Console.WriteLine(webRequest.Headers);
+            HttpWebRequest webRequest = null;
+            try
+            {
+                webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
+                webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+                // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+                webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+                webRequest.Accept = "text/xml";
+                webRequest.Method = "POST";
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+                       
             return webRequest;
         }
 
@@ -421,13 +418,11 @@ namespace GeminiSearchWebApp.Controllers
             try
             {
                 byte[] bytes = Convert.FromBase64String(base64);
-                // System.IO.File.SetAttributes(path, FileAttributes.Normal);
                 using (FileStream fs = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
                 {
                     fs.Write(bytes, 0, bytes.Length);
                     fs.Flush();
                 }
-                // System.IO.File.WriteAllBytes(filePath, fs);
             }
             catch (Exception ex)
             {
@@ -493,16 +488,14 @@ namespace GeminiSearchWebApp.Controllers
                 toBeOpendocName = toBeOpendocName.Trim();
                 string contentType = string.Empty;
                 byte[] FileBytes = null;
-                // string path = @"Docs/XML_Response.doc";
                 string path = @"Docs/" + toBeOpendocName;
                 string webRootPath = _env.WebRootPath;
                 string finaldocPath = Path.Combine(webRootPath, path);
-                Console.WriteLine("Path of the document is " + finaldocPath);
                 try
                 {
                     FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
-                    FileInfo fileInfo = new FileInfo(finaldocPath);
-                    string extn = fileInfo.Extension;
+                    //FileInfo fileInfo = new FileInfo(finaldocPath);
+                    //string extn = fileInfo.Extension;
                     System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
                     new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
                     return File(FileBytes, contentType);

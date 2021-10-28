@@ -254,7 +254,6 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\D
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\appsettings.Development.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\appsettings.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\GeminiSearchWebApp.exe
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Debug\net5.0\Scripts\jquery.js
@@ -397,4 +396,3 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\ref\GeminiSearchWebApp.dll
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.csproj.AssemblyReference.cache

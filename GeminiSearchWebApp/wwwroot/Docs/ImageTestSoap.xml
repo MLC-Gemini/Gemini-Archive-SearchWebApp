@@ -26,7 +26,7 @@
 					</wmat:Transport>
 				</wmat:OrigClient>
 			</wmat:SvcHdr>
-			<set:FileId>240/44-5110</set:FileId>
+			<set:FileId>240/44-34</set:FileId>
 			<set:Pages xmlns="http://au.thenational.com/wealth/schema/setypes">20</set:Pages>
 			<get:ReturnAsAttachment>false</get:ReturnAsAttachment>
 			<set:TargetApp>
