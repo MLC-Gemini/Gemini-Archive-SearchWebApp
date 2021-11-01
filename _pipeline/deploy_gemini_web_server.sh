@@ -14,7 +14,14 @@ env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 
 ######################################
-echo "1. Bake 100% ready ami"
+echo "1. Prepare userdata"
+#Config AD Integration
+echo '#!/bin/bash' > tmp_batch_userdata_$$
+echo "chmod 755 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
+echo "/tmp/config_batch_ad.sh $BATCH_AD_PARENT_DOMAIN $BATCH_AD_CHILD_DOMAIN | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
+
+######################################
+echo "2. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
 
 ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAGE --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
@@ -46,6 +53,7 @@ aws ec2 run-instances \
     --image-id $ami_id \
     --instance-type $INSTANCE_TYPE_BATCH \
     --iam-instance-profile Name=$IAM_PROFILE_PROV \
+    --user-data file://tmp_batch_userdata_$$ \
     | jq ".Instances[0]|.InstanceId"|sed "s/\"//g"`
 
 aws ec2 create-tags --resources $instance_id --tags Key=CostCentre,Value=$T_CostCentre Key=ApplicationID,Value=$T_ApplicationID Key=Environment,Value=$T_Environment Key=AppCategory,Value=$T_AppCategory Key=SupportGroup,Value=$T_SupportGroup Key=Name,Value=$T_Name Key=PowerMgt,Value=$T_EC2_PowerMgt Key=BackupOptOut,Value=$T_BackupOptOut Key=HIPImage,Value=$ami_id Key=TechnicalService,Value=$TechnicalService Key=Owner,Value=$Owner Key=Name,Value=$Name Key=Account,Value=$Account
@@ -74,7 +82,7 @@ echo "- Register 100% baked image"
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE-deploy --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
 
 # ######################################
-echo "2. Start Autoscling group using 100% backed ami"
+echo "3. Start Autoscling group using 100% backed ami"
   ImageId=`aws ssm get-parameter --name $AWS_PAR_BATCH_IMAGE-deploy --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
   echo $ImageId
 
@@ -102,7 +110,7 @@ envsubst < Batch/template/Linux_Batch_Autoscaling.sh > tmp_launch_asg_$$.sh
 bash tmp_launch_asg_$$.sh
 
 # ######################################
-# echo "3. Set DNS entry"
+echo "4. Set DNS entry"
  lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$env_id-Stack \
  	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
  lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
