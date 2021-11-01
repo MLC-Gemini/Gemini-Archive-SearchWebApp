@@ -17,7 +17,7 @@ source ./Batch/var/read_variables.sh $env_id
 echo "1. Prepare userdata"
 #Config AD Integration
 echo '#!/bin/bash' > tmp_batch_userdata_$$
-echo "chmod 755 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
+echo "sudo chmod 777 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
 echo "/tmp/config_batch_ad.sh $BATCH_AD_PARENT_DOMAIN $BATCH_AD_CHILD_DOMAIN | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
 
 echo tmp_batch_userdata_$$
