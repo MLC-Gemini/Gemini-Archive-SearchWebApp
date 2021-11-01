@@ -17,10 +17,9 @@ source ./Batch/var/read_variables.sh $env_id
 echo "1. Prepare userdata"
 #Config AD Integration
 echo '#!/bin/bash' > tmp_batch_userdata_$$
-echo "sudo chmod 777 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
+echo "sudo chmod 775 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
 echo "/tmp/config_batch_ad.sh $BATCH_AD_PARENT_DOMAIN $BATCH_AD_CHILD_DOMAIN | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
 
-echo tmp_batch_userdata_$$
 ######################################
 echo "2. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
@@ -115,7 +114,7 @@ echo "4. Set DNS entry"
  lb_arn=$(aws cloudformation describe-stack-resources --stack-name GEMINI-WEB-$env_id-Stack \
  	|jq -r '.StackResources[]|select (.LogicalResourceId=="LoadBalancer").PhysicalResourceId')
  lb_dns=$(aws elbv2 describe-load-balancers --load-balancer-arns $lb_arn |jq -r '.LoadBalancers[0].DNSName')
- 
+
  ./Batch/aws_set_dns.sh $env_id $GEMINIWEB_DNS.$GEMINI_DNS_ZONE_NAME $lb_dns
 
 # ##Added below code as CAST requirement to verify the resource is up and running
