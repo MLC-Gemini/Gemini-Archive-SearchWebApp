@@ -2,18 +2,22 @@
 
 cleanup() {
 	echo "9. Drop this instance"
+  rm -f kms_policy_ami_$$.json
+	rm -f encrypted_device_mapping_$$.json
+  rm -f geminiarchive-app.key
+  rm -f geminiarchive-app.pem
+  rm -f privatekey.pem
+  rm -f certificate.pem
+  rm -f certificatechain.pem
+  rm -f /tmp/gemini_web_staging/*
+  rm -f /tmp/ec2_install_software.sh
+  rm -f /tmp/Published
+  rm -f /tmp/config_batch_ad.sh
 	aws ec2 terminate-instances --instance-ids $instance_id
 	rm tmp_gemini_web_bake_$env_id.pem
 	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
 	aws ec2 wait instance-terminated --instance-ids $instance_id
 	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
-	rm -f kms_policy_ami_$$.json
-	rm -f encrypted_device_mapping_$$.json
-  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.key
-  rm -f geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
-  rm -f privatekey.pem
-  rm -f certificate.pem
-  rm -f certificatechain.pem
 	echo "Baking Done ."
 }
 trap cleanup EXIT
@@ -121,10 +125,10 @@ aws iam upload-server-certificate --server-certificate-name $ALB_SSL_CERT_NAME \
                                     --private-key file://privatekey.pem
 
 # Downloading the SSL certificate for Ec2 backend server (key and cert) file from AWS SSM parameter store and outputting to local file
-aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.key
-aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
-aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
-aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app-tst.gemini.awsnp.national.com.au.pem
+aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app.key
+aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > geminiarchive-app.pem
+aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app.pem
+aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> geminiarchive-app.pem
 
 echo "4. Configurting ASP.NET secret form AWS SSM parameter store value"
 
@@ -168,8 +172,9 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ngin
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Published ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/kestrel-geminiweb.service ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/nginx.conf ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.key ec2-user@$endpoint:/tmp
-scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app-tst.gemini.awsnp.national.com.au.pem ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/config_batch_ad.sh ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.key ec2-user@$endpoint:/tmp
+scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.pem ec2-user@$endpoint:/tmp
 
 echo "6. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'

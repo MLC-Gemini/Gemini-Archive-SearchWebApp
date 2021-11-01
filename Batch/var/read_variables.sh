@@ -80,6 +80,10 @@ if [[ $env_id == 'nonprod' ]]; then
     GEMINI_DNS_ZONE_ID="Z06453042CMJI49LOR7NB"
     GEMINIWEB_DNS="geminiarchive-app-tst"
 
+  # EC2 SSH LDAP itegration
+    BATCH_AD_PARENT_DOMAIN="aurdev"
+    BATCH_AD_CHILD_DOMAIN="BASDEV"
+
 elif [[ $env_id == 'prod' ]]; then
   #echo "The variable for prod env"
   # kMS JSON template variable 
@@ -111,6 +115,10 @@ elif [[ $env_id == 'prod' ]]; then
     GEMINI_DNS_ZONE_NAME="gemini.aws.national.com.au"
     GEMINI_DNS_ZONE_ID="Z00088892Y517L4T4PLC1"
     GEMINIWEB_DNS="geminiarchive-app-prod"
+
+   # EC2 SSH LDAP itegration
+    BATCH_AD_PARENT_DOMAIN="aur"
+    BATCH_AD_CHILD_DOMAIN="BAS"
 
 else
   echo "Please provide the valid env_id for eg. nonprod for NonProd or prod for Production"
