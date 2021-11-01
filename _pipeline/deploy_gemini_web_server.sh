@@ -20,6 +20,7 @@ echo '#!/bin/bash' > tmp_batch_userdata_$$
 echo "chmod 755 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
 echo "/tmp/config_batch_ad.sh $BATCH_AD_PARENT_DOMAIN $BATCH_AD_CHILD_DOMAIN | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
 
+echo tmp_batch_userdata_$$
 ######################################
 echo "2. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
