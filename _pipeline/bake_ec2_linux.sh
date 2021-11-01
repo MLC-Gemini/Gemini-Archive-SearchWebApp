@@ -175,9 +175,9 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarch
 echo "6. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm /tmp/ec2_install_software.sh'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm /tmp/config_batch_ad.sh'
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/gemini_web_staging'
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/Published'
-ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/config_batch_ad.sh'
 
 echo "7. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
