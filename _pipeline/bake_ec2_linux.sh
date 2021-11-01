@@ -2,6 +2,11 @@
 
 cleanup() {
 	echo "9. Drop this instance"
+	aws ec2 terminate-instances --instance-ids $instance_id
+	rm tmp_gemini_web_bake_$env_id.pem
+	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
+	aws ec2 wait instance-terminated --instance-ids $instance_id
+	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
   rm -f kms_policy_ami_$$.json
 	rm -f encrypted_device_mapping_$$.json
   rm -f geminiarchive-app.key
@@ -9,15 +14,6 @@ cleanup() {
   rm -f privatekey.pem
   rm -f certificate.pem
   rm -f certificatechain.pem
-  rm -f /tmp/gemini_web_staging/*
-  rm -f /tmp/ec2_install_software.sh
-  rm -f /tmp/Published
-  rm -f /tmp/config_batch_ad.sh
-	aws ec2 terminate-instances --instance-ids $instance_id
-	rm tmp_gemini_web_bake_$env_id.pem
-	aws ec2 delete-key-pair --key-name "tmpkey-GEMINI-WEB-$env_id$$"
-	aws ec2 wait instance-terminated --instance-ids $instance_id
-	aws ec2 delete-security-group --group-id $geminiweb_tmp_sec_group_id
 	echo "Baking Done ."
 }
 trap cleanup EXIT
@@ -178,6 +174,10 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarch
 
 echo "6. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm /tmp/ec2_install_software.sh'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/gemini_web_staging'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/Published'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/config_batch_ad.sh'
 
 echo "7. Create image form this instance"
 ts=`date +%Y-%m-%d-%H-%M-%S`
