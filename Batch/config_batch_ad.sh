@@ -9,7 +9,7 @@ child_domain=$2
 ##creating 'ad_auth_group' template variable which will contain the list of all group DNs separated by '|'
 echo "%$parent_domain-Delegated-SRVGEMBATCH-SudoRoot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/10_ldapadmin
 echo "%$parent_domain-BAS-Delegated-SRVGEMBATCH-LogonAccess ALL=(Batchsupport) NOPASSWD: ALL" >> /etc/sudoers.d/20_svc_acct
-echo "%$parent_domain-BAS-Delegated-SRVGEMBATCH-SudoSrv-gem-m ALL=(BatchSudo) NOPASSWD: ALL" >> /etc/sudoers.d/20_svc_acct
+echo "%$parent_domain-BAS-Delegated-SRVGEMBATCH-SudoSrv-gem-m ALL=(BatchsupportSudo) NOPASSWD: ALL" >> /etc/sudoers.d/20_svc_acct
 
 #append all group DN with '|' as separator and add as variable to /etc/facter/facts.d/ldap_auth_group.yaml
 echo "ldap_auth_group: CN=$parent_domain-Delegated-SRVGEMBATCH-SudoRoot,OU=Application,OU=$parent_domain,OU=Delegated,OU=Support Groups,OU=Production,DC=$child_domain,DC=national,DC=com,DC=au|CN=$parent_domain-BAS-Delegated-SRVGEMBATCH-LogonAccess,OU=Application,OU=$parent_domain,OU=Delegated,OU=Support Groups,OU=Production,DC=$child_domain,DC=national,DC=com,DC=au|CN=$parent_domain-BAS-Delegated-SRVGEMBATCH-SudoSrv-gem-m,OU=Application,OU=$parent_domain,OU=Delegated,OU=Support Groups,OU=Production,DC=$child_domain,DC=national,DC=com,DC=au" > /etc/facter/facts.d/ldap_auth_group.yaml
