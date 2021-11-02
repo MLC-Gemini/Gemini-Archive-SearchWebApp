@@ -10,7 +10,7 @@
     <script src="~/CustomJS/jquery-ui.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            debugger;
+            
             var urlParams = new URLSearchParams(window.location.search);
             var userName = urlParams.get('name');
             $("#lblLoggedInUser").html("Hello, " + userName);

@@ -354,7 +354,7 @@
 
                                                         clicks++;
 
-                                                        if (clicks === 1) {                                                           
+                                                        if (clicks === 1) {
                                                             rowId = this.rowIndex;
                                                             var caseText = $("#myTable tr").eq(rowId).find("td:nth-child(11)");
                                                             var selectedCaseId = caseText.text();
@@ -391,21 +391,25 @@
                                                                         url: "/Home/GetDocId",
                                                                         dataType: "JSON",
                                                                         data: { caseId: selectedCaseId },
-                                                                        success: function (comeback) {                                                                            
-                                                                            $.each(comeback, function (i, index) {                                                                               
-                                                                                $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) { 
-                                                                                   
+                                                                        success: function (comeback) {
+                                                                            var count = 0;
+                                                                            $.each(comeback, function (i, index) {
+                                                                                if (count < 1) {
+                                                                                    $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
+                                                                                        
                                                                                     //if (docWindow == null || docWindow.closed) {
                                                                                     //    docWindow = window.open('/Home/DocTransport/?toBeOpendocName='+ data +'', "_blank", "height = 600, width = 800, left = 150, top = 50");
                                                                                     //    }
                                                                                     //    else {
                                                                                     //        docWindow.focus();
                                                                                     //}
-                                                                                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "_blank", "height = 600, width = 800, left = 150, top = 50");
+                                                                                        docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
                                                                                         document.onmousedown = focusPopup;
                                                                                         document.onkeyup = focusPopup;
                                                                                         document.onmousemove = focusPopup;
                                                                                  });
+                                                                                    count++;
+                                                                                }
                                                                             });
                                                                         },
                                                                         error: function () {
@@ -502,18 +506,28 @@
                 $.fn.resetForm();
 
             });
-            //$('#docTable').on('click', 'tr', function (e) {
-            //    debugger;
-            //    if (docWindow == null || docWindow.closed) {
-            //        docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
-            //    }
-            //    else {
-            //        docWindow.focus();
-            //    }
-            //    document.onmousedown = focusPopup;
-            //    document.onkeyup = focusPopup;
-            //    document.onmousemove = focusPopup;
-            //});
+
+            $('#docTable').on('click', 'tr', function (e) {
+                rowId = this.rowIndex;
+                var docId = $("#docTable tr").eq(rowId).find("td:nth-child(3)");
+                var docIdSelected = docId.text();
+
+                $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {
+                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
+                    document.onmousedown = focusPopup;
+                    document.onkeyup = focusPopup;
+                    document.onmousemove = focusPopup;
+                });
+                //if (docWindow == null || docWindow.closed) {
+                //    docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
+                //}
+                //else {
+                //    docWindow.focus();
+                //}
+                //document.onmousedown = focusPopup;
+                //document.onkeyup = focusPopup;
+                //document.onmousemove = focusPopup;
+            });
 
             function focusPopup() {
                 if (docWindow && !docWindow.closed) {
