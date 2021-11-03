@@ -54,6 +54,7 @@ if [[ $env_id == 'nonprod' ]]; then
     OWNER_ACCOUNT="998622627571"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
     GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
+    # Gemini web-server Lunch template EC2 variable 
     IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
     
   # Private VPC
@@ -63,13 +64,11 @@ if [[ $env_id == 'nonprod' ]]; then
     SUBNETID2="subnet-00f9ae140fbbeaa86"
     SUBNETID3="subnet-01ba8cd53df612f02"
  
-  # EC2 variable
+  # Provising EC2 variable 
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
     # Aws Tags
     T_Environment="nonprod"
     T_EC2_PowerMgt="WKED"
-    # Lunch template variable 
-    IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxNonProd"
 
   # ALB Listner SSL certificate name
@@ -90,6 +89,7 @@ elif [[ $env_id == 'prod' ]]; then
     OWNER_ACCOUNT="937709052626"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-geminiprod-2FA-devops-appstack"
     GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
+    # Gemini web-server Lunch template EC2 variable 
     IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
     
   # Private VPC
@@ -99,13 +99,11 @@ elif [[ $env_id == 'prod' ]]; then
     SUBNETID2="subnet-0fd7f4b9c8a849f64"
     SUBNETID3="subnet-0909479f29bc9f90c"
  
-  # EC2 variable
+  # Provising EC2 variable
     IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
     # Aws Tags
     T_Environment="prod"
     T_EC2_PowerMgt="SNAPD"
-    # Lunch template variable 
-    IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
 
   # ALB Listner SSL certificate name
