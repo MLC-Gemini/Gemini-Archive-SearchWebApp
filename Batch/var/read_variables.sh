@@ -14,7 +14,8 @@ GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
 # Provising EC2 variable 
 IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
 # Gemini web-server Lunch template EC2 variable 
-IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
+#IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
+IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
 # Aws comman Tags
 T_CostCentre="V_Gemini" 
 T_ApplicationID="ML0095"
