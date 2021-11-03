@@ -10,6 +10,11 @@ GEM_KMS="/gemini_archive_web/ec2_kms_key"
 BATCH_SERVER_SIZE=50
 INSTANCE_TYPE_BATCH="t3.medium"
 AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
+GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
+# Provising EC2 variable 
+IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
+# Gemini web-server Lunch template EC2 variable 
+IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
 # Aws comman Tags
 T_CostCentre="V_Gemini" 
 T_ApplicationID="ML0095"
@@ -53,8 +58,6 @@ if [[ $env_id == 'nonprod' ]]; then
   # kMS JSON template variable 
     OWNER_ACCOUNT="998622627571"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
-    GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
-    IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
     
   # Private VPC
     VPCID="vpc-0ecf6cd42dacf1a57"
@@ -63,13 +66,9 @@ if [[ $env_id == 'nonprod' ]]; then
     SUBNETID2="subnet-00f9ae140fbbeaa86"
     SUBNETID3="subnet-01ba8cd53df612f02"
  
-  # EC2 variable
-    IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
     # Aws Tags
     T_Environment="nonprod"
     T_EC2_PowerMgt="WKED"
-    # Lunch template variable 
-    IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxNonProd"
 
   # ALB Listner SSL certificate name
@@ -89,9 +88,7 @@ elif [[ $env_id == 'prod' ]]; then
   # kMS JSON template variable 
     OWNER_ACCOUNT="937709052626"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-geminiprod-2FA-devops-appstack"
-    GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
-    IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
-    
+        
   # Private VPC
     VPCID="vpc-0c0121a7c332d8b22"
     # private subnets
@@ -99,13 +96,9 @@ elif [[ $env_id == 'prod' ]]; then
     SUBNETID2="subnet-0fd7f4b9c8a849f64"
     SUBNETID3="subnet-0909479f29bc9f90c"
  
-  # EC2 variable
-    IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
     # Aws Tags
     T_Environment="prod"
     T_EC2_PowerMgt="SNAPD"
-    # Lunch template variable 
-    IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
 
   # ALB Listner SSL certificate name
