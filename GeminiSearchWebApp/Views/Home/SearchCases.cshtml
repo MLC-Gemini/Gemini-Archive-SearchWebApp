@@ -312,7 +312,8 @@
                                                             },
                                                             "lengthChange": false,
                                                             "paginate": false,
-                                                            "bInfo": false
+                                                            "bInfo": false,
+                                                            "order":[[2,"asc"]]
                                                         });
                                                     }
                                                 } catch (e) {
@@ -364,7 +365,6 @@
                                                                     if (response.length != 0 && selectedCaseId != null) {
                                                                         $.each(response, function (i, index) {
                                                                             if (selectedCaseId == index.CaseID) {
-                                                                                console.log(index.CaseID);
                                                                                 tableDoc.row.add([
                                                                                     index.DocumentType,
                                                                                     index.DocCreated,
