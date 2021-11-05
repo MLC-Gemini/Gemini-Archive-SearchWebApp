@@ -395,18 +395,14 @@
                                                                             var count = 0;
                                                                             $.each(comeback, function (i, index) {
                                                                                 if (count < 1) {
-                                                                                    $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
+                                                                                    $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) { 
+                                                                                            console.log(data);
+                                                                                            console.log(btoa(data));
+                                                                                            docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
+                                                                                            document.onmousedown = focusPopup;
+                                                                                            document.onkeyup = focusPopup;
+                                                                                            document.onmousemove = focusPopup;
                                                                                         
-                                                                                    //if (docWindow == null || docWindow.closed) {
-                                                                                    //    docWindow = window.open('/Home/DocTransport/?toBeOpendocName='+ data +'', "_blank", "height = 600, width = 800, left = 150, top = 50");
-                                                                                    //    }
-                                                                                    //    else {
-                                                                                    //        docWindow.focus();
-                                                                                    //}
-                                                                                        docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
-                                                                                        document.onmousedown = focusPopup;
-                                                                                        document.onkeyup = focusPopup;
-                                                                                        document.onmousemove = focusPopup;
                                                                                  });
                                                                                     count++;
                                                                                 }
@@ -513,7 +509,9 @@
                 var docIdSelected = docId.text();
 
                 $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {
-                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + data + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
+                    console.log(data);
+                    console.log(btoa(data));
+                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
                     document.onmousedown = focusPopup;
                     document.onkeyup = focusPopup;
                     document.onmousemove = focusPopup;

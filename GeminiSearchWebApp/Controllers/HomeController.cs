@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -379,7 +380,7 @@ namespace GeminiSearchWebApp.Controllers
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
-                return createdFileName = null;
+                return null;
             }
             return createdFileName;
 
@@ -480,9 +481,26 @@ namespace GeminiSearchWebApp.Controllers
 
         }
 
+        public string GetStringFromBase64(string inputVal)
+        {
+            try
+            {
+                byte[] data = Convert.FromBase64String(inputVal);
+                Console.WriteLine(Encoding.UTF8.GetString(data));
+                return Encoding.UTF8.GetString(data);
+            }
+            catch
+            {
+                Console.WriteLine("Error occured while decoding doc name");
+                return null;               
+            }
+        }
 
         public IActionResult DocTransport(string toBeOpendocName)
         {
+            Console.WriteLine("value before decoding is  "+toBeOpendocName);
+            toBeOpendocName = GetStringFromBase64(toBeOpendocName);
+            Console.WriteLine("value after decoding is  " + toBeOpendocName);
             if (!string.IsNullOrEmpty(toBeOpendocName) && toBeOpendocName.ToLower() != "undefined")
             {
                 toBeOpendocName = toBeOpendocName.Trim();
@@ -493,9 +511,7 @@ namespace GeminiSearchWebApp.Controllers
                 string finaldocPath = Path.Combine(webRootPath, path);
                 try
                 {
-                    FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
-                    //FileInfo fileInfo = new FileInfo(finaldocPath);
-                    //string extn = fileInfo.Extension;
+                    FileBytes = System.IO.File.ReadAllBytes(finaldocPath);                   
                     System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
                     new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
                     return File(FileBytes, contentType);
