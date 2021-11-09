@@ -782,11 +782,8 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.TagHelpers.input.cache
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.TagHelpers.output.cache
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.RazorCoreGenerate.cache
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\About.cshtml.g.cs
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\Contact.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\Index.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\Login.cshtml.g.cs
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\SearchCases.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Home\SearchLayout.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\Razor\Views\Shared\Error.cshtml.g.cs

@@ -39,7 +39,7 @@
                     $("#btnLogin").attr("disabled", true);
                     aLoginId = $("#login_id").val();
                     aPwd = $("#pwd").val();
-                    var statusResult = false;
+                    var statusResult = "false";
                     $.ajax(
                         {
                             type: "POST",
@@ -48,16 +48,17 @@
                             data: { userName: aLoginId, password: aPwd },
                             success: function (result) {
                                 if (result != null) {
-                                    statusResult = true;
+                                    statusResult = "true";
+                                    var loginValue = btoa(statusResult);
                                     $.ajax(
                                         {
                                             type: "POST",
                                             url: "/Home/LoginCheck",
                                             dataType: "JSON",
-                                            data: { loginStatus: statusResult },
+                                            data: { loginStatus: loginValue },
                                             success: function (response) {
                                                 if (response == true) {
-                                                    window.location.href = "/Home/SearchCases/?name=" + result;
+                                                    window.location.href = "/Home/SearchCases/?name=" + btoa(result);
                                                 }
                                                 else {
                                                     window.location.href = "/Home/Login";

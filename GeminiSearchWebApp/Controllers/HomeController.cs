@@ -14,7 +14,6 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace GeminiSearchWebApp.Controllers
@@ -29,7 +28,7 @@ namespace GeminiSearchWebApp.Controllers
         public static bool loginResult = false;
         private readonly IWebHostEnvironment _env;
         public string createdFile;
-        public string createdFileName;
+        public string createdFileName;        
         public HomeController(IConfiguration _configuration, IWebHostEnvironment env)
         {
             configuration = _configuration;
@@ -42,26 +41,6 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View();
         }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         public IActionResult SearchLayout()
         {
             return View();
@@ -72,7 +51,6 @@ namespace GeminiSearchWebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         public IActionResult Login()
         {
             ViewData["Message"] = "Your login page.";
@@ -91,10 +69,12 @@ namespace GeminiSearchWebApp.Controllers
             return RedirectToAction("Login");
         }
 
+      
+
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
-            connectionClass.CreateLog(userName);
+            connectionClass.CreateLog(userName);           
             try
             {
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -125,32 +105,33 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
-        public bool LoginCheck(bool loginStatus)
+        public bool LoginCheck(string loginStatus)
         {
-            loginResult = loginStatus;
-            bool result = false;
+            //string result = string.Empty;
+            string inputToValidate = GetStringFromBase64(loginStatus);
+            //bool result = false;
             try
             {
-                if (loginStatus == true)
+                if (inputToValidate.ToLower() == "True".ToLower())
                 {
-                    loginResult = loginStatus;
+                    loginResult = Convert.ToBoolean(inputToValidate);
                     return loginResult;
                 }
                 else
                 {
-                    result = false;
-                    loginResult = result;
+                    loginResult = false;
                 }
             }
             catch (Exception ex)
             {
                 connectionClass.CreateMessageLog(ex.Message);
             }
-            return result;
+            return loginResult;
         }
 
         public IActionResult SearchCases()
         {
+           
             bool loginValue = loginResult;
             ViewData["Message"] = "Your Search Page";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -180,35 +161,42 @@ namespace GeminiSearchWebApp.Controllers
             format = "dd/MM/yyyy";
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-            try
+            if (loginResult == true)
             {
-                UserInput userInput = new UserInput();
-                if (fLevel != null && uId != null && caseType != null)
+                try
                 {
-                    userInput.FilterLevel = fLevel;
-                    userInput.UserId = uId;
-                    userInput.CaseTypeDate = caseType;
-                }
-                else
-                {
-                    connectionClass.CreateMessageLog("HomeController GetSearchDoc method variables are null");
-                }
-                if (fDate == null || tDate == null)
-                {
-                    userInput.FromDate = DateTime.MinValue;
-                    userInput.ToDate = DateTime.MinValue;
-                }
-                else
-                {
-                    userInput.FromDate = DateTime.ParseExact(fDate, format, provider);
-                    userInput.ToDate = DateTime.ParseExact(tDate, format, provider);
-                }
-                dt = connectionClass.Getrecord(userInput);
+                    UserInput userInput = new UserInput();
+                    if (fLevel != null && uId != null && caseType != null)
+                    {
+                        userInput.FilterLevel = fLevel;
+                        userInput.UserId = uId;
+                        userInput.CaseTypeDate = caseType;
+                    }
+                    else
+                    {
+                        connectionClass.CreateMessageLog("HomeController GetSearchDoc method variables are null");
+                    }
+                    if (fDate == null || tDate == null)
+                    {
+                        userInput.FromDate = DateTime.MinValue;
+                        userInput.ToDate = DateTime.MinValue;
+                    }
+                    else
+                    {
+                        userInput.FromDate = DateTime.ParseExact(fDate, format, provider);
+                        userInput.ToDate = DateTime.ParseExact(tDate, format, provider);
+                    }
+                    dt = connectionClass.Getrecord(userInput);
 
+                }
+                catch (Exception ex)
+                {
+                    connectionClass.CreateMessageLog(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                connectionClass.CreateMessageLog(ex.Message);
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
 
             return TableToJson(dt);
@@ -221,50 +209,33 @@ namespace GeminiSearchWebApp.Controllers
             format = "dd/MM/yyyy";
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-            try
-            {
-                UserInput userInput = new UserInput();
-                if (filterLevel != null && User != null && caseDateType != null)
-                {
-                    userInput.FilterLevel = filterLevel;
-                    userInput.UserId = userId;
-                    userInput.CaseTypeDate = caseDateType;
-                }
-                else
-                {
-                    connectionClass.CreateMessageLog("HomeController GetCasesRecord method variables are null");
-                }
-
-                if (fromDate == null || toDate == null)
-                {
-                    userInput.FromDate = DateTime.MinValue;
-                    userInput.ToDate = DateTime.MinValue;
-                }
-                else
-                {
-                    userInput.FromDate = DateTime.ParseExact(fromDate, format, provider);
-                    userInput.ToDate = DateTime.ParseExact(toDate, format, provider);
-                }
-                dt = connectionClass.GetCasesRecord(userInput);
-
-            }
-            catch (Exception ex)
-            {
-                connectionClass.CreateMessageLog(ex.Message);
-            }
-
-            return TableToJson(dt);
-
-        }
-
-        public string GetActionRecord(int selectedCaseId)
-        {
-            DataTable dt = new DataTable();
-            if (selectedCaseId != 0)
+            if (loginResult == true)
             {
                 try
                 {
-                    dt = connectionClass.GetActionRecord(selectedCaseId);
+                    UserInput userInput = new UserInput();
+                    if (filterLevel != null && User != null && caseDateType != null)
+                    {
+                        userInput.FilterLevel = filterLevel;
+                        userInput.UserId = userId;
+                        userInput.CaseTypeDate = caseDateType;
+                    }
+                    else
+                    {
+                        connectionClass.CreateMessageLog("HomeController GetCasesRecord method variables are null");
+                    }
+
+                    if (fromDate == null || toDate == null)
+                    {
+                        userInput.FromDate = DateTime.MinValue;
+                        userInput.ToDate = DateTime.MinValue;
+                    }
+                    else
+                    {
+                        userInput.FromDate = DateTime.ParseExact(fromDate, format, provider);
+                        userInput.ToDate = DateTime.ParseExact(toDate, format, provider);
+                    }
+                    dt = connectionClass.GetCasesRecord(userInput);
 
                 }
                 catch (Exception ex)
@@ -274,7 +245,38 @@ namespace GeminiSearchWebApp.Controllers
             }
             else
             {
-                connectionClass.CreateMessageLog("CaseId passed to GetActionRecord method in HomeController is null");
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
+            }
+
+            return TableToJson(dt);
+
+        }
+
+        public string GetActionRecord(int selectedCaseId)
+        {
+            DataTable dt = new DataTable();
+            if (loginResult == true)
+            {
+                if (selectedCaseId != 0)
+                {
+                    try
+                    {
+                        dt = connectionClass.GetActionRecord(selectedCaseId);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        connectionClass.CreateMessageLog(ex.Message);
+                    }
+                }
+                else
+                {
+                    connectionClass.CreateMessageLog("CaseId passed to GetActionRecord method in HomeController is null");
+                }
+            }
+            else
+            {
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
 
             return TableToJson(dt);
@@ -284,13 +286,20 @@ namespace GeminiSearchWebApp.Controllers
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
-            try
+            if (loginResult == true)
             {
-                JSONString = JsonConvert.SerializeObject(table);
+                try
+                {
+                    JSONString = JsonConvert.SerializeObject(table);
+                }
+                catch (Exception ex)
+                {
+                    connectionClass.CreateMessageLog(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                connectionClass.CreateMessageLog(ex.Message);
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
             return JSONString;
         }
@@ -303,84 +312,105 @@ namespace GeminiSearchWebApp.Controllers
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
-            try
+            if (loginResult == true)
             {
-                DataTable documentId = connectionClass.GetDocumentId(caseId);
-                docId = JsonConvert.SerializeObject(documentId);
+                try
+                {
+                    DataTable documentId = connectionClass.GetDocumentId(caseId);
+                    docId = JsonConvert.SerializeObject(documentId);
+                }
+                catch (Exception ex)
+                {
+                    connectionClass.CreateMessageLog(ex.Message);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                connectionClass.CreateMessageLog(ex.Message);
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
             return docId;
         }
 
         public string Execute(string docId)
         {
-            try
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            string towerAPIusr = config["SecuritySettings:towerAPIsrvUser"];
+            string towerAPIpass = config["SecuritySettings:towerAPIsrvPass"];
+            if (loginResult == true)
             {
-                string docName = string.Empty;
-                string docType = string.Empty;
-                string respStatus = string.Empty;
-                string binaryResponse = string.Empty;
-                string responseFilePath = string.Empty;
-                string OpeningDocPath = string.Empty;
-                string path = @"Docs/ImageTestSoap.xml";
-                string requestpath = @"Docs/SoapInputReq.xml";
-                string webRootPath = _env.WebRootPath;
-                string reqdocPath = Path.Combine(webRootPath, requestpath);
-                string finaldocPath = Path.Combine(webRootPath, path);
-                var text = System.IO.File.ReadAllText(reqdocPath);
-                text = text.Replace("{0}", docId.Trim());
-                System.IO.File.WriteAllText(finaldocPath, text);
-                docName = docId.Replace("/", "-").Trim();
-                HttpWebRequest request = CreateWebRequest();
-                if (request!=null)
+                try
                 {
-                    XmlDocument soapEnvelopeXml = new XmlDocument();
-                    soapEnvelopeXml.Load(finaldocPath);
-                    using (Stream stream = request.GetRequestStream())
-                    {
-                        soapEnvelopeXml.Save(stream);
-                    }
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Console.WriteLine("Response description is  " + response.StatusDescription);
-                    Console.WriteLine("Response status  is  " + response.StatusCode);
-                    string ver = response.ProtocolVersion.ToString();
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    string soapResult = reader.ReadToEnd();
-                    string outputFile = @"Docs/XML_Response.xml";
-                    responseFilePath = Path.Combine(webRootPath, outputFile);
-                    System.IO.File.WriteAllText(responseFilePath, soapResult);
-                    if (System.IO.File.Exists(responseFilePath))
-                    {
-                        List<string> lstResponse = GetResponseDetails(responseFilePath);
 
-                        if (lstResponse != null)
+                    string docName = string.Empty;
+                    string docType = string.Empty;
+                    string respStatus = string.Empty;
+                    string binaryResponse = string.Empty;
+                    string responseFilePath = string.Empty;
+                    string OpeningDocPath = string.Empty;
+                    string path = @"Docs/ImageTestSoap.xml";
+                    string requestpath = @"Docs/SoapInputReq.xml";
+                    string webRootPath = _env.WebRootPath;
+                    string reqdocPath = Path.Combine(webRootPath, requestpath);
+                    string finaldocPath = Path.Combine(webRootPath, path);
+                    var text = System.IO.File.ReadAllText(reqdocPath);
+                    text = text.Replace("{usr}", towerAPIusr);
+                    text = text.Replace("{pwdd}", towerAPIpass);
+                    text = text.Replace("{docsID}", docId.Trim());
+                    System.IO.File.WriteAllText(finaldocPath, text);
+                    docName = docId.Replace("/", "-").Trim();
+                    HttpWebRequest request = CreateWebRequest();
+                    if (request != null)
+                    {
+                        XmlDocument soapEnvelopeXml = new XmlDocument();
+                        soapEnvelopeXml.Load(finaldocPath);
+                        using (Stream stream = request.GetRequestStream())
                         {
-                            docType = lstResponse[0].ToString();
-                            respStatus = lstResponse[1].ToString();
-                            binaryResponse = lstResponse[2].ToString();
+                            soapEnvelopeXml.Save(stream);
                         }
-                        if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Console.WriteLine("Response description is  " + response.StatusDescription);
+                        Console.WriteLine("Response status  is  " + response.StatusCode);
+                        string ver = response.ProtocolVersion.ToString();
+                        StreamReader reader = new StreamReader(response.GetResponseStream());
+                        string soapResult = reader.ReadToEnd();
+                        string outputFile = @"Docs/XML_Response.xml";
+                        responseFilePath = Path.Combine(webRootPath, outputFile);
+                        System.IO.File.WriteAllText(responseFilePath, soapResult);
+                        if (System.IO.File.Exists(responseFilePath))
                         {
-                            createdFile = @"Docs/" + docName + "." + docType.ToLower();
-                            createdFileName = docName + "." + docType.ToLower();
-                            OpeningDocPath = Path.Combine(webRootPath, createdFile);
-                            LoadBase64(binaryResponse, OpeningDocPath);
+                            List<string> lstResponse = GetResponseDetails(responseFilePath);
+
+                            if (lstResponse != null)
+                            {
+                                docType = lstResponse[0].ToString();
+                                respStatus = lstResponse[1].ToString();
+                                binaryResponse = lstResponse[2].ToString();
+                            }
+                            if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                            {
+                                createdFile = @"Docs/" + docName + "." + docType.ToLower();
+                                createdFileName = docName + "." + docType.ToLower();
+                                OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                                LoadBase64(binaryResponse, OpeningDocPath);
+                            }
                         }
                     }
+                    else
+                    {
+                        return null;
+                    }
+
                 }
-                else
+                catch (Exception ex)
                 {
+                    connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
                     return null;
                 }
-                
             }
-            catch (Exception ex)
+            else
             {
-                connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
-                return null;
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
             return createdFileName;
 
@@ -397,20 +427,27 @@ namespace GeminiSearchWebApp.Controllers
             string serviceUrl = config["SecuritySettings:serviceUrl"];
             string sWebServiceUrls = string.Concat(towerAPIurl, serviceUrl);
             HttpWebRequest webRequest = null;
-            try
+            if (loginResult == true)
             {
-                webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
-                webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
-                // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
-                webRequest.ContentType = "text/xml;charset=\"utf-8\"";
-                webRequest.Accept = "text/xml";
-                webRequest.Method = "POST";
+                try
+                {
+                    webRequest = (HttpWebRequest)WebRequest.Create(sWebServiceUrls);
+                    webRequest.Headers.Add("SOAPAction", "/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+                    // webRequest.Headers.Add(@"SOAP:/Webservices/Services/Imaging/Inquiry.serviceagent/HTTPSEndpoint/RetrieveImage");
+                    webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+                    webRequest.Accept = "text/xml";
+                    webRequest.Method = "POST";
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
-            catch (Exception)
+            else
             {
-                return null;
+                Console.WriteLine("Unauthorised behaviour");
             }
-                       
+
             return webRequest;
         }
 
@@ -437,47 +474,47 @@ namespace GeminiSearchWebApp.Controllers
             List<string> lstResult = new List<string>();
             var name = " ";
             IDictionary<string, string> mydict = new Dictionary<string, string>();
-            try
-            {
-                using (XmlReader reader = XmlReader.Create(pathofRespFile))
+                try
                 {
-                    while (reader.Read())
+                    using (XmlReader reader = XmlReader.Create(pathofRespFile))
                     {
-                        switch (reader.NodeType)
+                        while (reader.Read())
                         {
-                            case XmlNodeType.Element:
-                                name = reader.Name;
-                                break;
-                            case XmlNodeType.Text:
-                                mydict.Add(name, reader.Value);
-                                break;
+                            switch (reader.NodeType)
+                            {
+                                case XmlNodeType.Element:
+                                    name = reader.Name;
+                                    break;
+                                case XmlNodeType.Text:
+                                    mydict.Add(name, reader.Value);
+                                    break;
+                            }
+                        }
+                        if (mydict.ContainsKey("ns0:ImageType"))
+                        {
+                            string imageType = mydict["ns0:ImageType"];
+                            lstResult.Add(imageType.Trim());
+                            Console.WriteLine(imageType.Trim());
+                        }
+                        if (mydict.ContainsKey("ns1:StatusDesc"))
+                        {
+                            string statusDesc = mydict["ns1:StatusDesc"];
+                            lstResult.Add(statusDesc.Trim());
+                            Console.WriteLine(statusDesc);
+                        }
+                        if (mydict.ContainsKey("ns1:binaryContent"))
+                        {
+                            string binaryContent = mydict["ns1:binaryContent"];
+                            lstResult.Add(binaryContent.Trim());
+                            Console.WriteLine(binaryContent.Trim());
                         }
                     }
-                    if (mydict.ContainsKey("ns0:ImageType"))
-                    {
-                        string imageType = mydict["ns0:ImageType"];
-                        lstResult.Add(imageType.Trim());
-                        Console.WriteLine(imageType.Trim());
-                    }
-                    if (mydict.ContainsKey("ns1:StatusDesc"))
-                    {
-                        string statusDesc = mydict["ns1:StatusDesc"];
-                        lstResult.Add(statusDesc.Trim());
-                        Console.WriteLine(statusDesc);
-                    }
-                    if (mydict.ContainsKey("ns1:binaryContent"))
-                    {
-                        string binaryContent = mydict["ns1:binaryContent"];
-                        lstResult.Add(binaryContent.Trim());
-                        Console.WriteLine(binaryContent.Trim());
-                    }
+                    return lstResult;
                 }
-                return lstResult;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+                catch (Exception)
+                {
+                    return null;
+                }
 
         }
 
@@ -501,35 +538,42 @@ namespace GeminiSearchWebApp.Controllers
             Console.WriteLine("value before decoding is  "+toBeOpendocName);
             toBeOpendocName = GetStringFromBase64(toBeOpendocName);
             Console.WriteLine("value after decoding is  " + toBeOpendocName);
-            if (!string.IsNullOrEmpty(toBeOpendocName) && toBeOpendocName.ToLower() != "undefined")
+            if (loginResult == true)
             {
-                toBeOpendocName = toBeOpendocName.Trim();
-                string contentType = string.Empty;
-                byte[] FileBytes = null;
-                string path = @"Docs/" + toBeOpendocName;
-                string webRootPath = _env.WebRootPath;
-                string finaldocPath = Path.Combine(webRootPath, path);
-                try
+                if (!string.IsNullOrEmpty(toBeOpendocName) && toBeOpendocName.ToLower() != "undefined")
                 {
-                    FileBytes = System.IO.File.ReadAllBytes(finaldocPath);                   
-                    System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
-                    new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
-                    return File(FileBytes, contentType);
-                    
-                }
-                catch (Exception ex)
-                {
-                    connectionClass.CreateMessageLog(ex.Message);
-
-                }
-                finally
-                {
-                    if (System.IO.File.Exists(finaldocPath))
+                    toBeOpendocName = toBeOpendocName.Trim();
+                    string contentType = string.Empty;
+                    byte[] FileBytes = null;
+                    string path = @"Docs/" + toBeOpendocName;
+                    string webRootPath = _env.WebRootPath;
+                    string finaldocPath = Path.Combine(webRootPath, path);
+                    try
                     {
-                        System.IO.File.Delete(finaldocPath);
+                        FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
+                        System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
+                        new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
+                        return File(FileBytes, contentType);
+
                     }
-                    
+                    catch (Exception ex)
+                    {
+                        connectionClass.CreateMessageLog(ex.Message);
+
+                    }
+                    finally
+                    {
+                        if (System.IO.File.Exists(finaldocPath))
+                        {
+                            System.IO.File.Delete(finaldocPath);
+                        }
+
+                    }
                 }
+            }
+            else
+            {
+                connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
             return View();
         }

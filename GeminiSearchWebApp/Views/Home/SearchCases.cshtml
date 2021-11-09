@@ -21,7 +21,7 @@
     <script src="~/CustomJS/jquery-ui.min.js"></script>
     <script src="~/CustomJS/jquery.dataTables.min.js" defer></script>
     <link href="~/CustomCSS/jquery.dataTables.min.css" rel="stylesheet" />,
-    <link href="~/CustomCSS/SearchCases.css" rel="stylesheet"/>
+    <link href="~/CustomCSS/SearchCases.css" rel="stylesheet" />
 
     <script type="text/javascript">
         var caseIdVal;
@@ -81,6 +81,7 @@
 
             var tableDoc;
             var tableAction;
+
             $("#btnSearch").click(function () {
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
@@ -395,14 +396,14 @@
                                                                             var count = 0;
                                                                             $.each(comeback, function (i, index) {
                                                                                 if (count < 1) {
-                                                                                    $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) { 
+                                                                                    $.post("@Url.Action("Execute", "Home")", { docId: index.DocumentID }, function (data) {
                                                                                             console.log(data);
                                                                                             console.log(btoa(data));
                                                                                             docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
                                                                                             document.onmousedown = focusPopup;
                                                                                             document.onkeyup = focusPopup;
                                                                                             document.onmousemove = focusPopup;
-                                                                                        
+
                                                                                  });
                                                                                     count++;
                                                                                 }
@@ -500,7 +501,6 @@
                         });
                 }
                 $.fn.resetForm();
-
             });
 
             $('#docTable').on('click', 'tr', function (e) {
@@ -607,7 +607,7 @@
                                         maxDate: new Date,
                                         yearRange: "1980:+nn",
                                         onSelect: function (dateText) {
-                                           // console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                            // console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
                                             $(this).change();
                                         }
                                     });
@@ -624,7 +624,7 @@
                                         maxDate: new Date,
                                         yearRange: "1980:+nn",
                                         onSelect: function (dateText) {
-                                          //  console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
+                                            //  console.log("selected Date:" + dateText + ";inputs's current value:" + this.value);
                                             $(this).change();
                                         }
                                     });

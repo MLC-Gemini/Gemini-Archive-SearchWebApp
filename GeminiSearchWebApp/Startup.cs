@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 
+
 namespace GeminiSearchWebApp
 {
     public class Startup
@@ -30,7 +31,8 @@ namespace GeminiSearchWebApp
                 services.AddMvc().AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/Home/Login", "");
-                });                
+                });
+                
             }
             catch (Exception ex)
             {
@@ -57,7 +59,8 @@ namespace GeminiSearchWebApp
                     app.UseExceptionHandler("/Home/Error");                    
                     app.UseHsts();
                 }               
-                app.UseStaticFiles();               
+                app.UseStaticFiles();
+                app.UseAntiXssMiddleware();
                 app.UseRouting();               
                 app.UseEndpoints(endpoints =>
                 {
