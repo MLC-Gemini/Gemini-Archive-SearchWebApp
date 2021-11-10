@@ -12,7 +12,7 @@ cd /var/www/geminiweb
 
 # Copy ASP.NET core self-contained published file in web directory, change permisson and ownership and making file self-executable.
 sudo mv /tmp/Published/* .
-sudo chown root:root GeminiSearchWebApp
+sudo chown webapp:webapp GeminiSearchWebApp
 sudo chmod 775 GeminiSearchWebApp
 sudo chmod +x GeminiSearchWebApp
 
