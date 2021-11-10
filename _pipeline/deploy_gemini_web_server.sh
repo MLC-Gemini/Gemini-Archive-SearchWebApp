@@ -20,6 +20,11 @@ echo '#!/bin/bash' > tmp_batch_userdata_$$
 echo "sudo chmod 775 /tmp/config_batch_ad.sh " >> tmp_batch_userdata_$$
 echo "/tmp/config_batch_ad.sh $BATCH_AD_PARENT_DOMAIN $BATCH_AD_CHILD_DOMAIN | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
 
+#Add Automatic paching cron job to ec2
+echo "crontab << EOF
+00 18 8-14 * 7 echo \"START patching \" >> /tmp/weekly-patching.log ; curl https://hip.ext.national.com.au/hip_upgrade.sh | bash -s -- -a latest ; echo \"FINISH patching\" >> /tmp/weekly-patching.log;
+EOF  | tee -a /tmp/userdata.log" >> tmp_batch_userdata_$$
+
 ######################################
 echo "2. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
