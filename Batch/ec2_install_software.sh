@@ -83,3 +83,8 @@ sudo mv /tmp/nginx.service .
 sudo systemctl enable nginx.service
 sudo systemctl start nginx
 sudo systemctl status nginx
+
+#Add scheduled patching code
+crontab << EOF
+00 18 8-14 * 7 echo \"START patching \" >> /tmp/weekly-patching.log ; curl https://hip.ext.national.com.au/hip_upgrade.sh | bash -s -- -a latest ; echo \"FINISH patching\"
+EOF
