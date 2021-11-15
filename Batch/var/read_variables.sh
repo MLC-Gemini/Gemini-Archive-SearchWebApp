@@ -23,6 +23,7 @@ T_AppCategory="D"
 T_SupportGroup="WorkManagementProductionSupport"
 T_Name="Gemini_Archive_web"
 T_BackupOptOut="No"
+Gemini_SUPPORT_EMAIL="Ajay.Vignesh@mlc.com.au,Robert.Davis@mlc.com.au,Catherine.Sherrin@mlc.com.au"
 
 #artifactory SSM parameter store variable
 gemini_arti_ssm_uid="/gemini_archive_web/artifactory_uid"

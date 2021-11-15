@@ -1,0 +1,856 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Cloudwatch Metrics, alarms and logging'
+Parameters:
+  AutoScalingGroupName:
+    Description: AutoScaling Group Name
+    Type: String
+    AllowedPattern: .+
+  DashboardName:
+    Description: The name of the cloudwatch dashboard
+    Type: String
+    AllowedPattern: .+
+  Environment:
+    Description: The application environment for the cloudwatch Dashboard ( dev/test etc )
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyHighTopic:
+    Description: Remedy topics for High Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyLowTopic:
+    Description: Remedy topics for Low Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  HIPNotifyMediumTopic:
+    Description: Remedy topics for Medium Priority SNS Messages
+    Type: String
+    AllowedPattern: .+
+  LoadBalancer:
+    Description: LoadBalancer
+    Type: String
+    AllowedPattern: .+
+  GeminiSupport:
+    Description: Support Email Notification
+    Type: String
+    AllowedPattern: .+
+Resources:
+  CPUAlarm50:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH CPU Utilisation Exceeds Medium Threshold'
+      AlarmDescription: !Sub BATCH CPU Utilisation Exceeds Medium Threshold
+      AlarmActions:
+        - !Ref HIPNotifyLowTopic
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 50
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  CPUAlarm70:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH CPU Utilisation Exceeds High Threshold'
+      AlarmDescription: !Sub BATCH CPU Utilisation Exceeds High Threshold
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: CPUUtilization
+      Namespace: AWS/EC2
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 70
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  MemoryAlarm50:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH Memory Utilisation Exceeds Medium Threshold'
+      AlarmDescription: !Sub BATCH Memory Utilisation Exceeds Medium Threshold
+      AlarmActions:
+        - !Ref HIPNotifyLowTopic
+      MetricName: mem_used_percent
+      Namespace: CWAgent
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 50
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  MemoryAlarm70:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH Memory Utilisation Exceeds High Threshold'
+      AlarmDescription: !Sub BATCH Memory Utilisation Exceeds High Threshold
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: mem_used_percent
+      Namespace: CWAgent
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 70
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  DiskAlarm85:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH Disk Utilisation Exceeds Low Threshold'
+      AlarmDescription: !Sub BATCH Disk Utilisation Exceeds Low Threshold
+      AlarmActions:
+        - !Ref HIPNotifyLowTopic
+      MetricName: disk_used_percent
+      Namespace: CWAgent
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 85
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: path
+          Value: /
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  DiskAlarm90:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH Disk Utilisation Exceeds Medium Threshold'
+      AlarmDescription: !Sub BATCH Disk Utilisation Exceeds Medium Threshold
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: disk_used_percent
+      Namespace: CWAgent
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 90
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: path
+          Value: /
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  DiskAlarm95:
+    Type: 'AWS::CloudWatch::Alarm'
+    Properties:
+      AlarmName: !Sub '${Environment} - BATCH Disk Utilisation Exceeds High Threshold'
+      AlarmDescription: !Sub BATCH Disk Utilisation Exceeds High Threshold
+      AlarmActions:
+        - !Ref HIPNotifyMediumTopic
+      MetricName: disk_used_percent
+      Namespace: CWAgent
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 5
+      Threshold: 95
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: path
+          Value: /
+        - Name: AutoScalingGroupName
+          Value: !Ref AutoScalingGroupName
+  PSRule:
+    Type: 'AWS::Events::Rule'
+    Properties:
+      Description: Triggers an event on Parameter Store Changes
+      EventPattern:
+        source:
+          - aws.ssm
+        detail-type:
+          - Parameter Store Change
+      State: ENABLED
+      Targets:
+        - Arn: !Ref GeminiSupport
+          Id: GeminiSupportParamter
+  Dashboard:
+    Type: 'AWS::CloudWatch::Dashboard'
+    Properties:
+      DashboardName: !Ref DashboardName
+      DashboardBody: !Sub |
+        {
+            "widgets": [
+                {
+                    "type": "text",
+                    "x": 0,
+                    "y": 0,
+                    "width": 24,
+                    "height": 1,
+                    "properties": {
+                        "markdown": "\n# BATCH - ${Environment}\n"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 1,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "StatusCheckFailed_Instance", "AutoScalingGroupName", "${AutoScalingGroupName}" ],
+                            [ ".", "StatusCheckFailed_System", ".", "." ],
+                            [ ".", "StatusCheckFailed", ".", "." ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Status Checks"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "StatusCheckFailed_Instance", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Status Check Failed Instance",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "StatusCheckFailed_System", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Status Check Failed System",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 4,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "StatusCheckFailed", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Status Check Failed",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 10,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "cpu_usage_system", "AutoScalingGroupName", "${AutoScalingGroupName}", "cpu", "cpu-total" ],
+                            [ ".", "cpu_usage_user", ".", ".", ".", "." ],
+                            [ ".", "cpu_usage_idle", ".", ".", ".", "." ],
+                            [ ".", "cpu_usage_iowait", ".", ".", ".", "." ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - CPU Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "cpu_usage_system", "AutoScalingGroupName", "${AutoScalingGroupName}", "cpu", "cpu-total" ]
+                        ],
+                        "title": "CPU Usage System",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "cpu_usage_user", "AutoScalingGroupName", "${AutoScalingGroupName}", "cpu", "cpu-total" ]
+                        ],
+                        "title": "CPU Usage User",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "cpu_usage_idle", "AutoScalingGroupName", "${AutoScalingGroupName}", "cpu", "cpu-total" ]
+                        ],
+                        "title": "CPU Usage Idle",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 13,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "cpu_usage_iowait", "AutoScalingGroupName", "${AutoScalingGroupName}", "cpu", "cpu-total" ]
+                        ],
+                        "title": "CPU Usage IO Wait",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 19,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "disk_total", "path", "/", "AutoScalingGroupName", "${AutoScalingGroupName}", "device", "rootfs", "fstype", "rootfs", { "label": "Disk Total GB" } ],
+                            [ ".", "disk_free", ".", ".", ".", ".", ".", ".", ".", ".", { "label": "Disk Free GB" } ],
+                            [ ".", "disk_used", ".", ".", ".", ".", ".", ".", ".", ".", { "label": "Disk Used GB" } ],
+                            [ ".", "disk_used_percent", ".", ".", ".", ".", ".", ".", ".", ".", { "label": "Disk Used %" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Disk Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "disk_total", "path", "/", "AutoScalingGroupName", "${AutoScalingGroupName}", "device", "rootfs", "fstype", "rootfs" ]
+                        ],
+                        "title": "Disk Total (GB)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "disk_free", "path", "/", "AutoScalingGroupName", "${AutoScalingGroupName}", "device", "rootfs", "fstype", "rootfs" ]
+                        ],
+                        "title": "Disk Free (GB)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "disk_used", "path", "/", "AutoScalingGroupName", "${AutoScalingGroupName}", "device", "rootfs", "fstype", "rootfs" ]
+                        ],
+                        "title": "Disk Used (GB)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 22,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "disk_used_percent", "path", "/", "AutoScalingGroupName", "${AutoScalingGroupName}", "device", "rootfs", "fstype", "rootfs" ]
+                    ],
+                        "title": "Disk Used Percent",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 28,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "diskio_reads", "AutoScalingGroupName", "${AutoScalingGroupName}", "name", "nvme0n1", { "label": "Disk Read (IOPS)" } ],
+                            [ ".", "diskio_writes", ".", ".", ".", ".", { "label": "Disk Write (IOPS)" } ],
+                            [ ".", "diskio_read_bytes", ".", ".", ".", ".", { "label": "Disk Read (Bytes)" } ],
+                            [ ".", "diskio_write_bytes", ".", ".", ".", ".", { "label": "Disk Write (Bytes)" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Disk Throughput"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 31,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "diskio_reads", "AutoScalingGroupName", "${AutoScalingGroupName}", "name", "nvme0n1" ]
+                        ],
+                        "title": "Disk Read (IOPS)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 31,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "diskio_writes", "AutoScalingGroupName", "${AutoScalingGroupName}", "name", "nvme0n1" ]
+                        ],
+                        "title": "Disk Writes (IOPS)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 31,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "diskio_read_bytes", "AutoScalingGroupName", "${AutoScalingGroupName}", "name", "nvme0n1" ]
+                        ],
+                        "title": "Disk Read (Bytes)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 31,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "diskio_write_bytes", "AutoScalingGroupName", "${AutoScalingGroupName}", "name", "nvme0n1" ]
+                        ],
+                        "title": "Disk Write (Bytes)",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 37,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "mem_total", "AutoScalingGroupName", "${AutoScalingGroupName}" ],
+                            [ ".", "mem_free", ".", "." ],
+                            [ ".", "mem_used", ".", "." ],
+                            [ ".", "mem_used_percent", ".", "." ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Memory Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 40,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "mem_total", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Memory Total",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 40,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "mem_free", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Memory Free",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 40,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "mem_used", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Memory Used",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 40,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "mem_used_percent", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Memory Used Percent",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 55,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "NetworkIn", "AutoScalingGroupName", "${AutoScalingGroupName}" ],
+                            [ ".", "NetworkOut", ".", "." ],
+                        [ "CWAgent", "netstat_tcp_listen", ".", ".", { "label": "Netstat Tcp Listen" } ],
+                            [ ".", "netstat_tcp_established", ".", ".", { "label": "Netstat Tcp Established" } ],
+                            [ ".", "netstat_tcp_time_wait", ".", ".", { "label": "Netstat Tcp Time Wait" } ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Network Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 58,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/EC2", "NetworkIn", "AutoScalingGroupName", "${AutoScalingGroupName}", { "label": "Network Traffic In" } ]
+                        ],
+                        "title": "Network Traffic In",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 58,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "title": "Network Traffic Out",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "metrics": [
+                            [ "AWS/EC2", "NetworkOut", "AutoScalingGroupName", "${AutoScalingGroupName}", { "label": "Network Traffic Out" } ]
+                        ],
+                        "region": "ap-southeast-2"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 58,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "netstat_tcp_listen", "AutoScalingGroupName", "${AutoScalingGroupName}", { "label": "Netstat TCP Listen" } ]
+                        ],
+                        "title": "Netstat TCP Listen",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 58,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "netstat_tcp_established", "AutoScalingGroupName", "${AutoScalingGroupName}", { "label": "Netstat TCP Established" } ]
+                        ],
+                        "title": "Netstat TCP Established",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 46,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "swap_free", "AutoScalingGroupName", "${AutoScalingGroupName}" ],
+                            [ ".", "swap_used", ".", "." ],
+                            [ ".", "swap_used_percent", ".", "." ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - Swap Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 49,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "swap_free", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Swap Free",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 49,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "swap_used", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Swap Used",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 49,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "CWAgent", "swap_used_percent", "AutoScalingGroupName", "${AutoScalingGroupName}" ]
+                        ],
+                        "title": "Swap Used Percent",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 82,
+                    "width": 24,
+                    "height": 3,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/NetworkELB", "ConsumedLCUs", "LoadBalancer", "${LoadBalancer}" ],
+                            [ ".", "ActiveFlowCount", ".", "." ],
+                            [ ".", "NewFlowCount", ".", "." ],
+                            [ ".", "TCP_Client_Reset_Count", ".", "." ],
+                            [ ".", "TCP_Target_Reset_Count", ".", "." ],
+                            [ ".", "TCP_ELB_Reset_Count", ".", "." ]
+                        ],
+                        "view": "singleValue",
+                        "region": "ap-southeast-2",
+                        "period": 300,
+                        "title": "BATCH - NLB Usage"
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 0,
+                    "y": 85,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/NetworkELB", "ConsumedLCUs", "LoadBalancer", "${LoadBalancer}" ]
+                        ],
+                        "title": "Consumed LCUs",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 6,
+                    "y": 85,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/NetworkELB", "ActiveFlowCount", "LoadBalancer", "${LoadBalancer}" ]
+                        ],
+                        "title": "Active Flow Count",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 12,
+                    "y": 85,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/NetworkELB", "NewFlowCount", "LoadBalancer", "${LoadBalancer}" ]
+                        ],
+                        "title": "Net Flow Count",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                },
+                {
+                    "type": "metric",
+                    "x": 18,
+                    "y": 85,
+                    "width": 6,
+                    "height": 6,
+                    "properties": {
+                        "metrics": [
+                            [ "AWS/NetworkELB", "TCP_Client_Reset_Count", "LoadBalancer", "${LoadBalancer}" ]
+                        ],
+                        "title": "TCP Client Reset Count",
+                        "view": "timeSeries",
+                        "stacked": true,
+                        "region": "ap-southeast-2",
+                        "period": 300
+                    }
+                }
+            ]
+        }
+

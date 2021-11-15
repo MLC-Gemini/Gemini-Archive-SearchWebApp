@@ -193,3 +193,6 @@ done
 echo "8. Add encrypted image to aws parameter store"
 #./aws/aws_put_parameter.sh $AWS_PAR_BATCH_IMAGE $image_id
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
+
+echo "9. Create Cloud watch"
+_pipeline/create_cloud_watch_ec2.sh $T_Environment
