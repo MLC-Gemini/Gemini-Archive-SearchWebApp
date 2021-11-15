@@ -96,9 +96,10 @@ namespace GeminiSearchWebApp.DAL
                         Description = "Invalid Input",
                         ErrorCode = 500
                     };
+                
                 }
-
-                await context.Response.WriteAsync(_error.ToJSON());
+            context.Response.Redirect("/Home/Login");
+            await context.Response.WriteAsync(_error.ToJSON());                
             }
         }
 
@@ -189,7 +190,7 @@ namespace GeminiSearchWebApp.DAL
         public class ErrorResponse
         {
             public int ErrorCode { get; set; }
-            public string Description { get; set; }
-        }
+            public string Description { get; set; }            
+    }
     
 }

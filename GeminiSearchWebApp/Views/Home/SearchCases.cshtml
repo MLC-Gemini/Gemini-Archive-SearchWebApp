@@ -41,6 +41,12 @@
                 window.location.href = "/Home/Login";
             }
 
+            let currentUser = btoa('@ViewBag.sessionUserName');
+                var urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('name') != currentUser) {
+                    window.location.href = "/Home/Login";
+                }
+
              $.fn.resetForm = function () {
                 $("input").change(function () {
                     if ($.fn.ifEmpty() == false) {
@@ -83,6 +89,7 @@
             var tableAction;
 
             $("#btnSearch").click(function () {
+
                 var from = $("#dateRange").val();
                 var to = $("#toRange").val();
                 var d = new Date(from.split("/").reverse().join("-"));

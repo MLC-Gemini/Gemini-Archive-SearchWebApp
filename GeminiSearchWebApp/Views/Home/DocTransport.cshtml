@@ -1,5 +1,21 @@
-﻿@{ 
-    ViewData["Title"] = "No Document Found";
+﻿@{
+    ViewData["Title"] = "ImageDocument";
 }
-   
+<script src="~/CustomJS/jquery.js"></script>
+<link href="~/CustomCSS/jquery-ui.css" rel="stylesheet" />
+<script src="~/CustomJS/jquery-ui.min.js"></script>
+<script type="text/javascript">
+    var docnames;   
+    $(document).ready(function () {       
+        docnames = '@ViewBag.DocError';        
+        if (docnames == '' || docnames.toLowerCase() == 'undefined') {
+            $("#lbldocName").html("No document found");
+        }
+    });
+</script>
+<body>
+    <div>
+        <p id="lbldocName" style="font-size:18px;display:block;text-align:center;font-weight:bold;"></p>
+    </div>
+</body>
 

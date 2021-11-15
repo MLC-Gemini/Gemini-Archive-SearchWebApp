@@ -24,7 +24,7 @@ namespace GeminiSearchWebApp.Controllers
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
         public LdapConnect ldapConnect;
-        public string loggedInUserName { get; set; }
+        public static string loggedInUserName { get; set; }
         public static bool loginResult = false;
         private readonly IWebHostEnvironment _env;
         public string createdFile;
@@ -69,11 +69,10 @@ namespace GeminiSearchWebApp.Controllers
             return RedirectToAction("Login");
         }
 
-      
-
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
+            string logInName = string.Empty;
             connectionClass.CreateLog(userName);           
             try
             {
@@ -82,10 +81,11 @@ namespace GeminiSearchWebApp.Controllers
                 var domain = config["SecuritySettings:domain"];
                 if (userName != null && password != null)
                 {
-                    loggedInUserName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
-                    if (!string.IsNullOrEmpty(loggedInUserName))
+                    logInName = ldapConnect.ValidateUsernameAndPassword(userName, password, domain);
+                    if (!string.IsNullOrEmpty(logInName))
                     {
-                        result = JsonConvert.SerializeObject(loggedInUserName);
+                        result = JsonConvert.SerializeObject(logInName);
+                        loggedInUserName = logInName;
                         return result;
                     }
                     else
@@ -150,6 +150,7 @@ namespace GeminiSearchWebApp.Controllers
             ViewBag.emptyFromDate = config["Appsettings:emptyFromDate"];
             ViewBag.emptyToDate = config["Appsettings:emptyToDate"];
             ViewBag.loginFinalStatus = loginValue;
+            ViewBag.sessionUserName = loggedInUserName;
             return View();
         }
 
@@ -337,6 +338,9 @@ namespace GeminiSearchWebApp.Controllers
             var config = builder.Build();
             string towerAPIusr = config["SecuritySettings:towerAPIsrvUser"];
             string towerAPIpass = config["SecuritySettings:towerAPIsrvPass"];
+            string path= config["AppSettings:geminiDocRequest"];
+            string requestpath= config["AppSettings:geminiDocTemplate"];
+            string outputFile = config["AppSettings:geminiDocResponse"];
             if (loginResult == true)
             {
                 try
@@ -348,8 +352,8 @@ namespace GeminiSearchWebApp.Controllers
                     string binaryResponse = string.Empty;
                     string responseFilePath = string.Empty;
                     string OpeningDocPath = string.Empty;
-                    string path = @"Docs/ImageTestSoap.xml";
-                    string requestpath = @"Docs/SoapInputReq.xml";
+                   // path = @(path);
+                   // requestpath = "@" + requestpath;
                     string webRootPath = _env.WebRootPath;
                     string reqdocPath = Path.Combine(webRootPath, requestpath);
                     string finaldocPath = Path.Combine(webRootPath, path);
@@ -374,7 +378,7 @@ namespace GeminiSearchWebApp.Controllers
                         string ver = response.ProtocolVersion.ToString();
                         StreamReader reader = new StreamReader(response.GetResponseStream());
                         string soapResult = reader.ReadToEnd();
-                        string outputFile = @"Docs/XML_Response.xml";
+                      //  string outputFile = @"Docs/XML_Response.xml";
                         responseFilePath = Path.Combine(webRootPath, outputFile);
                         System.IO.File.WriteAllText(responseFilePath, soapResult);
                         if (System.IO.File.Exists(responseFilePath))
@@ -522,9 +526,17 @@ namespace GeminiSearchWebApp.Controllers
         {
             try
             {
-                byte[] data = Convert.FromBase64String(inputVal);
-                Console.WriteLine(Encoding.UTF8.GetString(data));
-                return Encoding.UTF8.GetString(data);
+                if(!string.IsNullOrEmpty(inputVal))
+                {
+                    byte[] data = Convert.FromBase64String(inputVal);
+                    Console.WriteLine(Encoding.UTF8.GetString(data));
+                    return Encoding.UTF8.GetString(data);
+                }
+                else
+                {
+                    return null;
+                }
+                
             }
             catch
             {
@@ -570,9 +582,15 @@ namespace GeminiSearchWebApp.Controllers
 
                     }
                 }
+                else
+                {
+                    ViewBag.DocError = toBeOpendocName;
+                    
+                }
             }
             else
             {
+                ViewBag.DocError = toBeOpendocName;
                 connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
             return View();
