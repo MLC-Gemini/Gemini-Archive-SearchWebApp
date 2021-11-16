@@ -133,3 +133,6 @@ echo "4. Set DNS entry"
  	echo "Wait for ec2 instance ready......"
  	sleep 60
  done
+
+echo "5. Create Cloud watch"
+_pipeline/create_cloud_watch_ec2.sh $T_Environment
