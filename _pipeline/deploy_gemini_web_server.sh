@@ -135,4 +135,4 @@ echo "4. Set DNS entry"
  done
 
 echo "5. Create Cloud watch"
-_pipeline/create_cloud_watch_ec2.sh $T_Environment
+_pipeline/create_cloud_watch_ec2.sh $env_id
