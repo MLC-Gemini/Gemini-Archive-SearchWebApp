@@ -56,7 +56,6 @@ namespace GeminiSearchWebApp.Controllers
             ViewData["Message"] = "Your login page.";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
-
             ViewBag.emptyLogin = config["Appsettings:emptyLogin"];
             ViewBag.emptyPwd = config["Appsettings:emptyPwd"];
             ViewBag.emptyCredentials = config["Appsettings:emptyCredentials"];
@@ -341,11 +340,11 @@ namespace GeminiSearchWebApp.Controllers
             string path= config["AppSettings:geminiDocRequest"];
             string requestpath= config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
+            string finaldocPath = string.Empty;
             if (loginResult == true)
             {
                 try
                 {
-
                     string docName = string.Empty;
                     string docType = string.Empty;
                     string respStatus = string.Empty;
@@ -356,7 +355,7 @@ namespace GeminiSearchWebApp.Controllers
                    // requestpath = "@" + requestpath;
                     string webRootPath = _env.WebRootPath;
                     string reqdocPath = Path.Combine(webRootPath, requestpath);
-                    string finaldocPath = Path.Combine(webRootPath, path);
+                    finaldocPath = Path.Combine(webRootPath, path);
                     var text = System.IO.File.ReadAllText(reqdocPath);
                     text = text.Replace("{usr}", towerAPIusr);
                     text = text.Replace("{pwdd}", towerAPIpass);
@@ -407,9 +406,16 @@ namespace GeminiSearchWebApp.Controllers
 
                 }
                 catch (Exception ex)
-                {
+                {                    
                     connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
                     return null;
+                }
+                finally
+                {
+                    if (System.IO.File.Exists(finaldocPath))
+                    {
+                        System.IO.File.Delete(finaldocPath);
+                    }
                 }
             }
             else
