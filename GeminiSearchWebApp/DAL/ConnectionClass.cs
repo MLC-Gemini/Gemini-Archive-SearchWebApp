@@ -83,6 +83,7 @@ namespace GeminiSearchWebApp.DAL
 
                         SqlDataAdapter da = new SqlDataAdapter(dbCommand);
                         da.Fill(dtCases);
+                        da.Dispose();
 
                     }
                     catch (Exception ex)
@@ -91,7 +92,7 @@ namespace GeminiSearchWebApp.DAL
                         Console.WriteLine(ex);
                     }
                     finally
-                    {
+                    {                        
                         conn.Close();
                     }
                 }
@@ -166,6 +167,7 @@ namespace GeminiSearchWebApp.DAL
 
                         SqlDataAdapter da = new SqlDataAdapter(dbCommand);
                         da.Fill(dtResult);
+                        da.Dispose();
 
                     }
                     catch (Exception ex)
@@ -214,6 +216,7 @@ namespace GeminiSearchWebApp.DAL
 
                         SqlDataAdapter da = new SqlDataAdapter(dbCommand);
                         da.Fill(dtAction);
+                        da.Dispose();
 
                     }
                     catch (Exception ex)
@@ -261,6 +264,7 @@ namespace GeminiSearchWebApp.DAL
 
                         SqlDataAdapter da = new SqlDataAdapter(dbCommand);
                         da.Fill(dtDocId);
+                        da.Dispose();
 
                     }
                     catch (Exception ex)
@@ -321,6 +325,7 @@ namespace GeminiSearchWebApp.DAL
                     finally
                     {
                         conn.Close();
+                        dbCommand.Dispose();
                     }
                 }
             }
@@ -370,6 +375,7 @@ namespace GeminiSearchWebApp.DAL
                     finally
                     {
                         conn.Close();
+                        dbCommand.Dispose();
                     }
                 }
             }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "X56cLGAZj3PHnctP4PB6cHAl6uSVbjm5GNbLU4Y2WigBKs5ymY0frrp+DjP6wDpRD1sdf7dmYJ6SmL8tU5LMXA==",
+  "dgSpecHash": "fsKT/EacQHkvpIzcOstGdtZihb8+bUIPkhbOq6ToSktcSvB/oS1YgoMvHnG46DfJW/AXsuN55dQzHeEdPGXd9g==",
   "success": true,
   "projectFilePath": "C:\\Temp\\GitHubCode\\Gemini-Archive-SearchWebApp\\GeminiSearchWebApp\\GeminiSearchWebApp.csproj",
   "expectedPackageFiles": [
@@ -183,9 +183,9 @@
     "C:\\Users\\x033027d\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\x033027d\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\x033027d\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\5.0.8\\microsoft.netcore.app.runtime.linux-x64.5.0.8.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\5.0.8\\microsoft.aspnetcore.app.runtime.linux-x64.5.0.8.nupkg.sha512",
-    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\5.0.8\\microsoft.netcore.app.host.linux-x64.5.0.8.nupkg.sha512"
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.app.runtime.linux-x64\\5.0.12\\microsoft.netcore.app.runtime.linux-x64.5.0.12.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.linux-x64\\5.0.12\\microsoft.aspnetcore.app.runtime.linux-x64.5.0.12.nupkg.sha512",
+    "C:\\Users\\x033027d\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\5.0.12\\microsoft.netcore.app.host.linux-x64.5.0.12.nupkg.sha512"
   ],
   "logs": []
 }

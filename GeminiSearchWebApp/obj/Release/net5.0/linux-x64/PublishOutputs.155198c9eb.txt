@@ -10,7 +10,6 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.min.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.unobtrusive.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.unobtrusive.min.js
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Docs\ImageTestSoap.xml
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Docs\SoapInputReq.xml
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\favicon.ico
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Images\sort_asc.png
@@ -53,7 +52,7 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\lib\jquery\dist\jquery.min.map
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\lib\jquery\LICENSE.txt
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\appsettings.json
+C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\libman.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\GeminiSearchWebApp.pdb
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\Scripts\jquery.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\GeminiSearchWebApp.Views.pdb
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\GeminiSearchWebApp

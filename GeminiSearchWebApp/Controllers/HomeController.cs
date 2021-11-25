@@ -341,7 +341,7 @@ namespace GeminiSearchWebApp.Controllers
             string requestpath= config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
             string finaldocPath = string.Empty;
-            if (loginResult == true)
+            if (loginResult == true && !(string.IsNullOrEmpty(docId)))
             {
                 try
                 {
@@ -377,7 +377,8 @@ namespace GeminiSearchWebApp.Controllers
                         string ver = response.ProtocolVersion.ToString();
                         StreamReader reader = new StreamReader(response.GetResponseStream());
                         string soapResult = reader.ReadToEnd();
-                      //  string outputFile = @"Docs/XML_Response.xml";
+                        //  string outputFile = @"Docs/XML_Response.xml";
+                        reader.Dispose();
                         responseFilePath = Path.Combine(webRootPath, outputFile);
                         System.IO.File.WriteAllText(responseFilePath, soapResult);
                         if (System.IO.File.Exists(responseFilePath))

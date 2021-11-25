@@ -513,25 +513,18 @@
             $('#docTable').on('click', 'tr', function (e) {
                 rowId = this.rowIndex;
                 var docId = $("#docTable tr").eq(rowId).find("td:nth-child(3)");
-                var docIdSelected = docId.text();
-
-                $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {
-                    console.log(data);
-                    console.log(btoa(data));
-                    docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
-                    document.onmousedown = focusPopup;
-                    document.onkeyup = focusPopup;
-                    document.onmousemove = focusPopup;
-                });
-                //if (docWindow == null || docWindow.closed) {
-                //    docWindow = window.open('/Home/DocTransport', "_blank", "height=600,width=800,left=150,top=50");
-                //}
-                //else {
-                //    docWindow.focus();
-                //}
-                //document.onmousedown = focusPopup;
-                //document.onkeyup = focusPopup;
-                //document.onmousemove = focusPopup;
+                var docIdSelected = docId.text();               
+                if (rowId > 0) {
+                    $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {                        
+                        docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
+                        document.onmousedown = focusPopup;
+                        document.onkeyup = focusPopup;
+                        document.onmousemove = focusPopup;
+                    });
+                }
+                else {
+                    writeLogFileFromView("No document to show");
+                }
             });
 
             function focusPopup() {

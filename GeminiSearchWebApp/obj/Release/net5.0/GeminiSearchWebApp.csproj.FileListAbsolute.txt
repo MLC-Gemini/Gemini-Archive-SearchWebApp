@@ -220,7 +220,6 @@ C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\ne
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\GeminiSearchWebApp.pdb
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\appsettings.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\GeminiSearchWebApp.exe
-C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\Scripts\jquery.js
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\GeminiSearchWebApp.deps.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\GeminiSearchWebApp.runtimeconfig.json
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\GeminiSearchWebApp.runtimeconfig.dev.json
@@ -424,3 +423,4 @@ C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\R
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\runtimes\win-arm64\lib\net5.0\dotnet-aspnet-codegenerator-design.exe
 C:\Temp\GeminiProjectMaster\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\SearchLayout.cshtml.g.cs
 C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\obj\Release\net5.0\Razor\Views\Home\DocTransport.cshtml.g.cs
+C:\Temp\GitHubCode\Gemini-Archive-SearchWebApp\GeminiSearchWebApp\bin\Release\net5.0\libman.json
