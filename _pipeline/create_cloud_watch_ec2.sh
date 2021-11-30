@@ -21,12 +21,13 @@ load_balancer=$(echo $(cat tmpBatchStack$$ |jq -r '.StackResources[]|select (.Lo
 
 aws cloudformation deploy --template-file Batch/template/Cloudwatch_EC2.yml --stack-name Gemini-CLOUD-WATCH-EC2-$T_Environment --parameter-overrides \
     "AutoScalingGroupName=$(cat tmpBatchStack$$ |jq -r '.StackResources[]|select (.LogicalResourceId == "AutoScalingGroup").PhysicalResourceId')" \
-    "DashboardName=CLOUD_WATCH-EC2-$TEST_ENV" \
+    "DashboardName=CLOUD_WATCH-EC2-$T_Environment" \
     "Environment=$T_Environment" \
     "HIPNotifyHighTopic=$hip_notify_high_topic" \
     "HIPNotifyLowTopic=$hip_notify_low_topic" \
     "HIPNotifyMediumTopic=$hip_notify_medium_topic" \
     "LoadBalancer=$load_balancer" \
+    "S3BucketName=gemini-$T_Environment-3118"\
     "GeminiSupport"=$support_topic_arn \
         --tags \
         "CostCentre=$T_CostCentre" \
