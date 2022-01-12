@@ -1,6 +1,5 @@
-using GeminiSearchWebApp.DAL;
+﻿using GeminiSearchWebApp.DAL;
 using GeminiSearchWebApp.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,8 @@ using System.Xml;
 
 namespace GeminiSearchWebApp.Controllers
 {
-        public class HomeController : Controller
+
+    public class HomeController : Controller
     {
         private IConfiguration configuration;
         private ConnectionClass connectionClass;
@@ -104,7 +104,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
-         [NonAction]
+        [NonAction]
         public bool LoginCheck(string loginStatus)
         {
             //string result = string.Empty;
@@ -128,7 +128,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return loginResult;
         }
-
+          
         public IActionResult SearchCases()
         {
            
@@ -284,7 +284,7 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-        [NonAction]
+         [NonAction]
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
@@ -305,12 +305,12 @@ namespace GeminiSearchWebApp.Controllers
             }
             return JSONString;
         }
-
+         
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
         }
-        [NonAction]
+          [NonAction]
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
@@ -332,7 +332,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return docId;
         }
-        [NonAction]
+           [NonAction]
         public string Execute(string docId)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -463,7 +463,7 @@ namespace GeminiSearchWebApp.Controllers
 
             return webRequest;
         }
-        [NonAction]
+
         public static void LoadBase64(string base64, string path)
         {
             try
@@ -481,7 +481,7 @@ namespace GeminiSearchWebApp.Controllers
             }
         }
 
-        [NonAction]
+          [NonAction]
         public List<string> GetResponseDetails(string pathofRespFile)
         {
             List<string> lstResult = new List<string>();
@@ -530,7 +530,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
 
         }
-        [NonAction]
+           [NonAction]
         public string GetStringFromBase64(string inputVal)
         {
             try
