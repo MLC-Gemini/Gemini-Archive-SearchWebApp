@@ -67,7 +67,7 @@ namespace GeminiSearchWebApp.Controllers
             loginResult = false;
             return RedirectToAction("Login");
         }
-
+         [NonAction]
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
@@ -104,6 +104,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
+        [NonAction]
         public bool LoginCheck(string loginStatus)
         {
             //string result = string.Empty;
@@ -127,7 +128,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return loginResult;
         }
-
+          
         public IActionResult SearchCases()
         {
            
@@ -153,7 +154,7 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-
+        [NonAction]
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
             DataTable dt = new DataTable();
@@ -202,6 +203,7 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
+        [NonAction]
         public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
         {
             DataTable dt = new DataTable();
@@ -251,7 +253,7 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-
+        [NonAction]
         public string GetActionRecord(int selectedCaseId)
         {
             DataTable dt = new DataTable();
@@ -282,7 +284,7 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-
+         [NonAction]
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
@@ -303,12 +305,12 @@ namespace GeminiSearchWebApp.Controllers
             }
             return JSONString;
         }
-
+         
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
         }
-
+          [NonAction]
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
@@ -330,7 +332,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return docId;
         }
-
+           [NonAction]
         public string Execute(string docId)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -479,7 +481,7 @@ namespace GeminiSearchWebApp.Controllers
             }
         }
 
-
+          [NonAction]
         public List<string> GetResponseDetails(string pathofRespFile)
         {
             List<string> lstResult = new List<string>();
@@ -528,7 +530,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
 
         }
-
+           [NonAction]
         public string GetStringFromBase64(string inputVal)
         {
             try
