@@ -7,7 +7,7 @@ echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers >
 # Directory for Gemini web application
 sudo mkdir -p /var/www
 sudo mkdir /var/www/geminiweb
-sudo chmod -R 775 /var/www/geminiweb/
+sudo chmod -R 770 /var/www/geminiweb/
 cd /var/www/geminiweb
 
 # Copy ASP.NET core self-contained published file in web directory, change permisson and ownership and making file self-executable.
