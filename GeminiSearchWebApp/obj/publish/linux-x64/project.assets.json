@@ -106,8 +106,6 @@
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
         "type": "package",
         "compile": {
@@ -173,7 +171,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -186,8 +183,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Html.Abstractions.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -201,7 +196,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Http.Features/5.0.10": {
         "type": "package",
         "dependencies": {
@@ -249,8 +243,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Runtime.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Session/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -267,7 +259,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Session.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "type": "package",
         "compile": {
@@ -520,8 +511,6 @@
           }
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -534,7 +523,6 @@
           "lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.Extensions.Configuration/5.0.0": {
         "type": "package",
         "dependencies": {
@@ -1058,11 +1046,7 @@
           "System.Security.Principal.Windows": "5.0.0"
         },
         "compile": {
-<<<<<<< HEAD
-          "ref/netstandard2.0/_._": {}
-=======
           "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {}
->>>>>>> PenTestFix1
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
@@ -2164,11 +2148,7 @@
           "System.Security.Principal.Windows": "5.0.0"
         },
         "compile": {
-<<<<<<< HEAD
-          "ref/netstandard2.0/_._": {}
-=======
           "ref/netstandard2.0/System.Security.AccessControl.dll": {}
->>>>>>> PenTestFix1
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.AccessControl.dll": {}
@@ -2216,32 +2196,6 @@
           }
         }
       },
-<<<<<<< HEAD
-      "System.Security.Cryptography.Cng/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.IO": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Encoding": "4.3.0",
-          "System.Security.Cryptography.Primitives": "4.3.0",
-          "System.Text.Encoding": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.6/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Cng.dll": {
-            "assetType": "runtime",
-            "rid": "unix"
-          },
-          "runtimes/win/lib/netstandard1.6/System.Security.Cryptography.Cng.dll": {
-=======
       "System.Security.Cryptography.Cng/4.5.0": {
         "type": "package",
         "compile": {
@@ -2252,7 +2206,6 @@
         },
         "runtimeTargets": {
           "runtimes/win/lib/netcoreapp2.1/System.Security.Cryptography.Cng.dll": {
->>>>>>> PenTestFix1
             "assetType": "runtime",
             "rid": "win"
           }
@@ -2349,8 +2302,6 @@
           }
         }
       },
-<<<<<<< HEAD
-=======
       "System.Security.Cryptography.Pkcs/4.5.0": {
         "type": "package",
         "dependencies": {
@@ -2369,7 +2320,6 @@
           }
         }
       },
->>>>>>> PenTestFix1
       "System.Security.Cryptography.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -2431,8 +2381,6 @@
           }
         }
       },
-<<<<<<< HEAD
-=======
       "System.Security.Cryptography.Xml/4.5.0": {
         "type": "package",
         "dependencies": {
@@ -2458,7 +2406,6 @@
           "lib/netstandard2.0/System.Security.Permissions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "System.Security.Principal.Windows/5.0.0": {
         "type": "package",
         "compile": {
@@ -2740,8 +2687,6 @@
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
         "type": "package",
         "compile": {
@@ -2807,7 +2752,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -2820,8 +2764,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Html.Abstractions.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -2835,7 +2777,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Http.Features/5.0.10": {
         "type": "package",
         "dependencies": {
@@ -2883,8 +2824,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Razor.Runtime.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Session/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -2901,7 +2840,6 @@
           "lib/netstandard2.0/Microsoft.AspNetCore.Session.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "type": "package",
         "compile": {
@@ -3154,8 +3092,6 @@
           }
         }
       },
-<<<<<<< HEAD
-=======
       "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
         "type": "package",
         "dependencies": {
@@ -3168,7 +3104,6 @@
           "lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "Microsoft.Extensions.Configuration/5.0.0": {
         "type": "package",
         "dependencies": {
@@ -3683,11 +3618,7 @@
           "System.Security.Principal.Windows": "5.0.0"
         },
         "compile": {
-<<<<<<< HEAD
-          "ref/netstandard2.0/_._": {}
-=======
           "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {}
->>>>>>> PenTestFix1
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
@@ -5004,11 +4935,7 @@
           "System.Security.Principal.Windows": "5.0.0"
         },
         "compile": {
-<<<<<<< HEAD
-          "ref/netstandard2.0/_._": {}
-=======
           "ref/netstandard2.0/System.Security.AccessControl.dll": {}
->>>>>>> PenTestFix1
         },
         "runtime": {
           "lib/netstandard2.0/System.Security.AccessControl.dll": {}
@@ -5039,28 +4966,6 @@
           "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Algorithms.dll": {}
         }
       },
-<<<<<<< HEAD
-      "System.Security.Cryptography.Cng/4.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "1.1.0",
-          "System.IO": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0",
-          "System.Runtime.Handles": "4.3.0",
-          "System.Runtime.InteropServices": "4.3.0",
-          "System.Security.Cryptography.Algorithms": "4.3.0",
-          "System.Security.Cryptography.Encoding": "4.3.0",
-          "System.Security.Cryptography.Primitives": "4.3.0",
-          "System.Text.Encoding": "4.3.0"
-        },
-        "compile": {
-          "ref/netstandard1.6/_._": {}
-        },
-        "runtime": {
-          "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Cng.dll": {}
-=======
       "System.Security.Cryptography.Cng/4.5.0": {
         "type": "package",
         "compile": {
@@ -5068,7 +4973,6 @@
         },
         "runtime": {
           "lib/netcoreapp2.1/System.Security.Cryptography.Cng.dll": {}
->>>>>>> PenTestFix1
         }
       },
       "System.Security.Cryptography.Csp/4.3.0": {
@@ -5142,8 +5046,6 @@
           "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.OpenSsl.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "System.Security.Cryptography.Pkcs/4.5.0": {
         "type": "package",
         "dependencies": {
@@ -5156,7 +5058,6 @@
           "lib/netcoreapp2.1/System.Security.Cryptography.Pkcs.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "System.Security.Cryptography.Primitives/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -5211,8 +5112,6 @@
           "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.X509Certificates.dll": {}
         }
       },
-<<<<<<< HEAD
-=======
       "System.Security.Cryptography.Xml/4.5.0": {
         "type": "package",
         "dependencies": {
@@ -5238,7 +5137,6 @@
           "lib/netstandard2.0/System.Security.Permissions.dll": {}
         }
       },
->>>>>>> PenTestFix1
       "System.Security.Principal.Windows/5.0.0": {
         "type": "package",
         "compile": {
@@ -5572,8 +5470,6 @@
         "microsoft.aspnetcore.connections.abstractions.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
       "sha512": "GXmMD8/vuTLPLvKzKEPz/4vapC5e0cwx1tUVd83ePRyWF9CCrn/pg4/1I+tGkQqFLPvi3nlI2QtPtC6MQN8Nww==",
       "type": "package",
@@ -5639,7 +5535,6 @@
         "microsoft.aspnetcore.hosting.server.abstractions.nuspec"
       ]
     },
->>>>>>> PenTestFix1
     "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
       "sha512": "Y4rs5aMEXY8G7wJo5S3EEt6ltqyOTr/qOeZzfn+hw/fuQj5GppGckMY5psGLETo1U9hcT5MmAhaT5xtusM1b5g==",
       "type": "package",
@@ -5653,8 +5548,6 @@
         "microsoft.aspnetcore.html.abstractions.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
       "sha512": "Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
       "type": "package",
@@ -5668,7 +5561,6 @@
         "microsoft.aspnetcore.http.abstractions.nuspec"
       ]
     },
->>>>>>> PenTestFix1
     "Microsoft.AspNetCore.Http.Features/5.0.10": {
       "sha512": "IWs6dC9OqkREOs8SLs59MZ0I5CHnWrwuZ5yuIMLL8Qr3I3hJNNUzbxU5fgI1BwPddyobgajVlpc3VmgscrHecA==",
       "type": "package",
@@ -5728,8 +5620,6 @@
         "microsoft.aspnetcore.razor.runtime.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "Microsoft.AspNetCore.Session/2.2.0": {
       "sha512": "lOjJVh293AKaOEPi1MIC1/G9gOVZMrve2a05o56oslK6bo0PMgMB17rmPomvqrJAjMdlWZ/MGdN2y78Z9wzWTw==",
       "type": "package",
@@ -5743,7 +5633,6 @@
         "microsoft.aspnetcore.session.nuspec"
       ]
     },
->>>>>>> PenTestFix1
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
       "sha512": "yuvf07qFWFqtK3P/MRkEKLhn5r2UbSpVueRziSqj0yJQIKFwG1pq9mOayK3zE5qZCTs0CbrwL9M6R8VwqyGy2w==",
       "type": "package",
@@ -6064,8 +5953,6 @@
         "microsoft.codeanalysis.workspaces.common.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
       "sha512": "spsJkYo8gGJapaxTSQFN/wqA+ghpJMLwB4ZyTB+fSdpd7AmMFP/YSpIcGmczcw4KggpxLGhLk7lCkSIlgvHaqQ==",
       "type": "package",
@@ -6079,7 +5966,6 @@
         "microsoft.extensions.caching.abstractions.nuspec"
       ]
     },
->>>>>>> PenTestFix1
     "Microsoft.Extensions.Configuration/5.0.0": {
       "sha512": "LN322qEKHjuVEhhXueTUe7RNePooZmS8aGid5aK2woX3NPjSnONFyKUc6+JknOS6ce6h2tCLfKPTBXE3mN/6Ag==",
       "type": "package",
@@ -10633,34 +10519,6 @@
         "system.security.cryptography.algorithms.nuspec"
       ]
     },
-<<<<<<< HEAD
-    "System.Security.Cryptography.Cng/4.3.0": {
-      "sha512": "03idZOqFlsKRL4W+LuCpJ6dBYDUWReug6lZjBa3uJWnk5sPCUXckocevTaUA8iT/MFSrY/2HXkOt753xQ/cf8g==",
-      "type": "package",
-      "path": "system.security.cryptography.cng/4.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/net46/System.Security.Cryptography.Cng.dll",
-        "lib/net461/System.Security.Cryptography.Cng.dll",
-        "lib/net463/System.Security.Cryptography.Cng.dll",
-        "ref/net46/System.Security.Cryptography.Cng.dll",
-        "ref/net461/System.Security.Cryptography.Cng.dll",
-        "ref/net463/System.Security.Cryptography.Cng.dll",
-        "ref/netstandard1.3/System.Security.Cryptography.Cng.dll",
-        "ref/netstandard1.4/System.Security.Cryptography.Cng.dll",
-        "ref/netstandard1.6/System.Security.Cryptography.Cng.dll",
-        "runtimes/unix/lib/netstandard1.6/System.Security.Cryptography.Cng.dll",
-        "runtimes/win/lib/net46/System.Security.Cryptography.Cng.dll",
-        "runtimes/win/lib/net461/System.Security.Cryptography.Cng.dll",
-        "runtimes/win/lib/net463/System.Security.Cryptography.Cng.dll",
-        "runtimes/win/lib/netstandard1.4/System.Security.Cryptography.Cng.dll",
-        "runtimes/win/lib/netstandard1.6/System.Security.Cryptography.Cng.dll",
-        "system.security.cryptography.cng.4.3.0.nupkg.sha512",
-        "system.security.cryptography.cng.nuspec"
-=======
     "System.Security.Cryptography.Cng/4.5.0": {
       "sha512": "WG3r7EyjUe9CMPFSs6bty5doUqT+q9pbI80hlNzo2SkPkZ4VTuZkGWjpp77JB8+uaL4DFPRdBsAY+DX3dBK92A==",
       "type": "package",
@@ -10722,7 +10580,6 @@
         "system.security.cryptography.cng.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
->>>>>>> PenTestFix1
       ]
     },
     "System.Security.Cryptography.Csp/4.3.0": {
@@ -10812,8 +10669,6 @@
         "system.security.cryptography.openssl.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "System.Security.Cryptography.Pkcs/4.5.0": {
       "sha512": "TGQX51gxpY3K3I6LJlE2LAftVlIMqJf0cBGhz68Y89jjk3LJCB6SrwiD+YN1fkqemBvWGs+GjyMJukl6d6goyQ==",
       "type": "package",
@@ -10847,7 +10702,6 @@
         "version.txt"
       ]
     },
->>>>>>> PenTestFix1
     "System.Security.Cryptography.Primitives/4.3.0": {
       "sha512": "7bDIyVFNL/xKeFHjhobUAQqSpJq9YTOpbEs6mR233Et01STBMXNAc/V+BM6dwYGc95gVh/Zf+iVXWzj3mE8DWg==",
       "type": "package",
@@ -10931,8 +10785,6 @@
         "system.security.cryptography.x509certificates.nuspec"
       ]
     },
-<<<<<<< HEAD
-=======
     "System.Security.Cryptography.Xml/4.5.0": {
       "sha512": "i2Jn6rGXR63J0zIklImGRkDIJL4b1NfPSEbIVHBlqoIb12lfXIigCbDRpDmIEzwSo/v1U5y/rYJdzZYSyCWxvg==",
       "type": "package",
@@ -10975,7 +10827,6 @@
         "version.txt"
       ]
     },
->>>>>>> PenTestFix1
     "System.Security.Principal.Windows/5.0.0": {
       "sha512": "t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
       "type": "package",
@@ -11714,10 +11565,7 @@
     "net5.0": [
       "Amazon.Extensions.Configuration.SystemsManager >= 3.0.0",
       "Microsoft.AspNetCore.Authentication.Negotiate >= 5.0.10",
-<<<<<<< HEAD
-=======
       "Microsoft.AspNetCore.Session >= 2.2.0",
->>>>>>> PenTestFix1
       "Microsoft.Extensions.Hosting.Systemd >= 5.0.1",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 5.0.2",
       "Newtonsoft.Json >= 13.0.1",
@@ -11779,13 +11627,10 @@
             "target": "Package",
             "version": "[5.0.10, )"
           },
-<<<<<<< HEAD
-=======
           "Microsoft.AspNetCore.Session": {
             "target": "Package",
             "version": "[2.2.0, )"
           },
->>>>>>> PenTestFix1
           "Microsoft.Extensions.Hosting.Systemd": {
             "target": "Package",
             "version": "[5.0.1, )"
@@ -11820,15 +11665,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
-            "version": "[5.0.13, 5.0.13]"
+            "version": "[5.0.14, 5.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Host.linux-x64",
-            "version": "[5.0.13, 5.0.13]"
+            "version": "[5.0.14, 5.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.linux-x64",
-            "version": "[5.0.13, 5.0.13]"
+            "version": "[5.0.14, 5.0.14]"
           }
         ],
         "frameworkReferences": {
@@ -11839,7 +11684,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

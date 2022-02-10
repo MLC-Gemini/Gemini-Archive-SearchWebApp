@@ -104,24 +104,18 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
-<<<<<<< HEAD
-        [NonAction]
-=======
 
->>>>>>> PenTestFix1
+
         public bool LoginCheck(string loginStatus)
         {
             //string result = string.Empty;
             string inputToValidate = GetStringFromBase64(loginStatus);
-            //bool result = false;
-            //bool LoginCheck = false;
 
             try
             {
                 if (inputToValidate.ToLower() == "True".ToLower())
                 {
                     loginResult = Convert.ToBoolean(inputToValidate);
-                    //return loginResult;
                 }
                 else
                 {
@@ -163,10 +157,7 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-<<<<<<< HEAD
-        [NonAction]
-=======
->>>>>>> PenTestFix1
+
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
             DataTable dt = new DataTable();
@@ -215,12 +206,9 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-<<<<<<< HEAD
-        [NonAction]
+
         public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
-=======
-        public  string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
->>>>>>> PenTestFix1
+
         {
             DataTable dt = new DataTable();
             string format;
@@ -269,10 +257,8 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-<<<<<<< HEAD
-        [NonAction]
-=======
->>>>>>> PenTestFix1
+
+
         public string GetActionRecord(int selectedCaseId)
         {
             DataTable dt = new DataTable();
@@ -303,10 +289,8 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-<<<<<<< HEAD
-         [NonAction]
-=======
->>>>>>> PenTestFix1
+
+
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
@@ -332,10 +316,8 @@ namespace GeminiSearchWebApp.Controllers
         {
             connectionClass.CreateMessageLog(exView);
         }
-<<<<<<< HEAD
-          [NonAction]
-=======
->>>>>>> PenTestFix1
+
+
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
@@ -357,10 +339,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return docId;
         }
-<<<<<<< HEAD
-           [NonAction]
-=======
->>>>>>> PenTestFix1
+
         public string Execute(string docId)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -509,10 +488,8 @@ namespace GeminiSearchWebApp.Controllers
             }
         }
 
-<<<<<<< HEAD
-          [NonAction]
-=======
->>>>>>> PenTestFix1
+
+
         public List<string> GetResponseDetails(string pathofRespFile)
         {
             List<string> lstResult = new List<string>();
@@ -561,10 +538,8 @@ namespace GeminiSearchWebApp.Controllers
                 }
 
         }
-<<<<<<< HEAD
-           [NonAction]
-=======
->>>>>>> PenTestFix1
+
+
         public string GetStringFromBase64(string inputVal)
         {
             try
