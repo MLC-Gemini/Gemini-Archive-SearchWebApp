@@ -10,6 +10,7 @@ C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubT
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.min.js
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.unobtrusive.js
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\CustomJS\jquery.validate.unobtrusive.min.js
+C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Docs\ImageTestSoap.xml
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Docs\SoapInputReq.xml
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\favicon.ico
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\PubTmp\Out\wwwroot\Images\sort_asc.png

@@ -106,6 +106,7 @@ C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\win\lib
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\linux\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\osx\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.0\System.DirectoryServices.Protocols.dll
+C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.csproj.AssemblyReference.cache
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfoInputs.cache
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.AssemblyInfo.cs
@@ -137,4 +138,3 @@ C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebA
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\ref\GeminiSearchWebApp.dll
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.pdb
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.genruntimeconfig.cache
-C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Debug\net5.0\GeminiSearchWebApp.csproj.AssemblyReference.cache

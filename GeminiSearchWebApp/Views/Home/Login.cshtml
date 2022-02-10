@@ -57,6 +57,7 @@
                                             dataType: "JSON",
                                             data: { loginStatus: loginValue },
                                             success: function (response) {
+                                                //debugger;
                                                 if (response == true) {
                                                     window.location.href = "/Home/SearchCases/?name=" + btoa(result);
                                                 }

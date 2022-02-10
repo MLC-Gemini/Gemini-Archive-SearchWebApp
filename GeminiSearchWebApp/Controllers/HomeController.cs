@@ -67,7 +67,7 @@ namespace GeminiSearchWebApp.Controllers
             loginResult = false;
             return RedirectToAction("Login");
         }
-         [NonAction]
+
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
@@ -104,18 +104,20 @@ namespace GeminiSearchWebApp.Controllers
             }
             return result;
         }
-        [NonAction]
+
         public bool LoginCheck(string loginStatus)
         {
             //string result = string.Empty;
             string inputToValidate = GetStringFromBase64(loginStatus);
             //bool result = false;
+            //bool LoginCheck = false;
+
             try
             {
                 if (inputToValidate.ToLower() == "True".ToLower())
                 {
                     loginResult = Convert.ToBoolean(inputToValidate);
-                    return loginResult;
+                    //return loginResult;
                 }
                 else
                 {
@@ -126,6 +128,9 @@ namespace GeminiSearchWebApp.Controllers
             {
                 connectionClass.CreateMessageLog(ex.Message);
             }
+
+            HttpContext.Session.SetString("isAuth", loginResult.ToString()); // adding session variable for holding value
+
             return loginResult;
         }
           
@@ -154,7 +159,6 @@ namespace GeminiSearchWebApp.Controllers
             return View();
         }
 
-        [NonAction]
         public string GetSearchDoc(string fLevel, string uId, string fDate, string tDate, string caseType)
         {
             DataTable dt = new DataTable();
@@ -162,7 +166,7 @@ namespace GeminiSearchWebApp.Controllers
             format = "dd/MM/yyyy";
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 try
                 {
@@ -203,15 +207,14 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-        [NonAction]
-        public string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
+        public  string GetCasesRecord(string filterLevel, string userId, string fromDate, string toDate, string caseDateType)
         {
             DataTable dt = new DataTable();
             string format;
             format = "dd/MM/yyyy";
             CultureInfo provider = CultureInfo.InvariantCulture;
 
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 try
                 {
@@ -253,11 +256,10 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-        [NonAction]
         public string GetActionRecord(int selectedCaseId)
         {
             DataTable dt = new DataTable();
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 if (selectedCaseId != 0)
                 {
@@ -284,11 +286,10 @@ namespace GeminiSearchWebApp.Controllers
             return TableToJson(dt);
 
         }
-         [NonAction]
         public string TableToJson(DataTable table)
         {
             string JSONString = string.Empty;
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 try
                 {
@@ -310,11 +311,10 @@ namespace GeminiSearchWebApp.Controllers
         {
             connectionClass.CreateMessageLog(exView);
         }
-          [NonAction]
         public string GetDocId(int caseId)
         {
             string docId = string.Empty;
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 try
                 {
@@ -332,7 +332,6 @@ namespace GeminiSearchWebApp.Controllers
             }
             return docId;
         }
-           [NonAction]
         public string Execute(string docId)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -343,7 +342,7 @@ namespace GeminiSearchWebApp.Controllers
             string requestpath= config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
             string finaldocPath = string.Empty;
-            if (loginResult == true && !(string.IsNullOrEmpty(docId)))
+            if (HttpContext.Session.GetString("isAuth") == true.ToString() && !(string.IsNullOrEmpty(docId)))
             {
                 try
                 {
@@ -481,7 +480,6 @@ namespace GeminiSearchWebApp.Controllers
             }
         }
 
-          [NonAction]
         public List<string> GetResponseDetails(string pathofRespFile)
         {
             List<string> lstResult = new List<string>();
@@ -530,7 +528,6 @@ namespace GeminiSearchWebApp.Controllers
                 }
 
         }
-           [NonAction]
         public string GetStringFromBase64(string inputVal)
         {
             try
@@ -559,7 +556,7 @@ namespace GeminiSearchWebApp.Controllers
             Console.WriteLine("value before decoding is  "+toBeOpendocName);
             toBeOpendocName = GetStringFromBase64(toBeOpendocName);
             Console.WriteLine("value after decoding is  " + toBeOpendocName);
-            if (loginResult == true)
+            if (HttpContext.Session.GetString("isAuth") == true.ToString())
             {
                 if (!string.IsNullOrEmpty(toBeOpendocName) && toBeOpendocName.ToLower() != "undefined")
                 {

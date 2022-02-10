@@ -28,6 +28,7 @@ namespace GeminiSearchWebApp
             {
                 services.AddControllersWithViews();
                 services.AddDistributedMemoryCache();
+                services.AddSession();
                 services.AddMvc().AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/Home/Login", "");
@@ -61,6 +62,7 @@ namespace GeminiSearchWebApp
                 }               
                 app.UseStaticFiles();
                 app.UseAntiXssMiddleware();
+                app.UseSession();
                 app.UseRouting();               
                 app.UseEndpoints(endpoints =>
                 {
