@@ -48,24 +48,29 @@ namespace GeminiSearchWebApp.DAL
                     }
                 }
 
-                // Check XSS in request content
-                var originalBody = context.Request.Body;
-                try
-                {
-                    var content = await ReadRequestBody(context);
+            // Check XSS in request content
+            var originalBody = context.Request.Body;
+            try
+            {
+                var content = await ReadRequestBody(context);
 
-                    if (CrossSiteScriptingValidation.IsDangerousString(content, out _))
-                    {
-                        await RespondWithAnError(context).ConfigureAwait(false);
-                        return;
-                    }
-                    await _next(context).ConfigureAwait(false);
-                }
-                finally
+                if (CrossSiteScriptingValidation.IsDangerousString(content, out _))
                 {
-                    context.Request.Body = originalBody;
+                    await RespondWithAnError(context).ConfigureAwait(false);
+                    return;
                 }
+
+                await _next(context).ConfigureAwait(false);
+
+                return;
             }
+            catch
+            { }
+            //finally
+            //{
+            //    context.Request.Body = originalBody;
+            //}
+        }
 
             private static async Task<string> ReadRequestBody(HttpContext context)
             {

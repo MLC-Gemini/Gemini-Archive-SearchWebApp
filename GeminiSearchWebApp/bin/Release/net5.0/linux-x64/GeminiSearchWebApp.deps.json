@@ -35,6 +35,10 @@
         "dependencies": {
           "Amazon.Extensions.Configuration.SystemsManager": "3.0.0",
           "Microsoft.AspNetCore.Authentication.Negotiate": "5.0.10",
+<<<<<<< HEAD
+=======
+          "Microsoft.AspNetCore.Session": "2.2.0",
+>>>>>>> PenTestFix1
           "Microsoft.Extensions.Hosting.Systemd": "5.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "5.0.2",
           "Newtonsoft.Json": "13.0.1",
@@ -55,21 +59,36 @@
           "Microsoft.AspNetCore.Components.Web": "5.0.0.0",
           "Microsoft.AspNetCore.CookiePolicy": "5.0.0.0",
           "Microsoft.AspNetCore.Cors": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Cryptography.Internal": "5.0.0.0",
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": "5.0.0.0",
           "Microsoft.AspNetCore.DataProtection.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.DataProtection": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Cryptography.Internal.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "5.0.0.0",
+          "Microsoft.AspNetCore.DataProtection.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.DataProtection.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.DataProtection.Extensions": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics.HealthChecks": "5.0.0.0",
           "Microsoft.AspNetCore": "5.0.0.0",
           "Microsoft.AspNetCore.HostFiltering": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Hosting.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Hosting": "5.0.0.0",
           "Microsoft.AspNetCore.Hosting.Server.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Html.Abstractions.Reference": "5.0.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Hosting.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Hosting": "5.0.0.0",
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Html.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.Http.Connections.Common": "5.0.0.0",
           "Microsoft.AspNetCore.Http.Connections": "5.0.0.0",
           "Microsoft.AspNetCore.Http": "5.0.0.0",
@@ -107,7 +126,11 @@
           "Microsoft.AspNetCore.Server.Kestrel.Core": "5.0.0.0",
           "Microsoft.AspNetCore.Server.Kestrel": "5.0.0.0",
           "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Session": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Session.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.SignalR.Common": "5.0.0.0",
           "Microsoft.AspNetCore.SignalR.Core": "5.0.0.0",
           "Microsoft.AspNetCore.SignalR": "5.0.0.0",
@@ -116,7 +139,11 @@
           "Microsoft.AspNetCore.WebSockets": "5.0.0.0",
           "Microsoft.AspNetCore.WebUtilities": "5.0.0.0",
           "Microsoft.CSharp": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.Extensions.Caching.Abstractions": "5.0.0.0",
+=======
+          "Microsoft.Extensions.Caching.Abstractions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.Extensions.Caching.Memory": "5.0.0.0",
           "Microsoft.Extensions.Configuration.Abstractions.Reference": "5.0.0.0",
           "Microsoft.Extensions.Configuration.Binder.Reference": "5.0.0.0",
@@ -278,9 +305,15 @@
           "System.Security.Cryptography.Encoding.Reference": "5.0.0.0",
           "System.Security.Cryptography.Primitives.Reference": "5.0.0.0",
           "System.Security.Cryptography.X509Certificates.Reference": "5.0.0.0",
+<<<<<<< HEAD
           "System.Security.Cryptography.Xml": "5.0.0.0",
           "System.Security": "4.0.0.0",
           "System.Security.Permissions": "5.0.0.0",
+=======
+          "System.Security.Cryptography.Xml.Reference": "5.0.0.0",
+          "System.Security": "4.0.0.0",
+          "System.Security.Permissions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "System.Security.Principal": "5.0.0.0",
           "System.Security.Principal.Windows.Reference": "5.0.0.0",
           "System.Security.SecureString": "5.0.0.0",
@@ -399,7 +432,11 @@
           "Microsoft.AspNetCore.Cors.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.Cryptography.Internal/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.Cryptography.Internal.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.Cryptography.Internal.dll": {}
         }
@@ -409,12 +446,20 @@
           "Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.DataProtection.Abstractions/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.DataProtection.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.DataProtection.Abstractions.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.DataProtection/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.DataProtection.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.DataProtection.dll": {}
         }
@@ -449,7 +494,11 @@
           "Microsoft.AspNetCore.HostFiltering.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.Hosting.Abstractions/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.Hosting.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.Hosting.Abstractions.dll": {}
         }
@@ -459,7 +508,11 @@
           "Microsoft.AspNetCore.Hosting.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.Hosting.Server.Abstractions/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.Hosting.Server.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.Hosting.Server.Abstractions.dll": {}
         }
@@ -469,7 +522,11 @@
           "Microsoft.AspNetCore.Html.Abstractions.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.Http.Abstractions/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.Http.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.Http.Abstractions.dll": {}
         }
@@ -659,7 +716,11 @@
           "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.AspNetCore.Session/5.0.0.0": {
+=======
+      "Microsoft.AspNetCore.Session.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.AspNetCore.Session.dll": {}
         }
@@ -704,7 +765,11 @@
           "Microsoft.CSharp.dll": {}
         }
       },
+<<<<<<< HEAD
       "Microsoft.Extensions.Caching.Abstractions/5.0.0.0": {
+=======
+      "Microsoft.Extensions.Caching.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "Microsoft.Extensions.Caching.Abstractions.dll": {}
         }
@@ -1514,7 +1579,11 @@
           "System.Security.Cryptography.X509Certificates.dll": {}
         }
       },
+<<<<<<< HEAD
       "System.Security.Cryptography.Xml/5.0.0.0": {
+=======
+      "System.Security.Cryptography.Xml.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "System.Security.Cryptography.Xml.dll": {}
         }
@@ -1524,7 +1593,11 @@
           "System.Security.dll": {}
         }
       },
+<<<<<<< HEAD
       "System.Security.Permissions/5.0.0.0": {
+=======
+      "System.Security.Permissions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
         "compile": {
           "System.Security.Permissions.dll": {}
         }
@@ -1785,11 +1858,51 @@
           "lib/net5.0/Microsoft.AspNetCore.Connections.Abstractions.dll": {}
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {},
+      "Microsoft.AspNetCore.DataProtection/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "2.2.0",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "2.2.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Options": "5.0.0",
+          "Microsoft.Win32.Registry": "5.0.0",
+          "System.Security.Cryptography.Xml": "4.5.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.DataProtection.Abstractions/2.2.0": {},
+      "Microsoft.AspNetCore.Hosting.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.2.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "5.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.10",
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
         "dependencies": {
           "System.Text.Encodings.Web": "4.5.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.10",
+          "System.Text.Encodings.Web": "4.5.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Http.Features/5.0.10": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "5.0.1",
@@ -1815,6 +1928,18 @@
           "Microsoft.AspNetCore.Razor": "2.2.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Session/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "2.2.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Caching.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Options": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "compile": {
           "ref/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {}
@@ -1874,6 +1999,14 @@
           "lib/netcoreapp3.1/Microsoft.CodeAnalysis.Workspaces.dll": {}
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.Extensions.Configuration/5.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
@@ -2945,6 +3078,7 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
       "System.Security.Cryptography.Cng/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -2960,6 +3094,9 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+=======
+      "System.Security.Cryptography.Cng/4.5.0": {},
+>>>>>>> PenTestFix1
       "System.Security.Cryptography.Csp/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -3010,6 +3147,14 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "System.Security.Cryptography.Pkcs/4.5.0": {
+        "dependencies": {
+          "System.Security.Cryptography.Cng": "4.5.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "System.Security.Cryptography.Primitives/4.3.0": {
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
@@ -3038,7 +3183,11 @@
           "System.Runtime.InteropServices": "4.3.0",
           "System.Runtime.Numerics": "4.3.0",
           "System.Security.Cryptography.Algorithms": "4.3.0",
+<<<<<<< HEAD
           "System.Security.Cryptography.Cng": "4.3.0",
+=======
+          "System.Security.Cryptography.Cng": "4.5.0",
+>>>>>>> PenTestFix1
           "System.Security.Cryptography.Csp": "4.3.0",
           "System.Security.Cryptography.Encoding": "4.3.0",
           "System.Security.Cryptography.OpenSsl": "4.3.0",
@@ -3050,6 +3199,20 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "System.Security.Cryptography.Xml/4.5.0": {
+        "dependencies": {
+          "System.Security.Cryptography.Pkcs": "4.5.0",
+          "System.Security.Permissions": "4.5.0"
+        }
+      },
+      "System.Security.Permissions/4.5.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "System.Security.Principal.Windows/5.0.0": {},
       "System.Text.Encoding/4.3.0": {
         "dependencies": {
@@ -3150,6 +3313,10 @@
         "dependencies": {
           "Amazon.Extensions.Configuration.SystemsManager": "3.0.0",
           "Microsoft.AspNetCore.Authentication.Negotiate": "5.0.10",
+<<<<<<< HEAD
+=======
+          "Microsoft.AspNetCore.Session": "2.2.0",
+>>>>>>> PenTestFix1
           "Microsoft.Extensions.Hosting.Systemd": "5.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "5.0.2",
           "Newtonsoft.Json": "13.0.1",
@@ -3170,21 +3337,36 @@
           "Microsoft.AspNetCore.Components.Web": "5.0.0.0",
           "Microsoft.AspNetCore.CookiePolicy": "5.0.0.0",
           "Microsoft.AspNetCore.Cors": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Cryptography.Internal": "5.0.0.0",
           "Microsoft.AspNetCore.Cryptography.KeyDerivation": "5.0.0.0",
           "Microsoft.AspNetCore.DataProtection.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.DataProtection": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Cryptography.Internal.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "5.0.0.0",
+          "Microsoft.AspNetCore.DataProtection.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.DataProtection.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.DataProtection.Extensions": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics": "5.0.0.0",
           "Microsoft.AspNetCore.Diagnostics.HealthChecks": "5.0.0.0",
           "Microsoft.AspNetCore": "5.0.0.0",
           "Microsoft.AspNetCore.HostFiltering": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Hosting.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Hosting": "5.0.0.0",
           "Microsoft.AspNetCore.Hosting.Server.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Html.Abstractions.Reference": "5.0.0.0",
           "Microsoft.AspNetCore.Http.Abstractions": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Hosting.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Hosting": "5.0.0.0",
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Html.Abstractions.Reference": "5.0.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.Http.Connections.Common": "5.0.0.0",
           "Microsoft.AspNetCore.Http.Connections": "5.0.0.0",
           "Microsoft.AspNetCore.Http": "5.0.0.0",
@@ -3222,7 +3404,11 @@
           "Microsoft.AspNetCore.Server.Kestrel.Core": "5.0.0.0",
           "Microsoft.AspNetCore.Server.Kestrel": "5.0.0.0",
           "Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.AspNetCore.Session": "5.0.0.0",
+=======
+          "Microsoft.AspNetCore.Session.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.AspNetCore.SignalR.Common": "5.0.0.0",
           "Microsoft.AspNetCore.SignalR.Core": "5.0.0.0",
           "Microsoft.AspNetCore.SignalR": "5.0.0.0",
@@ -3231,7 +3417,11 @@
           "Microsoft.AspNetCore.WebSockets": "5.0.0.0",
           "Microsoft.AspNetCore.WebUtilities": "5.0.0.0",
           "Microsoft.CSharp": "5.0.0.0",
+<<<<<<< HEAD
           "Microsoft.Extensions.Caching.Abstractions": "5.0.0.0",
+=======
+          "Microsoft.Extensions.Caching.Abstractions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "Microsoft.Extensions.Caching.Memory": "5.0.0.0",
           "Microsoft.Extensions.Configuration.Abstractions.Reference": "5.0.0.0",
           "Microsoft.Extensions.Configuration.Binder.Reference": "5.0.0.0",
@@ -3393,9 +3583,15 @@
           "System.Security.Cryptography.Encoding.Reference": "5.0.0.0",
           "System.Security.Cryptography.Primitives.Reference": "5.0.0.0",
           "System.Security.Cryptography.X509Certificates.Reference": "5.0.0.0",
+<<<<<<< HEAD
           "System.Security.Cryptography.Xml": "5.0.0.0",
           "System.Security": "4.0.0.0",
           "System.Security.Permissions": "5.0.0.0",
+=======
+          "System.Security.Cryptography.Xml.Reference": "5.0.0.0",
+          "System.Security": "4.0.0.0",
+          "System.Security.Permissions.Reference": "5.0.0.0",
+>>>>>>> PenTestFix1
           "System.Security.Principal": "5.0.0.0",
           "System.Security.Principal.Windows.Reference": "5.0.0.0",
           "System.Security.SecureString": "5.0.0.0",
@@ -4765,11 +4961,51 @@
           "Microsoft.AspNetCore.Http.Features": "5.0.10"
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {},
+      "Microsoft.AspNetCore.DataProtection/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.Internal": "2.2.0",
+          "Microsoft.AspNetCore.DataProtection.Abstractions": "2.2.0",
+          "Microsoft.AspNetCore.Hosting.Abstractions": "2.2.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Options": "5.0.0",
+          "Microsoft.Win32.Registry": "5.0.0",
+          "System.Security.Cryptography.Xml": "4.5.0",
+          "System.Security.Principal.Windows": "5.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.DataProtection.Abstractions/2.2.0": {},
+      "Microsoft.AspNetCore.Hosting.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Server.Abstractions": "2.2.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "5.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.10",
+          "Microsoft.Extensions.Configuration.Abstractions": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
         "dependencies": {
           "System.Text.Encodings.Web": "4.5.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.10",
+          "System.Text.Encodings.Web": "4.5.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.AspNetCore.Http.Features/5.0.10": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "5.0.1",
@@ -4795,6 +5031,18 @@
           "Microsoft.AspNetCore.Razor": "2.2.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.AspNetCore.Session/2.2.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.DataProtection": "2.2.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Caching.Abstractions": "2.2.0",
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0",
+          "Microsoft.Extensions.Options": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
         "runtime": {
           "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
@@ -5036,6 +5284,14 @@
           }
         }
       },
+<<<<<<< HEAD
+=======
+      "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1"
+        }
+      },
+>>>>>>> PenTestFix1
       "Microsoft.Extensions.Configuration/5.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "5.0.0",
@@ -6142,6 +6398,7 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
       "System.Security.Cryptography.Cng/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -6157,6 +6414,9 @@
           "System.Text.Encoding": "4.3.0"
         }
       },
+=======
+      "System.Security.Cryptography.Cng/4.5.0": {},
+>>>>>>> PenTestFix1
       "System.Security.Cryptography.Csp/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "5.0.0",
@@ -6207,6 +6467,14 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "System.Security.Cryptography.Pkcs/4.5.0": {
+        "dependencies": {
+          "System.Security.Cryptography.Cng": "4.5.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "System.Security.Cryptography.Primitives/4.3.0": {
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
@@ -6235,7 +6503,11 @@
           "System.Runtime.InteropServices": "4.3.0",
           "System.Runtime.Numerics": "4.3.0",
           "System.Security.Cryptography.Algorithms": "4.3.0",
+<<<<<<< HEAD
           "System.Security.Cryptography.Cng": "4.3.0",
+=======
+          "System.Security.Cryptography.Cng": "4.5.0",
+>>>>>>> PenTestFix1
           "System.Security.Cryptography.Csp": "4.3.0",
           "System.Security.Cryptography.Encoding": "4.3.0",
           "System.Security.Cryptography.OpenSsl": "4.3.0",
@@ -6247,6 +6519,20 @@
           "runtime.native.System.Security.Cryptography.OpenSsl": "4.3.0"
         }
       },
+<<<<<<< HEAD
+=======
+      "System.Security.Cryptography.Xml/4.5.0": {
+        "dependencies": {
+          "System.Security.Cryptography.Pkcs": "4.5.0",
+          "System.Security.Permissions": "4.5.0"
+        }
+      },
+      "System.Security.Permissions/4.5.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "5.0.0"
+        }
+      },
+>>>>>>> PenTestFix1
       "System.Security.Principal.Windows/5.0.0": {},
       "System.Text.Encoding/4.3.0": {
         "dependencies": {
@@ -6415,6 +6701,44 @@
       "path": "microsoft.aspnetcore.connections.abstractions/5.0.10",
       "hashPath": "microsoft.aspnetcore.connections.abstractions.5.0.10.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "Microsoft.AspNetCore.Cryptography.Internal/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GXmMD8/vuTLPLvKzKEPz/4vapC5e0cwx1tUVd83ePRyWF9CCrn/pg4/1I+tGkQqFLPvi3nlI2QtPtC6MQN8Nww==",
+      "path": "microsoft.aspnetcore.cryptography.internal/2.2.0",
+      "hashPath": "microsoft.aspnetcore.cryptography.internal.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.DataProtection/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G6dvu5Nd2vjpYbzazZ//qBFbSEf2wmBUbyAR7E4AwO3gWjhoJD5YxpThcGJb7oE3VUcW65SVMXT+cPCiiBg8Sg==",
+      "path": "microsoft.aspnetcore.dataprotection/2.2.0",
+      "hashPath": "microsoft.aspnetcore.dataprotection.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.DataProtection.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-seANFXmp8mb5Y12m1ShiElJ3ZdOT3mBN3wA1GPhHJIvZ/BxOCPyqEOR+810OWsxEZwA5r5fDRNpG/CqiJmQnJg==",
+      "path": "microsoft.aspnetcore.dataprotection.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.dataprotection.abstractions.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Hosting.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ubycklv+ZY7Kutdwuy1W4upWcZ6VFR8WUXU7l7B2+mvbDBBPAcfpi+E+Y5GFe+Q157YfA3C49D2GCjAZc7Mobw==",
+      "path": "microsoft.aspnetcore.hosting.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.hosting.abstractions.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1PMijw8RMtuQF60SsD/JlKtVfvh4NORAhF4wjysdABhlhTrYmtgssqyncR0Stq5vqtjplZcj6kbT4LRTglt9IQ==",
+      "path": "microsoft.aspnetcore.hosting.server.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.hosting.server.abstractions.2.2.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "Microsoft.AspNetCore.Html.Abstractions/2.2.0": {
       "type": "package",
       "serviceable": true,
@@ -6422,6 +6746,16 @@
       "path": "microsoft.aspnetcore.html.abstractions/2.2.0",
       "hashPath": "microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "Microsoft.AspNetCore.Http.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Nxs7Z1q3f1STfLYKJSVXCs1iBl+Ya6E8o4Oy1bCxJ/rNI44E/0f6tbsrVqAWfB7jlnJfyaAtIalBVxPKUPQb4Q==",
+      "path": "microsoft.aspnetcore.http.abstractions/2.2.0",
+      "hashPath": "microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "Microsoft.AspNetCore.Http.Features/5.0.10": {
       "type": "package",
       "serviceable": true,
@@ -6450,6 +6784,16 @@
       "path": "microsoft.aspnetcore.razor.runtime/2.2.0",
       "hashPath": "microsoft.aspnetcore.razor.runtime.2.2.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "Microsoft.AspNetCore.Session/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lOjJVh293AKaOEPi1MIC1/G9gOVZMrve2a05o56oslK6bo0PMgMB17rmPomvqrJAjMdlWZ/MGdN2y78Z9wzWTw==",
+      "path": "microsoft.aspnetcore.session/2.2.0",
+      "hashPath": "microsoft.aspnetcore.session.2.2.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
       "type": "package",
       "serviceable": true,
@@ -6499,6 +6843,16 @@
       "path": "microsoft.codeanalysis.workspaces.common/3.8.0",
       "hashPath": "microsoft.codeanalysis.workspaces.common.3.8.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "Microsoft.Extensions.Caching.Abstractions/2.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-spsJkYo8gGJapaxTSQFN/wqA+ghpJMLwB4ZyTB+fSdpd7AmMFP/YSpIcGmczcw4KggpxLGhLk7lCkSIlgvHaqQ==",
+      "path": "microsoft.extensions.caching.abstractions/2.2.0",
+      "hashPath": "microsoft.extensions.caching.abstractions.2.2.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "Microsoft.Extensions.Configuration/5.0.0": {
       "type": "package",
       "serviceable": true,
@@ -7479,12 +7833,21 @@
       "path": "system.security.cryptography.algorithms/4.3.0",
       "hashPath": "system.security.cryptography.algorithms.4.3.0.nupkg.sha512"
     },
+<<<<<<< HEAD
     "System.Security.Cryptography.Cng/4.3.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-03idZOqFlsKRL4W+LuCpJ6dBYDUWReug6lZjBa3uJWnk5sPCUXckocevTaUA8iT/MFSrY/2HXkOt753xQ/cf8g==",
       "path": "system.security.cryptography.cng/4.3.0",
       "hashPath": "system.security.cryptography.cng.4.3.0.nupkg.sha512"
+=======
+    "System.Security.Cryptography.Cng/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WG3r7EyjUe9CMPFSs6bty5doUqT+q9pbI80hlNzo2SkPkZ4VTuZkGWjpp77JB8+uaL4DFPRdBsAY+DX3dBK92A==",
+      "path": "system.security.cryptography.cng/4.5.0",
+      "hashPath": "system.security.cryptography.cng.4.5.0.nupkg.sha512"
+>>>>>>> PenTestFix1
     },
     "System.Security.Cryptography.Csp/4.3.0": {
       "type": "package",
@@ -7507,6 +7870,16 @@
       "path": "system.security.cryptography.openssl/4.3.0",
       "hashPath": "system.security.cryptography.openssl.4.3.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "System.Security.Cryptography.Pkcs/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TGQX51gxpY3K3I6LJlE2LAftVlIMqJf0cBGhz68Y89jjk3LJCB6SrwiD+YN1fkqemBvWGs+GjyMJukl6d6goyQ==",
+      "path": "system.security.cryptography.pkcs/4.5.0",
+      "hashPath": "system.security.cryptography.pkcs.4.5.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "System.Security.Cryptography.Primitives/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -7521,6 +7894,23 @@
       "path": "system.security.cryptography.x509certificates/4.3.0",
       "hashPath": "system.security.cryptography.x509certificates.4.3.0.nupkg.sha512"
     },
+<<<<<<< HEAD
+=======
+    "System.Security.Cryptography.Xml/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-i2Jn6rGXR63J0zIklImGRkDIJL4b1NfPSEbIVHBlqoIb12lfXIigCbDRpDmIEzwSo/v1U5y/rYJdzZYSyCWxvg==",
+      "path": "system.security.cryptography.xml/4.5.0",
+      "hashPath": "system.security.cryptography.xml.4.5.0.nupkg.sha512"
+    },
+    "System.Security.Permissions/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9gdyuARhUR7H+p5CjyUB/zPk7/Xut3wUSP8NJQB6iZr8L3XUXTMdoLeVAg9N4rqF8oIpE7MpdqHdDHQ7XgJe0g==",
+      "path": "system.security.permissions/4.5.0",
+      "hashPath": "system.security.permissions.4.5.0.nupkg.sha512"
+    },
+>>>>>>> PenTestFix1
     "System.Security.Principal.Windows/5.0.0": {
       "type": "package",
       "serviceable": true,
@@ -7687,7 +8077,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.Cryptography.Internal/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.Cryptography.Internal.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7697,12 +8091,20 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.DataProtection.Abstractions/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.DataProtection.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.DataProtection/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.DataProtection.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7737,7 +8139,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.Hosting.Abstractions/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.Hosting.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7747,7 +8153,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.Hosting.Server.Abstractions/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.Hosting.Server.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7757,7 +8167,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.Http.Abstractions/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.Http.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7947,7 +8361,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.AspNetCore.Session/5.0.0.0": {
+=======
+    "Microsoft.AspNetCore.Session.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -7992,7 +8410,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "Microsoft.Extensions.Caching.Abstractions/5.0.0.0": {
+=======
+    "Microsoft.Extensions.Caching.Abstractions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -8802,7 +9224,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "System.Security.Cryptography.Xml/5.0.0.0": {
+=======
+    "System.Security.Cryptography.Xml.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
@@ -8812,7 +9238,11 @@
       "serviceable": false,
       "sha512": ""
     },
+<<<<<<< HEAD
     "System.Security.Permissions/5.0.0.0": {
+=======
+    "System.Security.Permissions.Reference/5.0.0.0": {
+>>>>>>> PenTestFix1
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""
