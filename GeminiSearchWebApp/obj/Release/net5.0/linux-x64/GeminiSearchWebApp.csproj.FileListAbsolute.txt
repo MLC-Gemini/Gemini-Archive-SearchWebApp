@@ -403,7 +403,6 @@ C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\Syst
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\System.Security.Cryptography.Xml.dll
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\System.Security.Permissions.dll
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\System.Windows.Extensions.dll
-C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.csproj.AssemblyReference.cache
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.AssemblyInfoInputs.cache
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\obj\Release\net5.0\linux-x64\GeminiSearchWebApp.AssemblyInfo.cs

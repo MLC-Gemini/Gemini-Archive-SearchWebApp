@@ -67,7 +67,8 @@ namespace GeminiSearchWebApp.Controllers
             loginResult = false;
             return RedirectToAction("Login");
         }
-         [NonAction]
+
+
         public string ValidateLogin(string userName, string password)
         {
             string result = string.Empty;
