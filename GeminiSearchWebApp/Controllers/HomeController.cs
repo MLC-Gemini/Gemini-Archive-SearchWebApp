@@ -569,7 +569,8 @@ namespace GeminiSearchWebApp.Controllers
             Console.WriteLine("value before decoding is  "+toBeOpendocName);
             toBeOpendocName = GetStringFromBase64(toBeOpendocName);
             Console.WriteLine("value after decoding is  " + toBeOpendocName);
-            if (HttpContext.Session.GetString("isAuth") == true.ToString())
+
+            if (HttpContext.Session.GetString("isAuth") == true.ToString() && IsDirectoryTraversing(toBeOpendocName) == false)
             {
                 if (!string.IsNullOrEmpty(toBeOpendocName) && toBeOpendocName.ToLower() != "undefined")
                 {
@@ -603,8 +604,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
                 else
                 {
-                    ViewBag.DocError = toBeOpendocName;
-                    
+                    ViewBag.DocError = toBeOpendocName;                
                 }
             }
             else
@@ -614,5 +614,29 @@ namespace GeminiSearchWebApp.Controllers
             }
             return View();
         }
+
+        public bool IsDirectoryTraversing(string fileName)
+        {
+            bool isTraversing = false;
+
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                return isTraversing;
+            }
+
+            var decodedFileName = System.Web.HttpUtility.UrlDecode(fileName);
+
+            if (decodedFileName.Contains("/") ||
+                decodedFileName.Contains(@"\") ||
+                decodedFileName.Contains("$") ||
+                decodedFileName.Contains("..") ||
+                decodedFileName.Contains("?"))
+            {
+                isTraversing = true;
+            }
+
+            return isTraversing;
+        }
+
     }
 }
