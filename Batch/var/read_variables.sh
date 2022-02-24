@@ -104,7 +104,7 @@ elif [[ $env_id == 'prod' ]]; then
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
 
   # ALB Listner SSL certificate name
-    ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au" 
+    ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.aws.national.com.au" 
 
    # Route53 DNS Variable
     GEMINI_DNS_ZONE_NAME="gemini.aws.national.com.au"
