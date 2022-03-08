@@ -1,5 +1,5 @@
-C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\appsettings.json
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\libman.json
+C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\appsettings.json
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\GeminiSearchWebApp
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\GeminiSearchWebApp.deps.json
 C:\Users\p783718d\geminiweb\GeminiSearchWebApp\bin\Release\net5.0\linux-x64\GeminiSearchWebApp.runtimeconfig.json

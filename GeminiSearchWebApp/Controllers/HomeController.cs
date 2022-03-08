@@ -346,10 +346,11 @@ namespace GeminiSearchWebApp.Controllers
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
             var config = builder.Build();
             string towerAPIusr = config["SecuritySettings:towerAPIsrvUser"];
-            string towerAPIpass = config["SecuritySettings:towerAPIsrvPass"];
+            string towerAPIpass = new string(config["SecuritySettings:towerAPIsrvPass"].ToCharArray());
             string path= config["AppSettings:geminiDocRequest"];
             string requestpath= config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
+            string requestLogging = config["AppSettings:geminiDocReqlogging"];
             string finaldocPath = string.Empty;
             if (HttpContext.Session.GetString("isAuth") == true.ToString() && !(string.IsNullOrEmpty(docId)))
             {
@@ -373,6 +374,10 @@ namespace GeminiSearchWebApp.Controllers
                     System.IO.File.WriteAllText(finaldocPath, text);
                     docName = docId.Replace("/", "-").Trim();
                     HttpWebRequest request = CreateWebRequest();
+                    if (requestLogging == "Y")
+                    {
+                        System.IO.File.WriteAllText(reqdocPath, request.ToString());
+                    }
                     if (request != null)
                     {
                         XmlDocument soapEnvelopeXml = new XmlDocument();

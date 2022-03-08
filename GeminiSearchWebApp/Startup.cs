@@ -28,7 +28,9 @@ namespace GeminiSearchWebApp
             {
                 services.AddControllersWithViews();
                 services.AddDistributedMemoryCache();
-                services.AddSession();
+                services.AddSession(options => {
+                    options.IdleTimeout = TimeSpan.FromMinutes(15);
+                });
                 services.AddMvc().AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/Home/Login", "");
