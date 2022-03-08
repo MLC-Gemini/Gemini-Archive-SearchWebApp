@@ -23,7 +23,6 @@ T_AppCategory="D"
 T_SupportGroup="WorkManagementProductionSupport"
 T_Name="Gemini_Archive_web"
 T_BackupOptOut="No"
-Gemini_SUPPORT_EMAIL="Ajay.Vignesh@mlc.com.au,Robert.Davis@mlc.com.au,Catherine.Sherrin@mlc.com.au"
 
 #artifactory SSM parameter store variable
 gemini_arti_ssm_uid="/gemini_archive_web/artifactory_uid"
@@ -72,6 +71,7 @@ if [[ $env_id == 'nonprod' ]]; then
     T_Environment="nonprod"
     T_EC2_PowerMgt="WKED"
     KEYPAIR_NAME="GeminiArchWebBuildBoxNonProd"
+    Gemini_SUPPORT_EMAIL="Ajay.Vignesh@mlc.com.au,Robert.Davis@mlc.com.au,Catherine.Sherrin@mlc.com.au"
 
   # ALB Listner SSL certificate name
     ALB_SSL_CERT_NAME="geminiarchive-app-tst.gemini.awsnp.national.com.au" 
@@ -102,6 +102,7 @@ elif [[ $env_id == 'prod' ]]; then
     T_Environment="prod"
     T_EC2_PowerMgt="SNAPD"
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
+    Gemini_SUPPORT_EMAIL="Work.Management.Support@mlc.com.au"
 
   # ALB Listner SSL certificate name
     ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au" 
