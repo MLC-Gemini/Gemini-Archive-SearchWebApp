@@ -102,7 +102,7 @@ elif [[ $env_id == 'prod' ]]; then
     T_Environment="prod"
     T_EC2_PowerMgt="SNAPD"
     KEYPAIR_NAME="GeminiArchWebBuildBoxProd"
-    Gemini_SUPPORT_EMAIL="Work.Management.Support@mlc.com.au"
+    Gemini_SUPPORT_EMAIL="gemini_support@mlc.com.au"
 
   # ALB Listner SSL certificate name
     ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au" 
