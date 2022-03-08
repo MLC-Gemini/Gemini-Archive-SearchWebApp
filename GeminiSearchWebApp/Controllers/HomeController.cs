@@ -376,7 +376,7 @@ namespace GeminiSearchWebApp.Controllers
                     HttpWebRequest request = CreateWebRequest();
                     if (requestLogging == "Y")
                     {
-                        System.IO.File.WriteAllText(reqdocPath, request.ToString());
+                        System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequest.xml"), text);
                     }
                     if (request != null)
                     {
