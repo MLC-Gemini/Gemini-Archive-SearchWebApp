@@ -351,6 +351,7 @@ namespace GeminiSearchWebApp.Controllers
             string requestpath= config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
             string requestLogging = config["AppSettings:geminiDocReqlogging"];
+            string requestUnescape = config["AppSettings:geminiMsgUnescape"];
             string finaldocPath = string.Empty;
             if (HttpContext.Session.GetString("isAuth") == true.ToString() && !(string.IsNullOrEmpty(docId)))
             {
@@ -374,18 +375,39 @@ namespace GeminiSearchWebApp.Controllers
                     System.IO.File.WriteAllText(finaldocPath, text);
                     docName = docId.Replace("/", "-").Trim();
                     HttpWebRequest request = CreateWebRequest();
-                    if (requestLogging == "Y")
-                    {
-                        System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequest.xml"), text);
-                    }
+
                     if (request != null)
                     {
                         XmlDocument soapEnvelopeXml = new XmlDocument();
                         soapEnvelopeXml.Load(finaldocPath);
-                        using (Stream stream = request.GetRequestStream())
+
+                        if (requestUnescape == "N")
                         {
-                            soapEnvelopeXml.Save(stream);
+                            if (requestLogging == "Y")
+                            {
+                                System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithEscape.xml"), soapEnvelopeXml.InnerXml);
+                            }
+
+                            using (Stream stream = request.GetRequestStream())
+                            {
+                                soapEnvelopeXml.Save(stream);
+                            }
                         }
+                        else
+                        {
+                            string result = UnEscapeXml(soapEnvelopeXml.InnerXml);
+                            if (requestLogging == "Y")
+                            {
+                                System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithoutEscape.xml"), result);
+                            }
+                            byte[] postData = Encoding.ASCII.GetBytes(result);
+                            request.ContentLength = postData.Length;
+                            using (Stream stream = request.GetRequestStream())
+                            {
+                                stream.Write(postData, 0, postData.Length); // Send the data.
+                            }
+                        }
+
                         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                         Console.WriteLine("Response description is  " + response.StatusDescription);
                         Console.WriteLine("Response status  is  " + response.StatusCode);
@@ -494,7 +516,35 @@ namespace GeminiSearchWebApp.Controllers
             }
         }
 
+        public static string EscapeXml(string s)
+        {
+            string toxml = s;
+            if (!string.IsNullOrEmpty(toxml))
+            {
+                // replace literal values with entities
+                toxml = toxml.Replace("&", "&amp;");
+                toxml = toxml.Replace("'", "&apos;");
+                toxml = toxml.Replace("\"", "&quot;");
+                toxml = toxml.Replace(">", "&gt;");
+                toxml = toxml.Replace("<", "&lt;");
+            }
+            return toxml;
+        }
 
+        public static string UnEscapeXml(string s)
+        {
+            string toxml = s;
+            if (!string.IsNullOrEmpty(toxml))
+            {
+                // replace literal values with entities
+                toxml = toxml.Replace("&amp;", "&");
+                toxml = toxml.Replace("&apos;", "'");
+                toxml = toxml.Replace("&quot;", "\"");
+                toxml = toxml.Replace("&gt;", ">");
+                toxml = toxml.Replace("&lt;", "<");
+            }
+            return toxml;
+        }
 
         public List<string> GetResponseDetails(string pathofRespFile)
         {
