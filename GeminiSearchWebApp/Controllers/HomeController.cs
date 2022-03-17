@@ -373,7 +373,11 @@ namespace GeminiSearchWebApp.Controllers
                     text = text.Replace("{pwdd}", towerAPIpass);
                     text = text.Replace("{docsID}", docId.Trim());
                     System.IO.File.WriteAllText(finaldocPath, text);
+
+                    //check docID's format to decide where we retrieve doc&image
+
                     docName = docId.Replace("/", "-").Trim();
+
                     HttpWebRequest request = CreateWebRequest();
 
                     if (request != null)
@@ -452,7 +456,7 @@ namespace GeminiSearchWebApp.Controllers
                 {
                     if (System.IO.File.Exists(finaldocPath))
                     {
-                        System.IO.File.Delete(finaldocPath);
+                        //System.IO.File.Delete(finaldocPath);
                     }
                 }
             }
@@ -640,7 +644,7 @@ namespace GeminiSearchWebApp.Controllers
                         FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
                         System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
                         new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
-                        return File(FileBytes, contentType);
+                        return File(FileBytes, contentType, toBeOpendocName);
 
                     }
                     catch (Exception ex)
@@ -652,7 +656,7 @@ namespace GeminiSearchWebApp.Controllers
                     {
                         if (System.IO.File.Exists(finaldocPath))
                         {
-                            System.IO.File.Delete(finaldocPath);
+                            //System.IO.File.Delete(finaldocPath);
                         }
 
                     }

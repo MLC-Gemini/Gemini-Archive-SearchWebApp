@@ -166,12 +166,18 @@
 
                                 try {
                                     if (!$.fn.DataTable.isDataTable("#myTable")) {
-                                        var myTable = $("#myTable").DataTable({
+                                        //debugger;
+                                        var myTable = $("#myTable").DataTable({                                           
                                             pageLength: 10,
                                             searching: false,
+                                            //"Sorting": true,
                                             select: true,
                                             lengthMenu: [[10, 20, 50, -1], [10, 20, 50, 'All records']],
                                             data: result,
+                                            order: [[0, "desc"]],
+                                            columnDefs: [
+                                                { type: 'date', targets: 3 }
+                                            ],
                                             columns: [
                                                 { 'data': 'Account' },
                                                 { 'data': 'Status' },
@@ -190,6 +196,7 @@
                                                 { 'data': 'Employee' }
                                             ]
                                         });
+
                                         $('#myTable tbody').on('click', 'tr', function () {
                                             if ($(this).hasClass('selected')) {
                                                 $(this).removeClass('selected');
@@ -241,6 +248,7 @@
                                             }
                                         });
                                     }
+
                                 }
                                 catch (e) {
                                     writeLogFileFromView(e);
@@ -277,7 +285,10 @@
                                                             "paginate": false,
                                                             "searching": false,
                                                             "bInfo": false,
-                                                            "sorting": false
+                                                            //"Sorting": true
+                                                            order: [[0, "desc"]],
+                                                            columnDefs: [
+                                                                { type: 'datetime', targets: 1 }]
                                                         });
                                                         tableAction.column(4).visible(false);
                                                     }
@@ -513,9 +524,9 @@
             $('#docTable').on('click', 'tr', function (e) {
                 rowId = this.rowIndex;
                 var docId = $("#docTable tr").eq(rowId).find("td:nth-child(3)");
-                var docIdSelected = docId.text();               
+                var docIdSelected = docId.text();
                 if (rowId > 0) {
-                    $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {                        
+                    $.post("@Url.Action("Execute", "Home")", { docId: docIdSelected }, function (data) {
                         docWindow = window.open('/Home/DocTransport/?toBeOpendocName=' + btoa(data) + '', "PopUp", "height = 600, width = 800, left = 150, top = 50");
                         document.onmousedown = focusPopup;
                         document.onkeyup = focusPopup;
@@ -571,6 +582,38 @@
         });
 
 
+    </script>
+
+    <script type="text/javascript">
+        (function () {
+            //debugger;
+            const idleDurationSecs = 900;    // X number of secondsconst redirectUrl = '/logout';  // Redirect idle users to this URLlet idleTimeout; // variable to hold the timeout, do not modifyconst resetIdleTimeout = function() {
+            const redirectUrl = '/Home/Login';
+            let idleTimeout;
+
+            const resetIdleTimeout = function () {
+
+                // Clears the existing timeoutif(idleTimeout) clearTimeout(idleTimeout);
+
+                // Set a new idle timeout to load the redirectUrl after idleDurationSecs
+                idleTimeout = setTimeout(() => location.href = redirectUrl, idleDurationSecs * 1000);
+            };
+
+            // Clears the existing timeoutif(idleTimeout) clearTimeout(idleTimeout);
+
+            // Set a new idle timeout to load the redirectUrl after idleDurationSecs
+            // idleTimeout = setTimeout(() => location.href = redirectUrl, idleDurationSecs * 1000);
+            //};
+
+            // Init on page load
+            resetIdleTimeout();
+
+            // Reset the idle timeout on any of the events listed below
+            ['click', 'touchstart', 'mousemove'].forEach(evt =>
+                document.addEventListener(evt, resetIdleTimeout, false)
+            );
+
+        })();
     </script>
 
 </head>
