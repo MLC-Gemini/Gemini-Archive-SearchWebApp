@@ -28,7 +28,7 @@ namespace GeminiSearchWebApp.Controllers
         public static bool loginResult = false;
         private readonly IWebHostEnvironment _env;
         public string createdFile;
-        public string createdFileName;        
+        public string createdFileName;
         public HomeController(IConfiguration _configuration, IWebHostEnvironment env)
         {
             configuration = _configuration;
@@ -73,7 +73,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             string result = string.Empty;
             string logInName = string.Empty;
-            connectionClass.CreateLog(userName);           
+            connectionClass.CreateLog(userName);
             try
             {
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -132,10 +132,10 @@ namespace GeminiSearchWebApp.Controllers
 
             return loginResult;
         }
-          
+
         public IActionResult SearchCases()
         {
-           
+
             bool loginValue = loginResult;
             ViewData["Message"] = "Your Search Page";
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -312,7 +312,7 @@ namespace GeminiSearchWebApp.Controllers
             }
             return JSONString;
         }
-         
+
         public void ExceptionMessageFromView(string exView)
         {
             connectionClass.CreateMessageLog(exView);
@@ -347,11 +347,12 @@ namespace GeminiSearchWebApp.Controllers
             var config = builder.Build();
             string towerAPIusr = config["SecuritySettings:towerAPIsrvUser"];
             string towerAPIpass = new string(config["SecuritySettings:towerAPIsrvPass"].ToCharArray());
-            string path= config["AppSettings:geminiDocRequest"];
-            string requestpath= config["AppSettings:geminiDocTemplate"];
+            string path = config["AppSettings:geminiDocRequest"];
+            string requestpath = config["AppSettings:geminiDocTemplate"];
             string outputFile = config["AppSettings:geminiDocResponse"];
             string requestLogging = config["AppSettings:geminiDocReqlogging"];
             string requestUnescape = config["AppSettings:geminiMsgUnescape"];
+            string deleteDownloading = config["AppSettings:geminiDeleteDownload"];
             string finaldocPath = string.Empty;
             if (HttpContext.Session.GetString("isAuth") == true.ToString() && !(string.IsNullOrEmpty(docId)))
             {
@@ -363,8 +364,8 @@ namespace GeminiSearchWebApp.Controllers
                     string binaryResponse = string.Empty;
                     string responseFilePath = string.Empty;
                     string OpeningDocPath = string.Empty;
-                   // path = @(path);
-                   // requestpath = "@" + requestpath;
+                    // path = @(path);
+                    // requestpath = "@" + requestpath;
                     string webRootPath = _env.WebRootPath;
                     string reqdocPath = Path.Combine(webRootPath, requestpath);
                     finaldocPath = Path.Combine(webRootPath, path);
@@ -448,7 +449,7 @@ namespace GeminiSearchWebApp.Controllers
 
                 }
                 catch (Exception ex)
-                {                    
+                {
                     connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
                     return null;
                 }
@@ -456,7 +457,10 @@ namespace GeminiSearchWebApp.Controllers
                 {
                     if (System.IO.File.Exists(finaldocPath))
                     {
-                        //System.IO.File.Delete(finaldocPath);
+                        if (deleteDownloading == "Y")
+                        {
+                            System.IO.File.Delete(finaldocPath);
+                        }
                     }
                 }
             }
@@ -555,47 +559,47 @@ namespace GeminiSearchWebApp.Controllers
             List<string> lstResult = new List<string>();
             var name = " ";
             IDictionary<string, string> mydict = new Dictionary<string, string>();
-                try
+            try
+            {
+                using (XmlReader reader = XmlReader.Create(pathofRespFile))
                 {
-                    using (XmlReader reader = XmlReader.Create(pathofRespFile))
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        switch (reader.NodeType)
                         {
-                            switch (reader.NodeType)
-                            {
-                                case XmlNodeType.Element:
-                                    name = reader.Name;
-                                    break;
-                                case XmlNodeType.Text:
-                                    mydict.Add(name, reader.Value);
-                                    break;
-                            }
-                        }
-                        if (mydict.ContainsKey("ns0:ImageType"))
-                        {
-                            string imageType = mydict["ns0:ImageType"];
-                            lstResult.Add(imageType.Trim());
-                            Console.WriteLine(imageType.Trim());
-                        }
-                        if (mydict.ContainsKey("ns1:StatusDesc"))
-                        {
-                            string statusDesc = mydict["ns1:StatusDesc"];
-                            lstResult.Add(statusDesc.Trim());
-                            Console.WriteLine(statusDesc);
-                        }
-                        if (mydict.ContainsKey("ns1:binaryContent"))
-                        {
-                            string binaryContent = mydict["ns1:binaryContent"];
-                            lstResult.Add(binaryContent.Trim());
-                            Console.WriteLine(binaryContent.Trim());
+                            case XmlNodeType.Element:
+                                name = reader.Name;
+                                break;
+                            case XmlNodeType.Text:
+                                mydict.Add(name, reader.Value);
+                                break;
                         }
                     }
-                    return lstResult;
+                    if (mydict.ContainsKey("ns0:ImageType"))
+                    {
+                        string imageType = mydict["ns0:ImageType"];
+                        lstResult.Add(imageType.Trim());
+                        Console.WriteLine(imageType.Trim());
+                    }
+                    if (mydict.ContainsKey("ns1:StatusDesc"))
+                    {
+                        string statusDesc = mydict["ns1:StatusDesc"];
+                        lstResult.Add(statusDesc.Trim());
+                        Console.WriteLine(statusDesc);
+                    }
+                    if (mydict.ContainsKey("ns1:binaryContent"))
+                    {
+                        string binaryContent = mydict["ns1:binaryContent"];
+                        lstResult.Add(binaryContent.Trim());
+                        Console.WriteLine(binaryContent.Trim());
+                    }
                 }
-                catch (Exception)
-                {
-                    return null;
-                }
+                return lstResult;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
@@ -604,7 +608,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             try
             {
-                if(!string.IsNullOrEmpty(inputVal))
+                if (!string.IsNullOrEmpty(inputVal))
                 {
                     byte[] data = Convert.FromBase64String(inputVal);
                     Console.WriteLine(Encoding.UTF8.GetString(data));
@@ -614,20 +618,24 @@ namespace GeminiSearchWebApp.Controllers
                 {
                     return null;
                 }
-                
+
             }
             catch
             {
                 Console.WriteLine("Error occured while decoding doc name");
-                return null;               
+                return null;
             }
         }
 
         public IActionResult DocTransport(string toBeOpendocName)
         {
-            Console.WriteLine("value before decoding is  "+toBeOpendocName);
+            Console.WriteLine("value before decoding is  " + toBeOpendocName);
             toBeOpendocName = GetStringFromBase64(toBeOpendocName);
             Console.WriteLine("value after decoding is  " + toBeOpendocName);
+
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            string deleteDownloading = config["AppSettings:geminiDeleteDownload"];
 
             if (HttpContext.Session.GetString("isAuth") == true.ToString() && IsDirectoryTraversing(toBeOpendocName) == false)
             {
@@ -644,8 +652,14 @@ namespace GeminiSearchWebApp.Controllers
                         FileBytes = System.IO.File.ReadAllBytes(finaldocPath);
                         System.IO.File.SetAttributes(finaldocPath, FileAttributes.ReadOnly);
                         new FileExtensionContentTypeProvider().TryGetContentType(finaldocPath, out contentType);
-                        return File(FileBytes, contentType, toBeOpendocName);
-
+                        if (contentType.Contains("application/pdf") || contentType.Contains("text/plain"))
+                        {
+                            return File(FileBytes, contentType);
+                        }
+                        else
+                        {
+                            return File(FileBytes, contentType, toBeOpendocName);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -656,14 +670,18 @@ namespace GeminiSearchWebApp.Controllers
                     {
                         if (System.IO.File.Exists(finaldocPath))
                         {
-                            //System.IO.File.Delete(finaldocPath);
+                            if (deleteDownloading == "Y")
+                            {
+                                System.IO.File.Delete(finaldocPath);
+                            }
+
                         }
 
                     }
                 }
                 else
                 {
-                    ViewBag.DocError = toBeOpendocName;                
+                    ViewBag.DocError = toBeOpendocName;
                 }
             }
             else
