@@ -356,111 +356,173 @@ namespace GeminiSearchWebApp.Controllers
             string finaldocPath = string.Empty;
             if (HttpContext.Session.GetString("isAuth") == true.ToString() && !(string.IsNullOrEmpty(docId)))
             {
-                try
+                if (docId.Contains("/") == true)
                 {
-                    string docName = string.Empty;
-                    string docType = string.Empty;
-                    string respStatus = string.Empty;
-                    string binaryResponse = string.Empty;
-                    string responseFilePath = string.Empty;
-                    string OpeningDocPath = string.Empty;
-                    // path = @(path);
-                    // requestpath = "@" + requestpath;
-                    string webRootPath = _env.WebRootPath;
-                    string reqdocPath = Path.Combine(webRootPath, requestpath);
-                    finaldocPath = Path.Combine(webRootPath, path);
-                    var text = System.IO.File.ReadAllText(reqdocPath);
-                    text = text.Replace("{usr}", towerAPIusr);
-                    text = text.Replace("{pwdd}", towerAPIpass);
-                    text = text.Replace("{docsID}", docId.Trim());
-                    System.IO.File.WriteAllText(finaldocPath, text);
-
-                    //check docID's format to decide where we retrieve doc&image
-
-                    docName = docId.Replace("/", "-").Trim();
-
-                    HttpWebRequest request = CreateWebRequest();
-
-                    if (request != null)
+                    try
                     {
-                        XmlDocument soapEnvelopeXml = new XmlDocument();
-                        soapEnvelopeXml.Load(finaldocPath);
+                        string docName = string.Empty;
+                        string docType = string.Empty;
+                        string respStatus = string.Empty;
+                        string binaryResponse = string.Empty;
+                        string responseFilePath = string.Empty;
+                        string OpeningDocPath = string.Empty;
+                        // path = @(path);
+                        // requestpath = "@" + requestpath;
+                        string webRootPath = _env.WebRootPath;
+                        string reqdocPath = Path.Combine(webRootPath, requestpath);
+                        finaldocPath = Path.Combine(webRootPath, path);
+                        var text = System.IO.File.ReadAllText(reqdocPath);
+                        text = text.Replace("{usr}", towerAPIusr);
+                        text = text.Replace("{pwdd}", towerAPIpass);
+                        text = text.Replace("{docsID}", docId.Trim());
+                        System.IO.File.WriteAllText(finaldocPath, text);
+                        docName = docId.Replace("/", "-").Trim();
 
-                        if (requestUnescape == "N")
+                        HttpWebRequest request = CreateWebRequest();
+
+                        if (request != null)
                         {
-                            if (requestLogging == "Y")
+                            XmlDocument soapEnvelopeXml = new XmlDocument();
+                            soapEnvelopeXml.Load(finaldocPath);
+
+                            if (requestUnescape == "N")
                             {
-                                System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithEscape.xml"), soapEnvelopeXml.InnerXml);
+                                if (requestLogging == "Y")
+                                {
+                                    System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithEscape.xml"), soapEnvelopeXml.InnerXml);
+                                }
+
+                                using (Stream stream = request.GetRequestStream())
+                                {
+                                    soapEnvelopeXml.Save(stream);
+                                }
+                            }
+                            else
+                            {
+                                string result = UnEscapeXml(soapEnvelopeXml.InnerXml);
+                                if (requestLogging == "Y")
+                                {
+                                    System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithoutEscape.xml"), result);
+                                }
+                                byte[] postData = Encoding.ASCII.GetBytes(result);
+                                request.ContentLength = postData.Length;
+                                using (Stream stream = request.GetRequestStream())
+                                {
+                                    stream.Write(postData, 0, postData.Length); // Send the data.
+                                }
                             }
 
-                            using (Stream stream = request.GetRequestStream())
+                            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                            Console.WriteLine("Response description is  " + response.StatusDescription);
+                            Console.WriteLine("Response status  is  " + response.StatusCode);
+                            string ver = response.ProtocolVersion.ToString();
+                            StreamReader reader = new StreamReader(response.GetResponseStream());
+                            string soapResult = reader.ReadToEnd();
+                            //  string outputFile = @"Docs/XML_Response.xml";
+                            reader.Dispose();
+                            responseFilePath = Path.Combine(webRootPath, outputFile);
+                            System.IO.File.WriteAllText(responseFilePath, soapResult);
+                            if (System.IO.File.Exists(responseFilePath))
                             {
-                                soapEnvelopeXml.Save(stream);
+                                List<string> lstResponse = GetResponseDetails(responseFilePath);
+
+                                if (lstResponse != null)
+                                {
+                                    docType = lstResponse[0].ToString();
+                                    respStatus = lstResponse[1].ToString();
+                                    binaryResponse = lstResponse[2].ToString();
+                                }
+                                if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
+                                {
+                                    createdFile = @"Docs/" + docName + "." + docType.ToLower();
+                                    createdFileName = docName + "." + docType.ToLower();
+                                    OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                                    LoadBase64(binaryResponse, OpeningDocPath);
+                                }
                             }
                         }
                         else
                         {
-                            string result = UnEscapeXml(soapEnvelopeXml.InnerXml);
-                            if (requestLogging == "Y")
-                            {
-                                System.IO.File.WriteAllText(Path.Combine(webRootPath, "Docs/lastRequestWithoutEscape.xml"), result);
-                            }
-                            byte[] postData = Encoding.ASCII.GetBytes(result);
-                            request.ContentLength = postData.Length;
-                            using (Stream stream = request.GetRequestStream())
-                            {
-                                stream.Write(postData, 0, postData.Length); // Send the data.
-                            }
+                            return null;
                         }
 
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        Console.WriteLine("Response description is  " + response.StatusDescription);
-                        Console.WriteLine("Response status  is  " + response.StatusCode);
-                        string ver = response.ProtocolVersion.ToString();
-                        StreamReader reader = new StreamReader(response.GetResponseStream());
-                        string soapResult = reader.ReadToEnd();
-                        //  string outputFile = @"Docs/XML_Response.xml";
-                        reader.Dispose();
-                        responseFilePath = Path.Combine(webRootPath, outputFile);
-                        System.IO.File.WriteAllText(responseFilePath, soapResult);
-                        if (System.IO.File.Exists(responseFilePath))
-                        {
-                            List<string> lstResponse = GetResponseDetails(responseFilePath);
-
-                            if (lstResponse != null)
-                            {
-                                docType = lstResponse[0].ToString();
-                                respStatus = lstResponse[1].ToString();
-                                binaryResponse = lstResponse[2].ToString();
-                            }
-                            if (respStatus.ToLower() == "success" && !string.IsNullOrEmpty(binaryResponse))
-                            {
-                                createdFile = @"Docs/" + docName + "." + docType.ToLower();
-                                createdFileName = docName + "." + docType.ToLower();
-                                OpeningDocPath = Path.Combine(webRootPath, createdFile);
-                                LoadBase64(binaryResponse, OpeningDocPath);
-                            }
-                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
                         return null;
                     }
-
-                }
-                catch (Exception ex)
-                {
-                    connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
-                    return null;
-                }
-                finally
-                {
-                    if (System.IO.File.Exists(finaldocPath))
+                    finally
                     {
-                        if (deleteDownloading == "Y")
+                        if (System.IO.File.Exists(finaldocPath))
                         {
-                            System.IO.File.Delete(finaldocPath);
+                            if (deleteDownloading == "Y")
+                            {
+                                System.IO.File.Delete(finaldocPath);
+                            }
                         }
+                    }
+                }
+                else
+                {
+                    string OpeningDocPath = string.Empty;
+                    string webRootPath = _env.WebRootPath;
+                    string docName = string.Empty;
+                    docName = docId.Trim();
+
+                    DataTable dt = new DataTable();
+                    var docType = docId.Trim().Substring(0, 2);
+
+                    switch (docType)
+                    {
+                        case "CR":
+                        case "SW":
+                        case "TL":
+                            try
+                            {
+                                dt = connectionClass.GetCustomerRequestText(docName);
+                                if (dt.Rows.Count > 0)
+                                {
+                                    createdFile = @"Docs/" + docName + ".txt";
+                                    createdFileName = docName + ".txt";
+                                    OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                                    string Text = dt.Rows[0]["Text"].ToString();
+                                    LoadTxtFile(Text, OpeningDocPath);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                connectionClass.CreateMessageLog(ex.Message);
+                            }
+
+                            break;
+
+                        default:
+                            try
+                            {
+                                dt = connectionClass.GetDocumentContent(docName);
+                                if (dt.Rows.Count > 0)
+                                {
+                                    string originalFileName = dt.Rows[0]["OriginalFileName"].ToString();
+                                    string originalExtension = string.Empty;
+                                    if (originalFileName.IndexOf('.') > 0)
+                                    {
+                                        originalExtension = originalFileName.Substring(originalFileName.IndexOf('.'));
+                                    }
+
+                                    createdFile = @"Docs/" + docName + originalExtension;
+                                    createdFileName = docName + originalExtension;
+                                    OpeningDocPath = Path.Combine(webRootPath, createdFile);
+                                    string Text = dt.Rows[0]["DocumentText"].ToString();
+                                    LoadTxtFile(Text, OpeningDocPath);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                connectionClass.CreateMessageLog(ex.Message);
+                            }
+
+                            break;
                     }
                 }
             }
@@ -468,6 +530,7 @@ namespace GeminiSearchWebApp.Controllers
             {
                 connectionClass.CreateMessageLog("Unauthorised behaviour");
             }
+
             return createdFileName;
 
         }
@@ -523,6 +586,24 @@ namespace GeminiSearchWebApp.Controllers
                 Console.WriteLine("Error in LoadBase64 Method" + ex.Message);
             }
         }
+
+        public static void LoadTxtFile(string txtContent, string path)
+        {
+            try
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(txtContent);
+                using (FileStream fs = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                {
+                    fs.Write(bytes, 0, bytes.Length);
+                    fs.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in LoadTxtFile Method" + ex.Message);
+            }
+        }
+
 
         public static string EscapeXml(string s)
         {

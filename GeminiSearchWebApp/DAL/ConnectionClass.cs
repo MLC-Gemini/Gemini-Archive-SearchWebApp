@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace GeminiSearchWebApp.DAL
 {
-    public class ConnectionClass 
+    public class ConnectionClass
     {
         public IConfiguration Configuration;
         public UserInput userInput;
@@ -26,7 +26,7 @@ namespace GeminiSearchWebApp.DAL
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
             DataTable dtCases = new DataTable();
-            if (connString != null && userInput!=null)
+            if (connString != null && userInput != null)
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
@@ -92,7 +92,7 @@ namespace GeminiSearchWebApp.DAL
                         Console.WriteLine(ex);
                     }
                     finally
-                    {                        
+                    {
                         conn.Close();
                     }
                 }
@@ -109,7 +109,7 @@ namespace GeminiSearchWebApp.DAL
         {
             string connString = Configuration.GetConnectionString("rdsArcConn");
             DataTable dtResult = new DataTable();
-            if (connString != null && userInput!=null)
+            if (connString != null && userInput != null)
             {
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
@@ -303,7 +303,7 @@ namespace GeminiSearchWebApp.DAL
                     conn.Open();
                     try
                     {
-                        if (userName!=null && loginDateTime!=DateTime.MinValue)
+                        if (userName != null && loginDateTime != DateTime.MinValue)
                         {
                             dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = userName;
                             dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = loginDateTime;
@@ -312,7 +312,7 @@ namespace GeminiSearchWebApp.DAL
                         {
                             CreateMessageLog("UserName and Login date/time is null");
                         }
-                        
+
 
                         dbCommand.ExecuteNonQuery();
 
@@ -353,7 +353,7 @@ namespace GeminiSearchWebApp.DAL
                     conn.Open();
                     try
                     {
-                        if (uName != null && exceptionDateTime!=DateTime.MinValue && exDb!=null)
+                        if (uName != null && exceptionDateTime != DateTime.MinValue && exDb != null)
                         {
                             dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = uName;
                             dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = exceptionDateTime;
@@ -365,7 +365,7 @@ namespace GeminiSearchWebApp.DAL
                         }
 
                         dbCommand.ExecuteNonQuery();
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -383,6 +383,92 @@ namespace GeminiSearchWebApp.DAL
             {
                 Console.WriteLine("Connection String variable is null");
             }
+        }
+
+        public DataTable GetCustomerRequestText(string docID)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+            DataTable reqText = new DataTable();
+
+            if (connString != null && docID != null)
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    SqlCommand dbCommand = new SqlCommand();
+                    dbCommand.Connection = conn;
+                    dbCommand.CommandType = CommandType.StoredProcedure;
+                    dbCommand.CommandText = "[dbo].[usp_GetCustomerRequestText]";
+                    conn.Open();
+
+                    try
+                    {
+                        dbCommand.Parameters.Add("@DocID", SqlDbType.Char, 32).Value = docID;
+
+                        SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                        da.Fill(reqText);
+                        da.Dispose();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CreateMessageLog(ex.Message);
+                        Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+            else
+            {
+                CreateMessageLog("Connection String variable or docID is null in GetCustomerRequestText");
+            }
+
+            return reqText;
+        }
+
+        public DataTable GetDocumentContent(string docID)
+        {
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+            DataTable reqText = new DataTable();
+
+            if (connString != null && docID != null)
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    SqlCommand dbCommand = new SqlCommand();
+                    dbCommand.Connection = conn;
+                    dbCommand.CommandType = CommandType.StoredProcedure;
+                    dbCommand.CommandText = "[dbo].[usp_DocumentContent]";
+                    conn.Open();
+
+                    try
+                    {
+                        dbCommand.Parameters.Add("@DocID", SqlDbType.Char, 32).Value = docID;
+
+                        SqlDataAdapter da = new SqlDataAdapter(dbCommand);
+                        da.Fill(reqText);
+                        da.Dispose();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        CreateMessageLog(ex.Message);
+                        Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+            else
+            {
+                CreateMessageLog("Connection String variable or docID is null in GetDocumentContent");
+            }
+
+            return reqText;
         }
 
     }
