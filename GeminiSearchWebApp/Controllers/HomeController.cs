@@ -73,7 +73,7 @@ namespace GeminiSearchWebApp.Controllers
         {
             string result = string.Empty;
             string logInName = string.Empty;
-            connectionClass.CreateLog(userName);
+
             try
             {
                 var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
@@ -86,12 +86,13 @@ namespace GeminiSearchWebApp.Controllers
                     {
                         result = JsonConvert.SerializeObject(logInName);
                         loggedInUserName = logInName;
+
                         return result;
                     }
                     else
                     {
                         result = null;
-                        connectionClass.CreateMessageLog("Login Username is null");
+                        connectionClass.CreateMessageLog(string.Format("Login Username&Password is null or invalid"));
                     }
                 }
                 else
@@ -107,7 +108,7 @@ namespace GeminiSearchWebApp.Controllers
         }
 
 
-        public bool LoginCheck(string loginStatus)
+        public bool LoginCheck(string userName, string loginStatus)
         {
             //string result = string.Empty;
             string inputToValidate = GetStringFromBase64(loginStatus);
@@ -117,6 +118,7 @@ namespace GeminiSearchWebApp.Controllers
                 if (inputToValidate.ToLower() == "True".ToLower())
                 {
                     loginResult = Convert.ToBoolean(inputToValidate);
+                    connectionClass.CreateLog(userName, HttpContext.Session.Id);
                 }
                 else
                 {
@@ -179,7 +181,7 @@ namespace GeminiSearchWebApp.Controllers
                     }
                     else
                     {
-                        connectionClass.CreateMessageLog("HomeController GetSearchDoc method variables are null");
+                        connectionClass.CreateSessionMessageLog("HomeController GetSearchDoc method variables are null", HttpContext.Session.Id);
                     }
                     if (fDate == null || tDate == null)
                     {
@@ -196,7 +198,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    connectionClass.CreateMessageLog(ex.Message);
+                    connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                 }
             }
             else
@@ -229,7 +231,7 @@ namespace GeminiSearchWebApp.Controllers
                     }
                     else
                     {
-                        connectionClass.CreateMessageLog("HomeController GetCasesRecord method variables are null");
+                        connectionClass.CreateSessionMessageLog("HomeController GetSearchDoc method variables are null", HttpContext.Session.Id);
                     }
 
                     if (fromDate == null || toDate == null)
@@ -247,7 +249,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    connectionClass.CreateMessageLog(ex.Message);
+                    connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                 }
             }
             else
@@ -274,12 +276,12 @@ namespace GeminiSearchWebApp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        connectionClass.CreateMessageLog(ex.Message);
+                        connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                     }
                 }
                 else
                 {
-                    connectionClass.CreateMessageLog("CaseId passed to GetActionRecord method in HomeController is null");
+                    connectionClass.CreateSessionMessageLog("CaseId passed to GetActionRecord method in HomeController is null", HttpContext.Session.Id);
                 }
             }
             else
@@ -303,7 +305,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    connectionClass.CreateMessageLog(ex.Message);
+                    connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                 }
             }
             else
@@ -331,7 +333,7 @@ namespace GeminiSearchWebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    connectionClass.CreateMessageLog(ex.Message);
+                    connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                 }
             }
             else
@@ -449,7 +451,7 @@ namespace GeminiSearchWebApp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        connectionClass.CreateMessageLog(ex.Message + "Error occured in Service Consumed !");
+                        connectionClass.CreateSessionMessageLog(ex.Message + "Error occured in Service Consumed !", HttpContext.Session.Id);
                         return null;
                     }
                     finally
@@ -519,7 +521,7 @@ namespace GeminiSearchWebApp.Controllers
                             }
                             catch (Exception ex)
                             {
-                                connectionClass.CreateMessageLog(ex.Message);
+                                connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
                             }
 
                             break;
@@ -744,7 +746,7 @@ namespace GeminiSearchWebApp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        connectionClass.CreateMessageLog(ex.Message);
+                        connectionClass.CreateSessionMessageLog(ex.Message, HttpContext.Session.Id);
 
                     }
                     finally

@@ -285,11 +285,10 @@ namespace GeminiSearchWebApp.DAL
             return dtDocId;
         }
 
-        public void CreateLog(string userName)
+        public void CreateLog(string userName, string sessionID = "UNKNOWN")
         {
             getUserName = userName;
             loginDateTime = DateTime.Now;
-            userName = "LDCYS12";
 
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
@@ -307,10 +306,11 @@ namespace GeminiSearchWebApp.DAL
                         {
                             dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = userName;
                             dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = loginDateTime;
+                            dbCommand.Parameters.Add("@SessionID", SqlDbType.VarChar, 80).Value = sessionID;
                         }
                         else
                         {
-                            CreateMessageLog("UserName and Login date/time is null");
+                            CreateMessageLog("UserName and Login date&time is null");
                         }
 
 
@@ -338,8 +338,7 @@ namespace GeminiSearchWebApp.DAL
         public void CreateMessageLog(string exDb)
         {
             var exceptionDateTime = DateTime.Now;
-            var uName = getUserName;
-            uName = "LDCYS12";
+            var uName = "GeminiSearchApp";
 
             string connString = Configuration.GetConnectionString("rdsArcConn");
             if (connString != null)
@@ -358,6 +357,56 @@ namespace GeminiSearchWebApp.DAL
                             dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = uName;
                             dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = exceptionDateTime;
                             dbCommand.Parameters.Add("@MessageText", SqlDbType.Text).Value = exDb;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Message Log variables are null");
+                        }
+
+                        dbCommand.ExecuteNonQuery();
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                        dbCommand.Dispose();
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Connection String variable is null");
+            }
+        }
+
+        public void CreateSessionMessageLog(string exDb, string sessionID = "UNKNOWN")
+        {
+            var exceptionDateTime = DateTime.Now;
+            var uName = "GeminiSearchApp";
+
+            string connString = Configuration.GetConnectionString("rdsArcConn");
+            if (connString != null)
+            {
+                using (SqlConnection conn = new SqlConnection(connString))
+                {
+                    SqlCommand dbCommand = new SqlCommand();
+                    dbCommand.Connection = conn;
+                    dbCommand.CommandType = CommandType.StoredProcedure;
+                    dbCommand.CommandText = "[dbo].[usp_SetSessionMessageLog]";
+                    conn.Open();
+                    try
+                    {
+                        if (uName != null && exceptionDateTime != DateTime.MinValue && exDb != null)
+                        {
+                            dbCommand.Parameters.Add("@UserName", SqlDbType.VarChar, 20).Value = uName;
+                            dbCommand.Parameters.Add("@TimeStamp", SqlDbType.DateTime2).Value = exceptionDateTime;
+                            dbCommand.Parameters.Add("@MessageText", SqlDbType.Text).Value = exDb;
+                            dbCommand.Parameters.Add("@SessionID", SqlDbType.VarChar, 80).Value = sessionID;
                         }
                         else
                         {

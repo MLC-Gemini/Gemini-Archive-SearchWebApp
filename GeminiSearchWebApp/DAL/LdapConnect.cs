@@ -57,7 +57,7 @@ namespace GeminiSearchWebApp.DAL
             }
             catch (Exception)
             {
-                connectionClass.CreateMessageLog("The supplied credentials are invalid");
+                connectionClass.CreateMessageLog(string.Format("The user [{0}] supplied credential is invalid", username));
                 return null;
             }
         }

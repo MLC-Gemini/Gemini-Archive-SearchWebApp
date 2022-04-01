@@ -55,7 +55,7 @@
                                             type: "POST",
                                             url: "/Home/LoginCheck",
                                             dataType: "JSON",
-                                            data: { loginStatus: loginValue },
+                                            data: { userName: aLoginId, loginStatus: loginValue },
                                             success: function (response) {
                                                 //debugger;
                                                 if (response == true) {
