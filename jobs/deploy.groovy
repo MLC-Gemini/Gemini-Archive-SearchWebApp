@@ -3,7 +3,9 @@
 jobDsl scriptText:
 """
     pipelineJob("Gemini-Archive/cloudformation-deploy") { // Asset name in upper case
-        concurrentBuild(false)
+        properties {
+            disableConcurrentBuilds()
+        }
 
         displayName("Deploy a Cloudformation Stack")
 
