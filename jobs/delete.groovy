@@ -3,7 +3,9 @@
 jobDsl scriptText:
 """
     pipelineJob("Gemini-Archive/cloudformation-delete") {
-        concurrentBuild(false)
+        properties {
+            disableConcurrentBuilds()
+        }
 
         displayName("Delete a Cloudformation Stack")
 
