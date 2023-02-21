@@ -3,7 +3,9 @@
 jobDsl scriptText:
 """
     pipelineJob("Gemini-Archive/packer-bake") {
-        concurrentBuild(false)
+        properties {
+            disableConcurrentBuilds()
+        }
 
         displayName("Bake an AMI")
 
