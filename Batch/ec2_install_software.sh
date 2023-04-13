@@ -24,7 +24,7 @@ sudo mv /tmp/kestrel-geminiweb.service .
 # Starting and checking the kestral service status.
 sudo systemctl start kestrel-geminiweb.service
 sudo systemctl status kestrel-geminiweb.service
-#curl localhost:5000
+curl localhost:5000
 
 # Enabling service so it will run automatically af¬ter start of the operating system.
 sudo systemctl enable kestrel-geminiweb.service
