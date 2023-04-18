@@ -17,6 +17,9 @@ sudo chown -R webapp:webapp *
 sudo chmod 775 GeminiSearchWebApp
 sudo chmod +x GeminiSearchWebApp
 
+# Install ICU to keep kestrel up and running
+sudo yum -y install icu -q -y
+
 # Creating service configuration file for environment (Development, Producation)
 cd /etc/systemd/system/
 sudo mv /tmp/kestrel-geminiweb.service .
