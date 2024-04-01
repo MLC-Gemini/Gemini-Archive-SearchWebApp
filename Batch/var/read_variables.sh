@@ -61,11 +61,11 @@ if [[ $env_id == 'nonprod' ]]; then
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
     
   # Private VPC
-    VPCID="vpc-0ecf6cd42dacf1a57"
+    VPCID="vpc-0315f7fa68700cbeb"
     # private subnets
-    SUBNETID1="subnet-01132417d1533351a" 
-    SUBNETID2="subnet-00f9ae140fbbeaa86"
-    SUBNETID3="subnet-01ba8cd53df612f02"
+    SUBNETID1="subnet-0feb5ff78556a1b68" 
+    SUBNETID2="subnet-044a5f122aa1a0786"
+    SUBNETID3="subnet-09b42c88ba03d8294"
  
     # Aws Tags
     T_Environment="nonprod"
@@ -77,8 +77,8 @@ if [[ $env_id == 'nonprod' ]]; then
     ALB_SSL_CERT_NAME="geminiarchive-app-tst.gemini.awsnp.national.com.au" 
 
    # Route53 DNS Variable
-    GEMINI_DNS_ZONE_NAME="gemini.awsnp.national.com.au"
-    GEMINI_DNS_ZONE_ID="Z06453042CMJI49LOR7NB"
+    GEMINI_DNS_ZONE_NAME="gem.aws.odev.com.au"
+    GEMINI_DNS_ZONE_ID="Z103952728QJNDR9HHWXF"
     GEMINIWEB_DNS="geminiarchive-app-tst"
 
   # EC2 SSH LDAP itegration
