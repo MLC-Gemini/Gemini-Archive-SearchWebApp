@@ -57,7 +57,7 @@ Name="GeminiArchiveWeb-bake-deploy"
 
 if [[ $env_id == 'nonprod' ]]; then
   # kMS JSON template variable 
-    OWNER_ACCOUNT="998622627571"
+    OWNER_ACCOUNT="564701137555"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
     
   # Private VPC
