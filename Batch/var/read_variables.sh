@@ -63,9 +63,9 @@ if [[ $env_id == 'nonprod' ]]; then
   # Private VPC
     VPCID="vpc-0315f7fa68700cbeb"
     # private subnets
-    SUBNETID1="subnet-0feb5ff78556a1b68" 
-    SUBNETID2="subnet-044a5f122aa1a0786"
-    SUBNETID3="subnet-09b42c88ba03d8294"
+    SUBNETID1="subnet-0b0551340d3c3e2d3" 
+    SUBNETID2="subnet-0bc8f6436bf9d15e6"
+    SUBNETID3="subnet-0e95633450c31214d"
  
     # Aws Tags
     T_Environment="nonprod"
