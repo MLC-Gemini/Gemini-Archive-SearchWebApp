@@ -10,12 +10,12 @@ GEM_KMS="/gemini_archive_web/ec2_kms_key"
 BATCH_SERVER_SIZE=50
 INSTANCE_TYPE_BATCH="t3.medium"
 AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
-GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
+GEMINI_PROV_ROLE_ID="GEMINIDEVRHEL8"
 # Provising EC2 variable 
-IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
+IAM_PROFILE_PROV="GEMINIDEVRHEL8"
 # Gemini web-server Lunch template EC2 variable 
 #IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
-IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
+IAM_PROFILE_INST="GEMINIDEVRHEL8"
 # Aws comman Tags
 T_CostCentre="V_Gemini" 
 T_ApplicationID="ML0095"
