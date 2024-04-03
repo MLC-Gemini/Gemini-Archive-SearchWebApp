@@ -21,6 +21,6 @@ fi
 #echo $gemini_login_pwd
 
 cd $stage_folder
-curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://artifactory.aus.thenational.com/artifactory/GEMINI-build/nginx-1.20.1.tar.gz"
+curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://nexus.itt.aws.odev.com.au/nginx/nginx-1.25.3.tar.gz"
 
 
