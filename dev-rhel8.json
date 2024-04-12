@@ -1,0 +1,12 @@
+{
+  "Parameters": {
+    "Ami": "ami-02005c82fdc1a7022",
+    "OS": "rhel8",
+    "InstanceType": "t3a.small",
+    "Environment": "dev",
+    "Platform": "linux",
+    "PatchCycle": "NonProd",
+    "Snapshot": "snapn",
+    "EC2InstanceSG": "sg-0b8c950534ff7dcb5"
+  }
+}
