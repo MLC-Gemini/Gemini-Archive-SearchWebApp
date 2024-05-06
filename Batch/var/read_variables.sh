@@ -11,18 +11,26 @@ BATCH_SERVER_SIZE=50
 INSTANCE_TYPE_BATCH="t3.medium"
 AWS_PAR_BATCH_IMAGE="/gemini_archive_web/ami_image"
 GEMINI_PROV_ROLE_ID="GeminiProvisioningRole"
-# Provising EC2 variable 
+# Provising EC2 variable
 IAM_PROFILE_PROV="GeminiProvisioningInstanceProfile"
-# Gemini web-server Lunch template EC2 variable 
-#IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
-IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
+# Gemini web-server Lunch template EC2 variable
+IAM_PROFILE_INST="GeminiAppServerInstanceProfile"
+#IAM_PROFILE_INST="GeminiProvisioningInstanceProfile"
 # Aws comman Tags
-T_CostCentre="V_Gemini" 
-T_ApplicationID="ML0095"
+T_CostCentre="cc_1"
+T_ApplicationID="1"
 T_AppCategory="D"
 T_SupportGroup="WorkManagementProductionSupport"
 T_Name="Gemini_Archive_web"
 T_BackupOptOut="No"
+T_PatchCycle="NonProd"
+T_Environment="dev"
+T_DataClassification="Internal"
+T_Owner="test-owner"
+#T_PowerMgt="working-days-aest-7am-7pm-on-excluding-holidays"
+T_PowerMgt="exempt"
+T_MapMigrated="migGWCQZBFJA6"
+T_OUName="none"
 
 #artifactory SSM parameter store variable
 gemini_arti_ssm_uid="/gemini_archive_web/artifactory_uid"
@@ -47,7 +55,7 @@ SSM_LDAP_SERVER_PORT="/gemini_archive_web/ldap_port_number"
 SSM_LDAP_SERVER_BASEDN="/gemini_archive_web/ldap_base_dn"
 SSM_LDAP_SERVER_DOMAIN="/gemini_archive_web/ldap_domain"
 
-#Deploy Bake 
+#Deploy Bake
 TechnicalService="GeminiArchiveWeb"
 Owner="Gemini"
 Account="Gemini"
@@ -56,17 +64,17 @@ Name="GeminiArchiveWeb-bake-deploy"
 #NO_PROXY=localhost,169.254.169.254,hip.ext.national.com.au,github.aus.thenational.com,artifactory.ext.national.com.au
 
 if [[ $env_id == 'nonprod' ]]; then
-  # kMS JSON template variable 
-    OWNER_ACCOUNT="998622627571"
+  # kMS JSON template variable
+    OWNER_ACCOUNT="564701137555"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-gemininonprod-devops-appstack"
-    
+
   # Private VPC
-    VPCID="vpc-0ecf6cd42dacf1a57"
+    VPCID="vpc-0315f7fa68700cbeb"
     # private subnets
-    SUBNETID1="subnet-01132417d1533351a" 
-    SUBNETID2="subnet-00f9ae140fbbeaa86"
-    SUBNETID3="subnet-01ba8cd53df612f02"
- 
+    SUBNETID1="subnet-0b0551340d3c3e2d3"
+    SUBNETID2="subnet-0bc8f6436bf9d15e6"
+    SUBNETID3="subnet-0e95633450c31214d"
+
     # Aws Tags
     T_Environment="nonprod"
     T_EC2_PowerMgt="WKED"
@@ -74,11 +82,11 @@ if [[ $env_id == 'nonprod' ]]; then
     Gemini_SUPPORT_EMAIL="Ajay.Vignesh@mlc.com.au,Robert.Davis@mlc.com.au,Catherine.Sherrin@mlc.com.au"
 
   # ALB Listner SSL certificate name
-    ALB_SSL_CERT_NAME="geminiarchive-app-tst.gemini.awsnp.national.com.au" 
+    ALB_SSL_CERT_NAME="geminiarchive-app-tst.gem.aws.odev.com.au"
 
    # Route53 DNS Variable
-    GEMINI_DNS_ZONE_NAME="gemini.awsnp.national.com.au"
-    GEMINI_DNS_ZONE_ID="Z06453042CMJI49LOR7NB"
+    GEMINI_DNS_ZONE_NAME="gem.aws.odev.com.au"
+    GEMINI_DNS_ZONE_ID="Z103952728QJNDR9HHWXF"
     GEMINIWEB_DNS="geminiarchive-app-tst"
 
   # EC2 SSH LDAP itegration
@@ -87,17 +95,17 @@ if [[ $env_id == 'nonprod' ]]; then
 
 elif [[ $env_id == 'prod' ]]; then
   #echo "The variable for prod env"
-  # kMS JSON template variable 
-    OWNER_ACCOUNT="937709052626"
+  # kMS JSON template variable
+    OWNER_ACCOUNT="564701137555"
     KMS_ROLE_DELETE_ALLOW="AUR-Resource-AWS-geminiprod-2FA-devops-appstack"
-        
+
   # Private VPC
-    VPCID="vpc-0c0121a7c332d8b22"
+    VPCID="vpc-0315f7fa68700cbeb"
     # private subnets
-    SUBNETID1="subnet-0507e89e99c22c1f0" 
-    SUBNETID2="subnet-0fd7f4b9c8a849f64"
-    SUBNETID3="subnet-0909479f29bc9f90c"
- 
+    SUBNETID1="subnet-0b0551340d3c3e2d3"
+    SUBNETID2="subnet-0bc8f6436bf9d15e6"
+    SUBNETID3="subnet-0e95633450c31214d"
+
     # Aws Tags
     T_Environment="prod"
     T_EC2_PowerMgt="SNAPD"
@@ -105,7 +113,7 @@ elif [[ $env_id == 'prod' ]]; then
     Gemini_SUPPORT_EMAIL="gemini_support@mlc.com.au"
 
   # ALB Listner SSL certificate name
-    ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au" 
+    ALB_SSL_CERT_NAME="geminiarchive-app-prod.gemini.awsnp.national.com.au"
 
    # Route53 DNS Variable
     GEMINI_DNS_ZONE_NAME="gemini.aws.national.com.au"

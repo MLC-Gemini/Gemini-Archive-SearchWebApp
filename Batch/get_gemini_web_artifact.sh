@@ -21,6 +21,5 @@ fi
 #echo $gemini_login_pwd
 
 cd $stage_folder
-curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://artifactory.ext.national.com.au/artifactory/GEMINI-build/nginx-1.20.1.tar.gz"
-
-
+cp /home/ssm-user/Rob/Gemini-Archive-SearchWebApp/nginx-1.25.3.tar.gz .
+echo "copied nginx to $stage_folder"

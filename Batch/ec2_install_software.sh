@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Create webapp user 
-sudo luseradd webapp -d /opt/webapp 
+# Create webapp user
+sudo luseradd webapp -d /opt/webapp
 echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
 # Directory for Gemini web application
@@ -43,16 +43,17 @@ sudo mkdir /web/nginx/modules
 sudo mkdir /web/nginx/run
 cd /web/nginx/
 
-sudo mv /tmp/nginx-1.20.1.tar.gz .
-#sudo tar -xzvf nginx-1.20.1.tar.gz with output below command for skipping output (-v without verbose)
-sudo tar -zxf nginx-1.20.1.tar.gz
+sudo mv /tmp/gemini_web_staging/nginx-1.25.3.tar.gz .
+#sudo tar -xzvf nginx-1.25.3.tar.gz with output below command for skipping output (-v without verbose)
+
+sudo tar -zxf nginx-1.25.3.tar.gz
 #ls -lrt
 
-sudo mkdir binaries 
-sudo mv nginx-1.20.1/* binaries/
+sudo mkdir binaries
+sudo mv nginx-1.25.3/* binaries/
 
-sudo rm -rf nginx-1.20.1/
-sudo rm -rf nginx-1.20.1.tar.gz
+sudo rm -rf nginx-1.25.3/
+sudo rm -rf nginx-1.25.3.tar.gz
 
 cd binaries/
 # pwd > /web/nginx/binaries
@@ -65,7 +66,7 @@ sudo make install > /dev/null
 # pwd > /web/nginx
 sudo rm -rf binaries/
 
-# SSl certificate 
+# SSl certificate
 cd /web/nginx/
 sudo mkdir -p /web/nginx/ssl-cert
 sudo chown root:root ssl-cert
