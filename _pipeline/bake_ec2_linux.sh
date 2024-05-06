@@ -16,7 +16,7 @@ cleanup() {
                  rm -f certificatechain.pem
         echo "Baking Done ."
 }
-trap cleanup EXIT
+#trap cleanup EXIT
 
 #env_id="nonprod"
 env_id=$1
