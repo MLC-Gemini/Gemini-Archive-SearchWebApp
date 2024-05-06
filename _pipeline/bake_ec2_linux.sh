@@ -34,7 +34,8 @@ echo $ami_id
 
 aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiBakeDev$ts \
     --template-file cloudformation/ec2-launchtemplate-key.yaml \
-    --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
+    --capabilities CAPABILITY_NAMED_IAM \
+    --parameter-overrides "Ami=$ami_id" "OS=rhel8" "InstanceType=t3a.small" "Environment=dev" "Platform=linux" "PatchCycle=NonProd" "Snapshot=snapn" "EC2InstanceSG=sg-0b8c950534ff7dcb5"
 
 instance_id=`aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId[]" \
     --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiBakeDev$ts" --output=text`
