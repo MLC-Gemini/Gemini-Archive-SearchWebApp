@@ -1,0 +1,229 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Demonstration EC2 instance launch using Launch Template
+
+Parameters:
+  Ami:
+    Type: AWS::EC2::Image::Id
+    Description: The AMI for this region (find them here /golden-ami but hardcode the image id)
+  InstanceType:
+    Type: String
+    Default: t3a.micro
+  AppID:
+    Description: ID of Application being deployed
+    Type: String
+    Default: 001
+  DataClassification:
+    Type: String
+    Description: This contains the applications Data Classification
+    AllowedValues:
+      - Public
+      - Internal
+      - Confidential
+      - Highly Confidential
+    Default: Internal
+  Environment:
+    Type: String
+    Description: Deployment environment
+    AllowedValues:
+      - dev
+      - test
+      - prod
+  Owner:
+    Description: CMDB owner name
+    Type: String
+    Default: test-owner
+  PowerMgt:
+    Type: String
+    Description: Power Management Schedule
+    Default: working-days-aest-7am-7pm-on-excluding-holidays
+    # Standard business hours working-days-aest-7am-7pm-on-excluding-holidays
+    # Extended business hours working-days-aest-7am-11pm-on-excluding-holidays
+    # For more options see https://github.com/InsigniaFinancial/aws-power-mgmt-schedule
+  Snapshot:
+    Type: String
+    Description: Snapshot frequency
+    AllowedValues:
+      - snapd
+      - snapw
+      - snapn
+    Default: snapw
+  # De we still need PatchCycle and PatchGroup ?
+  PatchCycle:
+    Description: Patch Cycle
+    Type: String
+  OS:
+    Type: String
+    Description: Operating System
+    AllowedValues: [rhel7, rhel8, windows2016, windows2019]
+  Platform:
+    Type: String
+    AllowedValues: [linux, windows,]
+  DomainOU:
+    Type: String
+    Default: none
+  CloudWatchLogRetention:
+    Description: CloudWatch log group retention in days
+    Type: String
+    Default: 30
+  OSDiskVolumeSize:
+    Description: Size of data disk volume
+    Type: String
+    Default: 50
+  DataDiskVolumeSize:
+    Description: Size of data disk volume
+    Type: String
+    Default: 100
+  EC2InstanceSG:
+    Type: String
+    Description: Security Group of existing instance
+
+Mappings:
+  OSSettings:
+    blockDeviceName:
+      rhel8: /dev/sda1
+      rhel7: /dev/sda1
+      windows2016: /dev/sda1
+      windows2019: /dev/sda1
+  DataSettings:
+    blockDeviceName:
+      rhel8: /dev/sdf
+      rhel7: /dev/sdf
+      windows2016: /dev/xvdf
+      windows2019: /dev/xvdf
+
+
+Resources:
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-role"
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:policy/EC2WorkloadPolicy'
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      # Including this permissions boundary is mandatory and role creation will fail without it
+      PermissionsBoundary: !Sub 'arn:aws:iam::${AWS::AccountId}:policy/DeployerBoundaryPolicy'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - events.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+  CloudWatchAgentPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      ManagedPolicyName: !Sub "${AWS::StackName}-CWAgentPolicy"
+      Roles:
+        - !Ref InstanceRole
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogStream
+            - logs:DescribeLogStreams
+            - logs:PutLogEvents
+            Resource:
+            - !Sub 'arn:aws:logs:ap-southeast-2:${AWS::AccountId}:log-group:/ec2/instance/${Ec2Instance}:*'
+
+  KeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: !Sub "${AWS::StackName}-KeyPair"
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceRole
+
+  Ec2InstanceLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-instance
+      LaunchTemplateData:
+        ImageId: !Ref Ami
+        KeyName: !Ref KeyPair
+        # This IMDS_v2 setting is required and deployment will fail without it
+        MetadataOptions:
+          HttpTokens: required
+          InstanceMetadataTags: enabled
+
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      SubnetId: '{{resolve:ssm:/common/network/application/subnet/a}}'
+      LaunchTemplate:
+        LaunchTemplateId: !Ref Ec2InstanceLaunchTemplate
+        Version: !Sub ${Ec2InstanceLaunchTemplate.LatestVersionNumber}
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds: [ !Ref EC2InstanceSG ]
+      InstanceType: !Ref InstanceType
+      BlockDeviceMappings:
+        - DeviceName: !FindInMap [OSSettings, blockDeviceName, !Ref OS]
+          Ebs:
+            VolumeType: gp3
+            DeleteOnTermination: true
+            VolumeSize: !Ref OSDiskVolumeSize
+            Encrypted: true
+            # Looks up the account's general purpose Workload Kms key from SSM
+            KmsKeyId: '{{resolve:ssm:/common/kms/workload_cmk_arn}}'
+        - DeviceName: !FindInMap [DataSettings, blockDeviceName, !Ref OS]
+          Ebs:
+            VolumeType: gp3
+            DeleteOnTermination: true
+            VolumeSize: !Ref DataDiskVolumeSize
+            Encrypted: true
+            # Looks up the account's general purpose Workload Kms key from SSM
+            KmsKeyId: '{{resolve:ssm:/common/kms/workload_cmk_arn}}'
+      # Tags moved here, as changing tags in the launchtemplate, after initial deployment
+      # results in an EC2 delete/redeploy
+      PropagateTagsToVolumeOnCreation: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}
+        - Key: ApplicationID
+          Value: !Ref AppID
+        - Key: DataClassification
+          Value: !Ref DataClassification
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Platform
+          Value: !Ref Platform
+        - Key: CostCentre
+          Value: !Sub cc_${AppID}
+        - Key: Owner
+          Value: !Ref Owner
+        - Key: PowerMgt
+          Value: !Ref PowerMgt
+        - Key: Snapshot
+          Value: !Ref Snapshot
+        - Key: PatchCycle
+          Value: !Ref PatchCycle
+        - Key: OUName
+          Value: !Ref DomainOU
+        - Key: map-migrated
+          Value: migGWCQZBFJA6
+
+  CWLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      RetentionInDays: !Ref CloudWatchLogRetention
+      KmsKeyId: '{{resolve:ssm:/common/kms/workload_cmk_arn}}'
+      LogGroupName: !Sub '/ec2/instance/${Ec2Instance}'
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}
+
+Outputs:
+  Ec2Instance:
+    Description: The Instance ID
+    Value: !Ref Ec2Instance
