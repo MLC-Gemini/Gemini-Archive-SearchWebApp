@@ -43,7 +43,7 @@ sudo mkdir /web/nginx/modules
 sudo mkdir /web/nginx/run
 cd /web/nginx/
 
-sudo mv /tmp/nginx-1.25.3.tar.gz .
+sudo mv /tmp/gemini_web_staging/nginx-1.25.3.tar.gz .
 #sudo tar -xzvf nginx-1.25.3.tar.gz with output below command for skipping output (-v without verbose)
 
 sudo tar -zxf nginx-1.25.3.tar.gz

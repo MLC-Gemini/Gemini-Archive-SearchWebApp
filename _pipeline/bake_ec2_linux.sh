@@ -24,7 +24,7 @@ source ./Batch/var/read_variables.sh $env_id
 ts=`date +%Y-%m-%d-%H-%M-%S`
 
 echo "1. Download from artifactory"
-#./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
 
 echo "2. Run instance using latest golden image in Baking VPC"
 ami_id=$(aws ssm get-parameter  --name "/golden-ami/rhel8/latest" --query "Parameter.Value" --output text)
@@ -143,7 +143,8 @@ if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null'
   rm -r Published/appsettings.json
   mv tmp-appsettings.json Published/appsettings.json
 fi
-
+echo "Stopping for debug"
+EXIT
 echo "5. Copy source code to image"
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem /tmp/gemini_web_staging/* ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/ec2_install_software.sh ec2-user@$endpoint:/tmp
