@@ -43,7 +43,7 @@ sudo mkdir /web/nginx/modules
 sudo mkdir /web/nginx/run
 cd /web/nginx/
 
-sudo mv /tmp/gemini_web_staging/nginx-1.26.0.tar.gz .
+sudo mv /tmp/nginx-1.26.0.tar.gz .
 #sudo tar -xzvf nginx-1.26.0.tar.gz with output below command for skipping output (-v without verbose)
 
 sudo tar -zxf nginx-1.26.0.tar.gz
@@ -64,10 +64,11 @@ sudo make > /dev/null
 sudo make install > /dev/null
 
 # pwd > /web/nginx
-sudo rm -rf binaries/
+#sudo rm -rf binaries/
 
 # SSl certificate
 cd /web/nginx/
+sudo rm -rf binaries/
 sudo mkdir -p /web/nginx/ssl-cert
 sudo chown root:root ssl-cert
 sudo chmod -R 600 ssl-cert
