@@ -21,4 +21,6 @@ echo $gemini_arti_uid
 echo $gemini_login_pwd
 
 #cd $stage_folder
-curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://nexus.itt.aws.odev.com.au/nginx-1.26.0.tar.gz"
+#curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://nexus.itt.aws.odev.com.au/nginx-1.26.0.tar.gz"
+#temporarily bypass download error with .gz file
+cp Batch/nginx-1.26.0.tar.gz $stage_folder\nginx-1.26.0.tar.gz
