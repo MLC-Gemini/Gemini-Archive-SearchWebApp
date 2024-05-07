@@ -124,7 +124,7 @@ LdapServerPort=`aws ssm get-parameters --name $SSM_LDAP_SERVER_PORT --with-decry
 LdapBaseDn=`aws ssm get-parameters --name $SSM_LDAP_SERVER_BASEDN --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 LdapDomain=`aws ssm get-parameters --name $SSM_LDAP_SERVER_DOMAIN --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
 
-if [[ $rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null' && $TibcoImageEBF_pass != 'null' ]]; then
+if [[ $Rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null' && $TibcoImageEBF_pass != 'null' ]]; then
 # exporting the varibale needed for kms json template files.
   export RDSCONSTR="${Rdsconstr}"
   export ADGROUP="${Adgroup}"
