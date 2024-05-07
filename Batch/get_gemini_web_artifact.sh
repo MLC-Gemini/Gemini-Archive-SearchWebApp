@@ -23,5 +23,5 @@ echo $gemini_login_pwd
 #cd $stage_folder
 #curl -C - -u $gemini_arti_uid:$gemini_login_pwd -O "https://nexus.itt.aws.odev.com.au/nginx/nginx-1.25.3.tar.gz"
 
-cp /Batch/nginx-1.25.3.tar.gz $stage_folder/nginx-1.25.3.tar.gz
+cp Batch/nginx-1.25.3.tar.gz $stage_folder/nginx-1.25.3.tar.gz
 echo "copied nginx to $stage_folder"
