@@ -83,7 +83,7 @@ do
   ((index+=1))
 done
 
-echo "3. Setuping ALB Listener SSL certificate form AWS SSM parameter"
+#echo "3. Setuping ALB Listener SSL certificate form AWS SSM parameter"
 # ALB Listener IAM SSL certificate configuration.
 # Check for Wheather ALB IAM SSL certificate is already exist or not.
 #Alb_IAM_SSL_Name=`aws iam get-server-certificate --server-certificate-name $ALB_SSL_CERT_NAME | grep ServerCertificateName | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
@@ -92,10 +92,10 @@ echo "3. Setuping ALB Listener SSL certificate form AWS SSM parameter"
 # aws iam delete-server-certificate --server-certificate-name $ALB_SSL_CERT_NAME
 #fi
 # Downloading SSL certificate from AWS SSM parameter store in require format to store in AWS IAM.
-aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > privatekey.pem
-aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > certificate.pem
-aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > certificatechain.pem
-aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> certificatechain.pem
+#aws ssm get-parameter --name $SSL_KEY --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > privatekey.pem
+#aws ssm get-parameter --name $SSL_CERT --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > certificate.pem
+#aws ssm get-parameter --name $SSL_CHAIN1 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value > certificatechain.pem
+#aws ssm get-parameter --name $SSL_CHAIN2 --with-decryption --region "ap-southeast-2" --output text --query Parameter.Value >> certificatechain.pem
 
 # Uploading SSL Certificate in AWS IAM.
 #aws iam upload-server-certificate --server-certificate-name $ALB_SSL_CERT_NAME \
