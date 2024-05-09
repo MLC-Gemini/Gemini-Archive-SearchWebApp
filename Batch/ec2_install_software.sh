@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# create variable for nginx version
+nginx_version=nginx-1.26.0
+
 # Create webapp user
 sudo luseradd webapp -d /opt/webapp
 echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
@@ -43,17 +46,17 @@ sudo mkdir /web/nginx/modules
 sudo mkdir /web/nginx/run
 cd /web/nginx/
 
-sudo mv /tmp/nginx-1.26.0.tar.gz .
+sudo mv /tmp/$nginx_version.tar.gz .
 #sudo tar -xzvf nginx-1.26.0.tar.gz with output below command for skipping output (-v without verbose)
 
-sudo tar -zxf nginx-1.26.0.tar.gz
+sudo tar -zxf $nginx_version.tar.gz
 #ls -lrt
 
 sudo mkdir binaries
-sudo mv nginx-1.26.0/* binaries/
+sudo mv $nginx_version/* binaries/
 
-sudo rm -rf nginx-1.26.0/
-sudo rm -rf nginx-1.26.0.tar.gz
+sudo rm -rf $nginx_version/
+sudo rm -rf $nginx_version.tar.gz
 
 cd binaries/
 # pwd > /web/nginx/binaries
@@ -64,7 +67,7 @@ sudo make > /dev/null
 sudo make install > /dev/null
 
 # pwd > /web/nginx
-#sudo rm -rf binaries/
+sudo rm -rf binaries/
 
 # SSl certificate
 cd /web/nginx/
