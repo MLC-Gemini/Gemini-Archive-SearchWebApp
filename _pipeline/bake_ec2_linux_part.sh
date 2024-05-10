@@ -23,8 +23,7 @@ env_id=$1
 source ./Batch/var/read_variables.sh $env_id
 ts=`date +%Y-%m-%d-%H-%M-%S`
 
-echo "1. Download from artifactory"
-./Batch/get_gemini_web_artifact.sh $env_id /tmp/gemini_web_staging
+cp Batch/nginx*.tar.gz /tmp/gemini_web_staging
 
 echo "2. Run instance using latest golden image in Baking VPC"
 ami_id=$(aws ssm get-parameter  --name "/golden-ami/rhel8/latest" --query "Parameter.Value" --output text)
@@ -117,7 +116,7 @@ if [[ $Rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null'
   export LDAPBASEDN="${LdapBaseDn}"
   export LDADOMAIN="${LdapDomain}"
 
-  envsubst < Published/appsettings.json > tmp-appsettings.json
+  envsubst < Batch/template/appsettings.json > tmp-appsettings.json
 
 # Delete origin appsettings.json and replace with secrets form AWS SSM Parameter Store
   rm -r Published/appsettings.json
