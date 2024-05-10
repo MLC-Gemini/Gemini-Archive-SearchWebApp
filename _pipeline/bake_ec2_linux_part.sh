@@ -119,7 +119,6 @@ if [[ $Rdsconstr != 'null' && $Adgroup != 'null' && $TibcoImageEBF_uid != 'null'
   envsubst < Batch/template/appsettings.json > tmp-appsettings.json
 
 # Delete origin appsettings.json and replace with secrets form AWS SSM Parameter Store
-  rm -r Published/appsettings.json
   mv tmp-appsettings.json Published/appsettings.json
 fi
 
@@ -135,3 +134,5 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/conf
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.key ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.pem ec2-user@$endpoint:/tmp
 
+# clean-up appsettings - template is in Batch/template, this is the one passed onto new server already
+rm -r Published/appsettings.json
