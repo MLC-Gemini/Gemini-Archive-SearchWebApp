@@ -12,7 +12,7 @@
     "Statistic": "Maximum",
     "Period": "300",
     "Threshold": "10",
-    "DimensionName": "LoadBalancer",
+    "DimensionName": "AutoScalingGroup",
     "DimensionValue": "app/account-factory-lb/d07eb0e986f16a61"
   }
 }
