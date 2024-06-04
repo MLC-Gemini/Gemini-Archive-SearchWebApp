@@ -1,0 +1,18 @@
+{
+  "Parameters": {
+    "TopicName": "CW-Alarm-Topic",
+    "Endpoint": "ajay.vignesh@insigniafinancial.com.au",
+    "AlarmDescription": "CW Alarm Description",
+    "AlarmName": "CW-Alarm-Test",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": "1",
+    "TreatMissingData": "notBreaching",
+    "MetricName": "TargetResponseTime",
+    "Namespace": "AWS/ApplicationELB",
+    "Statistic": "Maximum",
+    "Period": "300",
+    "Threshold": "10",
+    "DimensionName": "LoadBalancer",
+    "DimensionValue": "app/account-factory-lb/d07eb0e986f16a61"
+  }
+}
