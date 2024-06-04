@@ -8,6 +8,9 @@ source ./Batch/var/read_variables.sh $env_id
 gemini_arti_uid=`aws ssm get-parameter --name $gemini_arti_ssm_uid --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
 gemini_login_pwd=`aws ssm get-parameter --name $gemini_arti_ssm_pass --with-decryption --region "ap-southeast-2" | grep Value | awk '{print $2}'|sed 's/"//g'|sed 's/,$//g'`
 
+#echo $gemini_arti_uid
+#echo $gemini_login_pwd
+
 if [ ! -d $stage_folder ]; then
     mkdir $stage_folder
 fi
