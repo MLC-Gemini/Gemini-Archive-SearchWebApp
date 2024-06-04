@@ -1,0 +1,107 @@
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: This CF Stack creates a CloudWatch Alarm listening on a CW metric and a SNS Topic for notification
+
+Parameters:
+
+  TopicName:
+    Description: Name of SNS topic
+    Type: String
+  Endpoint:
+    Description: SNS receiver's email address
+    Type: String
+  AlarmDescription:
+    Description: Description of CloudWatch Alarm
+    Type: String
+    Default: This alarm is triggered when CW metric meets certain condition(s)
+  AlarmName:
+    Description: Name of CloudWatch Alarm
+    Type: String
+    Default: My CloudWatch Alarm
+  ComparisonOperator:
+    Type: String
+    Description: The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.
+    AllowedValues:
+      - GreaterThanOrEqualToThreshold
+      - GreaterThanThreshold
+      - GreaterThanUpperThreshold
+      - LessThanLowerOrGreaterThanUpperThreshold
+      - LessThanLowerThreshold
+      - LessThanOrEqualToThreshold
+      - LessThanThreshold
+    Default: GreaterThanThreshold
+  EvaluationPeriods:
+    Description: The number of periods over which data is compared to the specified threshold. If you are setting an alarm that requires that a number of consecutive data points be breaching to trigger the alarm, this value specifies that number. If you are setting an "M out of N" alarm, this value is the N, and DatapointsToAlarm is the M.
+    Type: String
+    Default: 1
+  TreatMissingData:
+    Type: String
+    Description: Sets how this alarm is to handle missing data points.
+    AllowedValues:
+      - breaching
+      - notBreaching
+      - ignore
+      - missing
+    Default: notBreaching
+  MetricName:
+    Description: Name of CloudWatch metric
+    Type: String
+  Namespace:
+    Description: CloudWatch metric namespace
+    Type: String
+  Statistic:
+    Type: String
+    Description: The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use ExtendedStatistic.
+    AllowedValues:
+      - Average
+      - Maximum
+      - Minimum
+      - SampleCount
+      - Sum
+    Default: Average
+  Period:
+    Type: Number
+    Description: The period, in seconds, over which the statistic is applied. This is required for an alarm based on a metric. Valid values are 10, 30, 60, and any multiple of 60.
+    MinValue: 10
+    Default: 300
+  Threshold:
+    Type: Number
+    Description: The value to compare with the specified statistic.
+  DimensionName:
+    Type: String
+    Description: The name of the dimension. This dimension name must have been included when the metric was published.
+  DimensionValue:
+    Type: String
+    Description: The value for the dimension
+    
+Resources:
+  SnsTopicForCloudWatchAlarm:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        - Endpoint: !Ref Endpoint
+          Protocol: "email"
+      TopicName: !Ref TopicName
+      KmsMasterKeyId: '{{resolve:ssm:/common/kms/workload_cmk_arn}}'
+      Tags:
+        - Key: map-migrated
+          Value: migGWCQZBFJA6
+
+  CloudWatchAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: !Ref AlarmDescription
+      AlarmName: !Ref AlarmName
+      ComparisonOperator: !Ref ComparisonOperator
+      EvaluationPeriods: !Ref EvaluationPeriods
+      TreatMissingData: !Ref TreatMissingData
+      MetricName: !Ref MetricName
+      Dimensions:
+        - Name: !Ref DimensionName
+          Value: !Ref DimensionValue
+      Namespace: !Ref Namespace
+      Statistic: !Ref Statistic
+      Period: !Ref Period
+      Threshold: !Ref Threshold
+      AlarmActions: 
+        - !Ref SnsTopicForCloudWatchAlarm
