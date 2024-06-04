@@ -62,5 +62,5 @@ aws cloudformation deploy --region ap-southeast-2 --stack-name GEMINI-WEB-$env_i
     --template-file cloudformation/ec2-autoscaling-cert.yaml \
     --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 	
-echo "4. Create Cloud watch"
-_pipeline/create_cloud_watch_ec2.sh $env_id
+#echo "4. Create Cloud watch"
+#_pipeline/create_cloud_watch_ec2.sh $env_id
