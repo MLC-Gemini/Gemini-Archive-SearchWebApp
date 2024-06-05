@@ -42,7 +42,7 @@ sudo mkdir /web/nginx/run
 cd /web/nginx/
 
 sudo mv /tmp/nginx-1.25.3.tar.gz .
-#sudo tar -xzvf nginx-1.20.1.tar.gz with output below command for skipping output (-v without verbose)
+#sudo tar -xzvf nginx-1.25.3.tar.gz with output below command for skipping output (-v without verbose)
 sudo tar -zxf nginx-1.25.3.tar.gz
 
 sudo mkdir binaries 
