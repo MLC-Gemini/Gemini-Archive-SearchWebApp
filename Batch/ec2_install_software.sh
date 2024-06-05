@@ -4,11 +4,14 @@
 sudo luseradd webapp -d /opt/webapp 
 echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
+#Centos8 specific change
+sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
+
 # Directory for Gemini web application
-#sudo mkdir -p /opt/webapp
-sudo mkdir /opt/webapp/geminiweb
-sudo chmod -R 773 /opt/webapp/geminiweb/
-cd /opt/webapp/geminiweb
+#sudo mkdir -p /var/www
+sudo mkdir /var/www/geminiweb
+sudo chmod -R 773 /var/www/geminiweb/
+cd /var/www/geminiweb
 
 # Copy ASP.NET core self-contained published file in web directory, change permisson and ownership and making file self-executable.
 sudo mv /tmp/Published/* .
