@@ -1,0 +1,265 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Example Autoscaling Group with one EC2 instance
+
+Parameters:
+  Ami:
+    Type: String
+    Description: The AMI for this region
+    # Additional AMI Ids are listed in SSM Parameter Store under /golden-ami/
+    Default: /gemini_archive_web/ami_image-deploy
+  InstanceType:
+    Type: String
+    Default: t3a.micro
+  AppID:
+    Description: ID of Application being deployed
+    Type: String
+    Default: 001
+  DataClassification:
+    Type: String
+    Description: This contains the applications Data Classification
+    AllowedValues:
+      - Public
+      - Internal
+      - Confidential
+      - Highly Confidential
+    Default: Internal
+  Environment:
+    Type: String
+    Description: Deployment environment
+    AllowedValues:
+      - dev
+      - test
+      - prod
+    Default: dev
+  Owner:
+    Description: CMDB owner name
+    Type: String
+    Default: test-owner
+  PowerMgt:
+    Type: String
+    Description: Power Management Schedule at instance level - should leave at exempt-autoscaling for autoscaling groups
+    Default: exempt-autoscaling
+    AllowedValues: [exempt-autoscaling]
+    # For more options see https://github.com/InsigniaFinancial/aws-power-mgmt-schedule
+  MinSize:
+    Type: Number
+    Description: The minimum number of instances running
+    Default: 1
+  MaxSize:
+    Type: Number
+    Description: The maximum number of instances running
+    Default: 1
+  DesiredCapacity:
+    Type: Number
+    Description: The desired capacity
+    Default: 1
+  Snapshot:
+    Type: String
+    Description: Snapshot frequency
+    AllowedValues:
+      - snapd
+      - snapw
+      - snapn
+    Default: snapw
+  PatchCycle:
+    Description: Patch Cycle
+    Type: String
+    Default: NonProd
+  OS:
+    Type: String
+    Description: Operating System
+    AllowedValues: [rhel7, rhel8]
+  Platform:
+    Type: String
+    AllowedValues: [linux]
+  CidrValueForAppSubnet:
+      Description: should be smth like "10.76.15.0/25"
+      Type: AWS::SSM::Parameter::Value<String>
+      Default: /common/network/application/cidr
+Conditions:
+  OnlyTwoAppSubnetsNotThree: !Equals
+  # CIDR range for accounts is 21-25
+  # if there is smaller subnets (CIDR=25) we use only two subnets
+    - 25
+    - !Select  # get the 2nd element from string "25" from "10.76.15.0/25"
+        - 1
+        - !Split  # split string into list of strings
+          - /
+          - !Ref  CidrValueForAppSubnet
+
+Mappings:
+  OSSettings:
+    blockDeviceName:
+      rhel7: /dev/sda1
+      rhel8: /dev/sda1
+
+Resources:
+
+  HTTPSCert:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: geminiarchive-app-tst.gem.aws.odev.com.au
+      CertificateAuthorityArn: '{{resolve:ssm:/common/certificates/private/platform_infrastructure}}'
+      Tags:
+        - Key: map-migrated
+          Value: migGWCQZBFJA6
+
+  EC2InstanceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for the EC2 Instance
+      VpcId: '{{resolve:ssm:/common/network/application/vpc/id}}'
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-role"
+      Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - !Sub 'arn:aws:iam::${AWS::AccountId}:policy/EC2WorkloadPolicy'
+      # Including this permissions boundary is mandatory and role creation will fail without it
+      PermissionsBoundary: !Sub 'arn:aws:iam::${AWS::AccountId}:policy/DeployerBoundaryPolicy'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+                - events.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref InstanceRole
+
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Sub ${AWS::StackName}-instance
+      LaunchTemplateData:
+        IamInstanceProfile:
+          Arn: !GetAtt  InstanceProfile.Arn
+        DisableApiTermination: false
+        ImageId: !Ref Ami
+        InstanceType: !Ref InstanceType
+        SecurityGroupIds: [!Ref EC2InstanceSG ]
+        # This IMDS_v2 setting is required and deployment will fail without it
+        MetadataOptions:
+          HttpTokens: required
+          InstanceMetadataTags: enabled
+        BlockDeviceMappings:
+          - DeviceName: !FindInMap [OSSettings, blockDeviceName, !Ref OS]
+            Ebs:
+              VolumeType: gp3
+              DeleteOnTermination: true
+              VolumeSize: 50
+              Encrypted: true
+              # Looks up the account's general purpose Workload Kms key from SSM
+              KmsKeyId: '{{resolve:ssm:/common/kms/workload_cmk_arn}}'
+        # Some of these tags are mandatory and deployment will fail without them
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: !Sub ${AWS::StackName}-instance
+              - Key: ApplicationID
+                Value: !Ref AppID
+              - Key: DataClassification
+                Value: !Ref DataClassification
+              - Key: Environment
+                Value: !Ref Environment
+              - Key: Platform
+                Value: !Ref Platform
+              - Key: CostCentre
+                Value: !Sub cc_${AppID}
+              - Key: Owner
+                Value: !Ref Owner
+              - Key: PowerMgt
+                Value: !Ref PowerMgt
+              - Key: Snapshot
+                Value: !Ref Snapshot
+              - Key: PatchCycle
+                Value: !Ref PatchCycle
+              - Key: map-migrated
+                Value: migGWCQZBFJA6
+          # Some of these tags are mandatory and deployment will fail without them
+          - ResourceType: volume
+            Tags:
+              - Key: Name
+                Value: !Sub ${AWS::StackName}-instance
+              - Key: ApplicationID
+                Value: !Ref AppID
+              - Key: DataClassification
+                Value: !Ref DataClassification
+              - Key: Environment
+                Value: !Ref Environment
+              - Key: Platform
+                Value: !Ref Platform
+              - Key: CostCentre
+                Value: !Sub cc_${AppID}
+              - Key: Owner
+                Value: !Ref Owner
+              - Key: PowerMgt
+                Value: !Ref PowerMgt
+              - Key: Snapshot
+                Value: !Ref Snapshot
+              - Key: PatchCycle
+                Value: !Ref PatchCycle
+              - Key: map-migrated
+                Value: migGWCQZBFJA6
+
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: true
+      AutoScalingScheduledAction:
+        IgnoreUnmodifiedGroupSizeProperties: true
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      VPCZoneIdentifier: !If
+        - OnlyTwoAppSubnetsNotThree
+        -
+         - '{{resolve:ssm:/common/network/application/subnet/a}}'
+         - '{{resolve:ssm:/common/network/application/subnet/b}}'
+        -
+         - '{{resolve:ssm:/common/network/application/subnet/a}}'
+         - '{{resolve:ssm:/common/network/application/subnet/b}}'
+         - '{{resolve:ssm:/common/network/application/subnet/c}}'
+
+      MinSize: !Ref MinSize
+      MaxSize: !Ref MaxSize
+      DesiredCapacity: !Ref DesiredCapacity
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-host
+          PropagateAtLaunch: true
+        - Key: ApplicationID
+          Value: !Ref AppID
+          PropagateAtLaunch: true
+        - Key: DataClassification
+          Value: !Ref DataClassification
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: !Ref Environment
+          PropagateAtLaunch: true
+        - Key: Platform
+          Value: !Ref Platform
+          PropagateAtLaunch: true
+        - Key: CostCentre
+          Value: !Sub cc_${AppID}
+          PropagateAtLaunch: true
+        - Key: Owner
+          Value: !Ref Owner
+          PropagateAtLaunch: true
+        - Key: map-migrated
+          Value: migGWCQZBFJA6
+          PropagateAtLaunch: true
