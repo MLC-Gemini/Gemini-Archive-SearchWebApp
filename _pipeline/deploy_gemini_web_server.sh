@@ -25,7 +25,7 @@ sed -e "s/oldAMI/$ami_id/g;s/oldSG/$ec2instanceSG/g" template/dev-rhel8.json_tem
 
 echo $ami_id
 
-aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiPreDeploy_june \
+aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiPreDeployJune \
     --template-file cloudformation/ec2-launchtemplate-key.yaml \
     --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 
