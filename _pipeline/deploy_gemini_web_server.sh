@@ -30,7 +30,7 @@ aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiPreDeployJu
     --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 
 instance_id=`aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId[]" \
-    --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiPreDeploy_june" --output=text`
+    --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiPreDeployJune" --output=text`
 
 echo "- Wait for instance status OK"
 aws ec2 wait instance-status-ok --instance-ids $instance_id
@@ -38,7 +38,7 @@ aws ec2 wait instance-status-ok --instance-ids $instance_id
 echo $instance_id
 
 ts=`date +%Y-%m-%d-%H-%M-%S`
-image_id=$(aws ec2 create-image --name Gemini-web-deploy-$ts --instance-id $instance_id|jq -r ".ImageId")
+image_id=$(aws ec2 create-image --name Gemini-web-deploy-june-$ts --instance-id $instance_id|jq -r ".ImageId")
 aws ec2 create-tags --resources $image_id --tags Key=PatchCycle,Value=$T_PatchCycle Key=Environment,Value=$T_Environment Key=T_CostCentre,Value=$T_CostCentre Key=DataClassification,Value=$T_DataClassification Key=Owner,Value=$T_Owner Key=PowerMgt,Value=$T_PowerMgt Key=Name,Value=$T_Name Key=ApplicationID,Value=$T_ApplicationID Key=OUName,Value=$T_OUName Key=map-migrated,Value=$T_MapMigrated
 
 echo "- wait for image to be created"
