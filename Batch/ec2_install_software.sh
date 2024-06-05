@@ -41,15 +41,15 @@ sudo mkdir /web/nginx/modules
 sudo mkdir /web/nginx/run
 cd /web/nginx/
 
-sudo mv /tmp/nginx-1.20.1.tar.gz .
+sudo mv /tmp/nginx-1.25.3.tar.gz .
 #sudo tar -xzvf nginx-1.20.1.tar.gz with output below command for skipping output (-v without verbose)
-sudo tar -zxf nginx-1.20.1.tar.gz
+sudo tar -zxf nginx-1.25.3.tar.gz
 
 sudo mkdir binaries 
-sudo mv nginx-1.20.1/* binaries/
+sudo mv nginx-1.25.3/* binaries/
 
-sudo rm -rf nginx-1.20.1/
-sudo rm -rf nginx-1.20.1.tar.gz
+sudo rm -rf nginx-1.25.3/
+sudo rm -rf nginx-1.25.3.tar.gz
 
 cd binaries/
 
