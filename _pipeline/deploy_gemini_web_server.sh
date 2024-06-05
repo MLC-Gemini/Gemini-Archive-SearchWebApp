@@ -19,12 +19,15 @@ echo "1. Bake 100% ready ami"
 #The ami should have all necessary credential built in as "ApplicationServerProfile" does not have permission to access SSM etc.
 
 ami_id=`aws ssm get-parameters --name $AWS_PAR_BATCH_IMAGE --with-decryption --region ap-southeast-2| jq -r '.Parameters[0].Value'`
+ec2instanceSG=$(aws ssm get-parameter  --name "/gemini_archive_web/ec2instanceSG" --query "Parameter.Value" --output text)
+
+sed -e "s/oldAMI/$ami_id/g;s/oldSG/$ec2instanceSG/g" template/dev-rhel8.json_template > dev-rhel8.json
 
 echo $ami_id
 
 aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiPreDeploy \
     --template-file cloudformation/ec2-launchtemplate-key.yaml \
-    --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://asg-rhel8.json
+    --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 
 instance_id=`aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId[]" \
     --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiPreDeploy" --output=text`
