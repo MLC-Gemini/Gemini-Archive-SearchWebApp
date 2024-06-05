@@ -1,5 +1,5 @@
 [Unit]
-Description=ASP.NET Core App running on RHEL 7
+Description=ASP.NET Core App running on RHEL 8
 
 [Service]
 WorkingDirectory=/opt/webapp/geminiweb/
