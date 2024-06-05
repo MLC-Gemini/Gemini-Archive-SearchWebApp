@@ -33,6 +33,7 @@ SSL_KEY="/gemini_archive_web/ssl_key"
 SSL_CERT="/gemini_archive_web/ssl_cert"
 SSL_CHAIN1="/gemini_archive_web/ssl_chain1"
 SSL_CHAIN2="/gemini_archive_web/ssl_chain2"
+SSL_PASSPHRASE="/gemini_archive_web/ssl_passphrase"
 
 # ASP.NET AWS SSM parameter store variable
 SSM_RDS_SERVER="/gemini_archive_web/rds_server"
