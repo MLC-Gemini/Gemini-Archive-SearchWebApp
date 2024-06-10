@@ -1,14 +1,11 @@
 #!/bin/bash
 
-# Create webapp user 
-sudo luseradd webapp -d /opt/webapp 
+# Create webapp user
+sudo luseradd webapp -d /opt/webapp
 echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
-#Centos8 specific change
-sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
-
 # Directory for Gemini web application
-#sudo mkdir -p /var/www
+sudo mkdir -p /var/www
 sudo mkdir /var/www/geminiweb
 sudo chmod -R 773 /var/www/geminiweb/
 cd /var/www/geminiweb
@@ -48,7 +45,7 @@ sudo mv /tmp/nginx-1.25.3.tar.gz .
 #sudo tar -xzvf nginx-1.25.3.tar.gz with output below command for skipping output (-v without verbose)
 sudo tar -zxf nginx-1.25.3.tar.gz
 
-sudo mkdir binaries 
+sudo mkdir binaries
 sudo mv nginx-1.25.3/* binaries/
 
 sudo rm -rf nginx-1.25.3/
@@ -62,7 +59,7 @@ sudo make install > /dev/null
 
 sudo rm -rf binaries/
 
-# SSl certificate 
+# SSl certificate
 cd /web/nginx/
 sudo mkdir -p /web/nginx/ssl-cert
 sudo chown root:root ssl-cert
