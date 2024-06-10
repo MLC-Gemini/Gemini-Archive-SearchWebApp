@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #This script is used to add AD Group integration to the Gemini web server. Must be run from root.
+sudo mkdir -p /etc/facter/facts.d
 
 ##creating 'ad_auth_group' template variable which will contain the list of all group DNs separated by '|'
 echo "ROL_IFL_IT_Gemini_Sup ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/10_ldapadmin
