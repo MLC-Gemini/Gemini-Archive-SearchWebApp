@@ -10,6 +10,10 @@ sudo mkdir /var/www/geminiweb
 sudo chmod -R 773 /var/www/geminiweb/
 cd /var/www/geminiweb
 
+#Configure ldap settings
+sudo chmod 755 /tmp/config_batch_ad.sh
+sudo `sh /tmp/config_batch_ad.sh`
+
 # Copy ASP.NET core self-contained published file in web directory, change permisson and ownership and making file self-executable.
 sudo mv /tmp/Published/* .
 sudo chown webapp:webapp GeminiSearchWebApp
