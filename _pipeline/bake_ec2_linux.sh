@@ -150,6 +150,8 @@ echo "6. Change the SELINX setting to disabled from enforcing"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config'
 aws ec2 reboot-instances --instance-ids $instance_id
 aws ec2 wait instance-running --instance-ids $instance_id
+#Leave a few minutes to ensure instance is ssh ready
+sleep 3m
 
 echo "7. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
