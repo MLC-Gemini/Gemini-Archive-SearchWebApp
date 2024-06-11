@@ -146,12 +146,17 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem Batch/conf
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.key ec2-user@$endpoint:/tmp
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.pem ec2-user@$endpoint:/tmp
 
-echo "6. Run SSH(ec2_install_software.sh) to install software"
+echo "6. Change the SELINX setting to disabled from enforcing"
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config'
+aws ec2 reboot-instances --instance-ids $instance_id
+aws ec2 wait instance-running --instance-ids $instance_id
+
+echo "7. Run SSH(ec2_install_software.sh) to install software"
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo chmod +x /tmp/ec2_install_software.sh; sudo /tmp/ec2_install_software.sh'
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm /tmp/ec2_install_software.sh'
 ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo rm -r /tmp/Published'
 
-echo "7. Create image form this instance"
+echo "8. Create image form this instance"
 image_id=`aws ec2 create-image --name GEMINI_WEB_IMAGE$ts --instance-id $instance_id|jq ".ImageId"|sed "s/\"//g"`
 aws ec2 create-tags --resources $image_id --tags Key=PatchCycle,Value=$T_PatchCycle Key=Environment,Value=$T_Environment Key=T_CostCentre,Value=$T_CostCentre Key=DataClassification,Value=$T_DataClassification Key=Owner,Value=$T_Owner Key=PowerMgt,Value=$T_PowerMgt Key=Name,Value=$T_Name Key=ApplicationID,Value=$T_ApplicationID Key=OUName,Value=$T_OUName Key=map-migrated,Value=$T_MapMigrated
 
@@ -163,5 +168,5 @@ do
         sleep 30
 done
 
-echo "8. Add encrypted image to aws parameter store"
+echo "9. Add encrypted image to aws parameter store"
 aws ssm put-parameter --name $AWS_PAR_BATCH_IMAGE --value $image_id --type "SecureString" --region "ap-southeast-2" --overwrite
