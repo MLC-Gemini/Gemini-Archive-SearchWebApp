@@ -5,10 +5,10 @@ sudo luseradd webapp -d /opt/webapp
 echo "webapp         ALL=(ALL)       NOPASSWD: ALL" | sudo tee -a /etc/sudoers > /dev/null
 
 # Directory for Gemini web application
-sudo mkdir -p /var/www
-sudo mkdir /var/www/geminiweb
-sudo chmod -R 773 /var/www/geminiweb/
-cd /var/www/geminiweb
+#sudo mkdir -p /var/www
+sudo mkdir /opt/webapp/geminiweb
+sudo chmod -R 773 /opt/webapp/geminiweb
+cd /opt/webapp/geminiweb
 
 #Configure ldap settings
 sudo chmod 755 /tmp/config_batch_ad.sh
