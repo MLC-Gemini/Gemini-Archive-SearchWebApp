@@ -30,7 +30,7 @@ aws cloudformation deploy --region ap-southeast-2 --stack-name GeminiPreDeploy \
     --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 
 instance_id=`aws ec2 describe-instances --query "Reservations[*].Instances[*].InstanceId[]" \
-    --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiPreDeploy" --output=text`
+    --filters "Name=tag-key,Values=aws:cloudformation:stack-name" "Name=tag-value,Values=GeminiPreDeploy" "Name=instance-state-name,Values=running" --output=text`
 
 echo "- Wait for instance status OK"
 aws ec2 wait instance-status-ok --instance-ids $instance_id
@@ -61,7 +61,7 @@ ec2instanceSG=$(aws ssm get-parameter  --name "/gemini_archive_web/ec2instanceSG
 
 sed -e "s/oldAMI/$ImageId/g;s/oldSG/$ec2instanceSG/g" template/dev-rhel8.json_template > dev-rhel8.json
 
-aws cloudformation deploy --region ap-southeast-2 --stack-name GEMINI-WEB-$env_id-Stack \
+aws cloudformation deploy --region ap-southeast-2 --stack-name GEMINI-WEBArchive-$env_id-Stack \
     --template-file cloudformation/ec2-autoscaling-cert.yaml \
     --capabilities CAPABILITY_NAMED_IAM --parameter-overrides file://dev-rhel8.json
 	
