@@ -147,7 +147,7 @@ scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarch
 scp -o StrictHostKeyChecking=no -r -i tmp_gemini_web_bake_$env_id.pem geminiarchive-app.pem ec2-user@$endpoint:/tmp
 
 echo "6. Change the SELINX setting to disabled from enforcing"
-ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config > /etc/selinux/config_new; mv /etc/selinux/config_new /etc/selinux/config'
+ssh -i tmp_gemini_web_bake_$env_id.pem ec2-user@$endpoint 'sudo sed -e "s/SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config > /tmp/config_new; sudo mv /tmp/config_new /etc/selinux/config'
 aws ec2 reboot-instances --instance-ids $instance_id
 aws ec2 wait instance-running --instance-ids $instance_id
 #Leave a few minutes to ensure instance is ssh ready
